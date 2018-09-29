@@ -216,6 +216,63 @@ namespace Database
         }
 
         /// <summary>
+        /// Returns an average number of goals 
+        /// scored by hometeam,in selected league and season before date d.
+        /// </summary>
+        /// <param name="d"></param>
+        /// <exception cref="NotEnoughDataException">Thrown if no rows where returned.</exception>
+        public double HomeAVGBeforeDate(DateTime d, string season, string league)
+        {
+            double result = 0;
+            string query = "SELECT CASE WHEN COUNT(homescore) > 0 THEN AVG(homescore) ELSE -1 END AS REAL FROM matches WHERE (season=@season AND league=@league AND date(playedDate) < date(@date))";
+            SQLiteConnection con = new SQLiteConnection(connectionString);
+            con.Open();
+            SQLiteCommand command = new SQLiteCommand(query, con);
+            command.Parameters.AddWithValue("season", season);
+            command.Parameters.AddWithValue("league", league);
+            command.Parameters.AddWithValue("date", d.ToString("yyyy-MM-dd"));
+            SQLiteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                result = reader.GetDouble(0);
+            }
+            con.Close();
+
+            if (result == -1)
+                throw new NotEnoughDataException("Average could not be counted, no rows returned");
+
+            return result;
+        }
+
+        /// <summary>
+        /// Returns an average number of goals 
+        /// scored by awayteam,in selected league and season before date d.
+        /// </summary>
+        /// <param name="d"></param>
+        /// <exception cref="NotEnoughDataException">Thrown if no rows where returned.</exception>
+        public double AwayAVGBeforeDate(DateTime d, string season, string league)
+        {
+            double result = 0;
+            string query = "SELECT CASE WHEN COUNT(homescore) > 0 THEN AVG(awayscore) ELSE -1 END AS REAL FROM matches WHERE (season=@season AND league=@league AND date(playedDate) < date(@date))";
+            SQLiteConnection con = new SQLiteConnection(connectionString);
+            con.Open();
+            SQLiteCommand command = new SQLiteCommand(query, con);
+            command.Parameters.AddWithValue("season", season);
+            command.Parameters.AddWithValue("league", league);
+            command.Parameters.AddWithValue("date", d.ToString("yyyy-MM-dd"));
+            SQLiteDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                result = reader.GetDouble(0);
+            }
+            con.Close();
+
+            if (result == -1)
+                throw new NotEnoughDataException("Average could not be counted, no rows returned");
+            return result;
+        }
+
+        /// <summary>
         /// Returns a list of Match-objects parsed from SQLiteDataReader.
         /// </summary>
         private List<Match> ParseMatches(SQLiteDataReader reader)

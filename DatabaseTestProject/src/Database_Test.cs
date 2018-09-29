@@ -241,5 +241,41 @@ namespace DatabaseTestProject
         {
             Assert.AreEqual(13, db.SelectCount());
         }
+
+        [Test]
+        public void test_HomeAVGBeforeDate()
+        {
+            Assert.AreEqual(1.5, Math.Round((double) db.HomeAVGBeforeDate(new DateTime(2017, 11, 05), "2016-2017", "England"), 2));
+        }
+
+        [Test]
+        public void test_HomeAVGBeforeDate_Unexisting_league_NotEnoughDataException()
+        {
+            Assert.Throws<NotEnoughDataException>(() => db.HomeAVGBeforeDate(new DateTime(2017, 11, 05), "2016-2017", "Unexisting league"));
+        }
+
+        [Test]
+        public void test_HomeAVGBeforeDate_Unexisting_season_NotEnoughDataException()
+        {
+            Assert.Throws<NotEnoughDataException>(() => db.HomeAVGBeforeDate(new DateTime(2017, 11, 05), "2016-2014", "England"));
+        }
+
+        [Test]
+        public void test_AwayAVGBeforeDate()
+        {
+            Assert.AreEqual(1.17, Math.Round((double)db.AwayAVGBeforeDate(new DateTime(2017, 11, 05), "2016-2017", "England"), 2));
+        }
+
+        [Test]
+        public void test_AwayAVGBeforeDate_Unexisting_league_throws_NotEnoughDataException()
+        {
+            Assert.Throws<NotEnoughDataException>(() => db.AwayAVGBeforeDate(new DateTime(2017, 11, 05), "2016-2017", "Unexisting league"));
+        }
+
+        [Test]
+        public void test_AwayAVGBeforeDate_Unexisting_season_NotEnoughDataException()
+        {
+            Assert.Throws<NotEnoughDataException>(() => db.AwayAVGBeforeDate(new DateTime(2017, 11, 05), "2016-2014", "England"));
+        }
     }
 }
