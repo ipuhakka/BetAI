@@ -63,6 +63,8 @@ in a given season, before match n.
 
 **RQ7**. -Done.
 
+**RQ8**. -Done.
+
 ## Future changes.
 Once BetSimulator is done to the stage that it can be tested, results on how well 
 selecting N last from team works in the solution. There is a chance that it is 
@@ -77,6 +79,7 @@ Tests run OK
 Leagues and seasons make it easier to secure unification of data. Now if some match has incorrect values for these,
 database won't allow for adding these matches. Test run OK.
 
-**29.9.2018**: Removed all yesterdays changes to table schema and database layer. 
+**29.9.2018**: Removed all yesterdays changes to table schema and database layer. Added method to count
+home goal average up to date n. Tests run OK. Merge branches.
 
 
