@@ -32,4 +32,5 @@ Leagues and seasons make it easier to secure unification of data. Now if some ma
 database won't allow for adding these matches. Test run OK.
 
 **29.9.2018**: Introduced branching to development, so there is always a stable branch and a branch for developemnt changes.
-Removed seasons and leagues table, and column matchInSeasonId from matches. These were unnecessary for the system.
+Removed seasons and leagues table, and column matchInSeasonId from matches. These were unnecessary for the system. Test run OK,
+Merged development to master.
