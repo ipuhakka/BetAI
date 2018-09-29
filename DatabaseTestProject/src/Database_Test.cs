@@ -75,45 +75,25 @@ namespace DatabaseTestProject
         [Test]
         public void test_AddSeason_Invalid_format_throws_ArgumentException()
         {
-            Assert.Throws<ArgumentException>(() => db.AddSeason("2016/2017"));
+            List<Match> matches = new List<Match>();
+            matches.Add(new Match("ManU", "Nor", "England", "2016/2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2));
+            Assert.Throws<ArgumentException>(() => db.AddMatches(matches));
         }
 
         [Test]
-        public void test_AddSeason_Season_TooLong_throws_ArgumentException()
+        public void test_AddMatches_Season_TooLong_throws_ArgumentException()
         {
-            Assert.Throws<ArgumentException>(() => db.AddSeason("201-2017"));
+            List<Match> matches = new List<Match>();
+            matches.Add(new Match("ManU", "Nor", "England", "20162-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2));
+            Assert.Throws<ArgumentException>(() => db.AddMatches(matches));
         }
 
         [Test]
-        public void test_AddSeason_Season_TooShort_throws_ArgumentException()
+        public void test_AddMatches_Season_TooShort_throws_ArgumentException()
         {
-            Assert.Throws<ArgumentException>(() => db.AddSeason("20162-2017"));
-        }
-
-        [Test]
-        public void test_AddSeason_return1()
-        {
-            Assert.AreEqual(1, db.AddSeason("2015-2016"));
-        }
-
-        [Test]
-        public void test_AddSeason_return0()
-        {
-            db.AddSeason("2015-2016");
-            Assert.AreEqual(0, db.AddSeason("2015-2016"));
-        }
-
-        [Test]
-        public void test_AddLeague_return0()
-        {
-            db.AddLeague("Spain");
-            Assert.AreEqual(0, db.AddLeague("Spain"));
-        }
-
-        [Test]
-        public void test_AddLeague_return1()
-        {
-            Assert.AreEqual(1, db.AddLeague("Spain"));
+            List<Match> matches = new List<Match>();
+            matches.Add(new Match("ManU", "Nor", "England", "201-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2));
+            Assert.Throws<ArgumentException>(() => db.AddMatches(matches));
         }
 
         /// <summary>
@@ -126,7 +106,7 @@ namespace DatabaseTestProject
             List<Match> matches = new List<Match>();
             for (int i = 0; i < 3; i++)
             {
-                matches.Add(new Match("ManU", "Nor", "England", "2016-2017", new DateTime(2018, 9, 23), 2, 1, 1, 1.34, 3.1, 4.2));
+                matches.Add(new Match("ManU", "Nor", "England", "2016-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2));
             }
             int result = db.AddMatches(matches);
             Assert.AreEqual(1, result);
@@ -142,7 +122,7 @@ namespace DatabaseTestProject
             List<Match> matches = new List<Match>();
             for (int i = 0; i < 3; i++)
             {
-                matches.Add(new Match("ManU", "Nor", "England", "2016-2017", new DateTime(2018, 9, 23), 2, 1, 1, 1.34, 3.1, 4.2));
+                matches.Add(new Match("ManU", "Nor", "England", "2016-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2));
             }
             Assert.Throws<SQLiteException>(() => database.AddMatches(matches));
         }
@@ -157,7 +137,7 @@ namespace DatabaseTestProject
             List<Match> matches = new List<Match>();
             for (int i = 0; i < 380; i++)
             {
-                matches.Add(new Match(i.ToString(), (i + 1).ToString(), "England", "2016-2017", new DateTime(2018, 9, 23), 2, 1, 1, 1.34, 3.1, 4.2));
+                matches.Add(new Match(i.ToString(), (i + 1).ToString(), "England", "2016-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2));
             }
             Stopwatch sw = new Stopwatch();
             sw.Start();
@@ -220,7 +200,7 @@ namespace DatabaseTestProject
         [Test]
         public void test_SelectNthRow()
         {
-            Match m = new Match("ManU", "Cardiff", "England", "2016-2017", new DateTime(2017, 10, 28), 2, 0, 1, 2.2, 3.15, 2.7);
+            Match m = new Match("ManU", "Cardiff", "England", "2016-2017", new DateTime(2017, 10, 28), 2, 0, 2.2, 3.15, 2.7);
             Match compared = db.SelectNthRow(5);
             Assert.AreEqual(m.Hometeam, compared.Hometeam);
             Assert.AreEqual(m.Awayteam, compared.Awayteam);
@@ -230,7 +210,7 @@ namespace DatabaseTestProject
         [Test]
         public void test_SelectNthRow_zero_index()
         {
-            Match m = new Match("ManU", "Chelsea", "England", "2016-2017",new DateTime(2017, 09, 23), 2, 1, 1, 2.2, 3.15, 2.7);
+            Match m = new Match("ManU", "Chelsea", "England", "2016-2017",new DateTime(2017, 09, 23), 2, 1, 2.2, 3.15, 2.7);
             Match compared = db.SelectNthRow(0);
             Assert.AreEqual(m.Hometeam, compared.Hometeam);
             Assert.AreEqual(m.Awayteam, compared.Awayteam);

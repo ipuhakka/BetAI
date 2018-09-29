@@ -33,8 +33,6 @@ namespace DataParser
                 Console.WriteLine("Parsing csv data");
                 List<Match> matches = csv.Parse(tempFile, season, league, optionalParams);
                 DB db = new DB(database);
-                db.AddLeague(league);
-                db.AddSeason(season);
                 int addedRows = db.AddMatches(matches);
 
                 Console.WriteLine(addedRows + " added to database at " + database);

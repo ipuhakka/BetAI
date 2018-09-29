@@ -26,3 +26,10 @@ Next up -> Full unit test case design for CSVParser.
 linvalid lines out of the data.
 
 **27.9.2018:** Added requirements to Database, implemented new requirements and tests for them.
+
+**28.9.2018**: Changed the database structure completely. Now there are three tables: matches, seasons, and leagues.
+Leagues and seasons make it easier to secure unification of data. Now if some match has incorrect values for these,
+database won't allow for adding these matches. Test run OK.
+
+**29.9.2018**: Introduced branching to development, so there is always a stable branch and a branch for developemnt changes.
+Removed seasons and leagues table, and column matchInSeasonId from matches. These were unnecessary for the system.

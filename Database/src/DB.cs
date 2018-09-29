@@ -51,7 +51,7 @@ namespace Database
         /// <returns></returns>
         public void ClearDatabase()
         {
-            string query = "BEGIN; DELETE FROM matches; DELETE FROM seasons; DELETE FROM leagues;COMMIT;";
+            string query = "DELETE FROM matches;";
             SQLiteConnection con = new SQLiteConnection(connectionString);
             con.Open();
             SQLiteCommand command = new SQLiteCommand(query, con);
@@ -76,72 +76,14 @@ namespace Database
         }
 
         /// <summary>
-        /// Inserts a new row to seasons table. Returns 1 if season was inserted, 0 if not.
-        /// </summary>
-        /// <param name="season"></param>
-        /// <exception cref="ArgumentException">Thrown if season is not in format 'yyyy-yyyy'.</exception>
-        /// <exception cref="SQLiteException">Thrown if connection fails.</exception>
-        public int AddSeason(string season)
-        {
-            if (season.Length != 9 || !season[4].Equals('-'))
-                throw new ArgumentException("Invalid season format");
-
-            int result = 0;
-            string statement = "INSERT INTO seasons VALUES (@season);";
-            SQLiteConnection con = new SQLiteConnection(connectionString);
-            try
-            {
-                con.Open();
-                SQLiteCommand command = new SQLiteCommand(statement, con);
-                command.Parameters.AddWithValue("season", season);
-                result = command.ExecuteNonQuery();
-            }
-            catch (SQLiteException)
-            {
-                result = 0;
-            }
-            finally
-            {
-                con.Close();
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Adds a new league to table leagues. Returns 1 on success, 0 if league was not added.
-        /// </summary>
-        /// <param name="league"></param>
-        /// <returns></returns>
-        public int AddLeague(string league)
-        {
-            int result = 0;
-            string statement = "INSERT INTO leagues VALUES (@league);";
-            SQLiteConnection con = new SQLiteConnection(connectionString);
-            try
-            {
-                con.Open();
-                SQLiteCommand command = new SQLiteCommand(statement, con);
-                command.Parameters.AddWithValue("league", league);
-                result = command.ExecuteNonQuery();
-            }
-            catch (SQLiteException)
-            {
-                result = 0;
-            }
-            finally
-            {
-                con.Close();
-            }
-            return result;
-        }
-
-        /// <summary>
         /// Adds matches to the table matches. 
         /// </summary>
         /// <param name="matches">List of matches to be added.</param>
         /// <param name="connectionString">Connectionstring to use for the database connection.</param>
         /// <returns>Number of rows added.</returns>
         /// <exception cref="SQLiteException">Thrown if connection to database fails.</exception>
+        /// <exception cref="ArgumentException">Thrown if any match contains
+        /// invalid season parameter. </exception>
         public int AddMatches(List<Match> matches)
         {
             int addedMatches = 0;
@@ -153,10 +95,13 @@ namespace Database
             {
                 foreach (Match m in matches)
                 {
+                    if (m.Season.Length != 9 || !m.Season[4].Equals('-'))
+                        throw new ArgumentException("Invalid season format");
+
                     try
                     {
                             //Add your query here.
-                        cmd.CommandText = "INSERT INTO matches VALUES (@playedDate, @hometeam, @awayteam, @league, @season, @homescore, @awayscore, @homeOdd, @drawOdd, @awayOdd, @matchId);";
+                        cmd.CommandText = "INSERT INTO matches VALUES (@playedDate, @hometeam, @awayteam, @league, @season, @homescore, @awayscore, @homeOdd, @drawOdd, @awayOdd);";
                         cmd.Parameters.AddWithValue(@"playedDate", m.Date);
                         cmd.Parameters.AddWithValue(@"hometeam", m.Hometeam);
                         cmd.Parameters.AddWithValue(@"awayteam", m.Awayteam);
@@ -167,7 +112,6 @@ namespace Database
                         cmd.Parameters.AddWithValue(@"homeOdd", m.HomeOdd);
                         cmd.Parameters.AddWithValue(@"drawOdd", m.DrawOdd);
                         cmd.Parameters.AddWithValue(@"awayOdd", m.AwayOdd);
-                        cmd.Parameters.AddWithValue(@"MatchId", m.MatchInSeasonId);
                         addedMatches += cmd.ExecuteNonQuery();
                     }
                      catch (SQLiteException)
@@ -282,8 +226,7 @@ namespace Database
                 Match m = new Match(reader["hometeam"].ToString(), reader["awayteam"].ToString(),
                     reader["season"].ToString(), reader["league"].ToString(),
                     Convert.ToDateTime(reader["playedDate"]), Convert.ToInt32(reader["homescore"].ToString()), 
-                    Convert.ToInt32(reader["awayscore"].ToString()), Convert.ToInt32(reader["matchInSeasonId"].ToString()),
-                    Convert.ToDouble(reader["homeOdd"].ToString()), 
+                    Convert.ToInt32(reader["awayscore"].ToString()), Convert.ToDouble(reader["homeOdd"].ToString()), 
                     Convert.ToDouble(reader["drawOdd"].ToString()), Convert.ToDouble(reader["awayOdd"].ToString()));
 
                 matches.Add(m);

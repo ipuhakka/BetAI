@@ -1,14 +1,6 @@
 PRAGMA foreign_keys=OFF;
 BEGIN TRANSACTION;
 
-CREATE TABLE IF NOT EXISTS leagues(
-	league TEXT PRIMARY KEY
-);
-
-CREATE TABLE IF NOT EXISTS seasons(
-	season CHAR(9) PRIMARY KEY
-);
-
 CREATE TABLE IF NOT EXISTS matches(
 	playedDate TEXT,
 	hometeam TEXT,
@@ -20,7 +12,6 @@ CREATE TABLE IF NOT EXISTS matches(
 	homeOdd REAL,
 	drawOdd REAL,
 	awayOdd REAL,
-	matchInSeasonId INTEGER,
 	CONSTRAINT PK_matches PRIMARY KEY(playedDate, hometeam, awayteam)
 );
 

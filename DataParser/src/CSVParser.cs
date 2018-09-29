@@ -51,7 +51,7 @@ namespace DataParser
                     double drawOdd = Convert.ToDouble(splitted[indexes[indexes.FindIndex(t => t.Item1 == "DrawOdd")].Item2], CultureInfo.InvariantCulture);
                     double awayOdd = Convert.ToDouble(splitted[indexes[indexes.FindIndex(t => t.Item1 == "AwayOdd")].Item2], CultureInfo.InvariantCulture);
                     matches.Add(new Match(hometeam, awayteam, season, league, Convert.ToDateTime(date), homescore,
-                        awayscore, i, homeOdd, drawOdd, awayOdd));
+                        awayscore, homeOdd, drawOdd, awayOdd));
                 }
                 catch (FormatException)
                 {
