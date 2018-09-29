@@ -77,6 +77,6 @@ Tests run OK
 Leagues and seasons make it easier to secure unification of data. Now if some match has incorrect values for these,
 database won't allow for adding these matches. Test run OK.
 
-**29.9.2018**: Removed all yesterdays changes to table schema and database layer.
+**29.9.2018**: Removed all yesterdays changes to table schema and database layer. 
 
 
