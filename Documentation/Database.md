@@ -80,3 +80,4 @@ database won't allow for adding these matches. Test run OK.
 **29.9.2018**: Removed all yesterdays changes to table schema and database layer. Merged development to master.
 
 
+
