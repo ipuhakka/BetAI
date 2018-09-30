@@ -152,19 +152,21 @@ namespace Database
             matches = ParseMatches(reader);
             con.Close();
 
-            if (matches.Count < n)
+            if (matches.Count >= n)
             {
-                query = "SELECT * FROM matches WHERE (hometeam=@team OR awayteam=@team) AND date(playedDate) < date(@date) ORDER BY date(playedDate) DESC LIMIT @limit;";
-                con = new SQLiteConnection(connectionString);
-                con.Open();
-                command = new SQLiteCommand(query, con);
-                command.Parameters.AddWithValue("team", team);
-                command.Parameters.AddWithValue("date", date);
-                command.Parameters.AddWithValue("limit", n);
-                reader = command.ExecuteReader();
-                matches = ParseMatches(reader);
-                con.Close();
+                return matches;
             }
+
+            query = "SELECT * FROM matches WHERE (hometeam=@team OR awayteam=@team) AND date(playedDate) < date(@date) ORDER BY date(playedDate) DESC LIMIT @limit;";
+            con = new SQLiteConnection(connectionString);
+            con.Open();
+            command = new SQLiteCommand(query, con);
+            command.Parameters.AddWithValue("team", team);
+            command.Parameters.AddWithValue("date", date);
+            command.Parameters.AddWithValue("limit", n);
+            reader = command.ExecuteReader();
+            matches = ParseMatches(reader);
+            con.Close();
 
             if (matches.Count < n)
                 throw new NotEnoughDataException("Too few matches returned by query");
@@ -174,6 +176,7 @@ namespace Database
         /// <summary>
         /// Returns a match in selected row. Throws IndexOutOfRangeException
         /// if row searched is less than 0 or at least match-count.
+        /// Indexing starts from 0.
         /// </summary>
         /// <param name="rowNumber">Row to be returned</param>
         /// <exception cref="IndexOutOfRangeException"></exception>
@@ -221,7 +224,7 @@ namespace Database
         /// </summary>
         /// <param name="d"></param>
         /// <exception cref="NotEnoughDataException">Thrown if no rows where returned.</exception>
-        public double HomeAVGBeforeDate(DateTime d, string season, string league)
+        public double LeagueHomeAVGBeforeDate(DateTime d, string season, string league)
         {
             double result = 0;
             string query = "SELECT CASE WHEN COUNT(homescore) > 0 THEN AVG(homescore) ELSE -1 END AS REAL FROM matches WHERE (season=@season AND league=@league AND date(playedDate) < date(@date))";
@@ -250,7 +253,7 @@ namespace Database
         /// </summary>
         /// <param name="d"></param>
         /// <exception cref="NotEnoughDataException">Thrown if no rows where returned.</exception>
-        public double AwayAVGBeforeDate(DateTime d, string season, string league)
+        public double LeagueAwayAVGBeforeDate(DateTime d, string season, string league)
         {
             double result = 0;
             string query = "SELECT CASE WHEN COUNT(homescore) > 0 THEN AVG(awayscore) ELSE -1 END AS REAL FROM matches WHERE (season=@season AND league=@league AND date(playedDate) < date(@date))";
@@ -281,7 +284,7 @@ namespace Database
             while (reader.Read())
             {
                 Match m = new Match(reader["hometeam"].ToString(), reader["awayteam"].ToString(),
-                    reader["season"].ToString(), reader["league"].ToString(),
+                    reader["league"].ToString(), reader["season"].ToString(),
                     Convert.ToDateTime(reader["playedDate"]), Convert.ToInt32(reader["homescore"].ToString()), 
                     Convert.ToInt32(reader["awayscore"].ToString()), Convert.ToDouble(reader["homeOdd"].ToString()), 
                     Convert.ToDouble(reader["drawOdd"].ToString()), Convert.ToDouble(reader["awayOdd"].ToString()));

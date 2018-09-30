@@ -57,7 +57,7 @@ in a given season, before match n.
 
 **RQ4**. - Done.
 
-**RQ5**. - Done. Updating 380 matches takes ~ 0.5 seconds.
+**RQ5**. - Done. Updating 380 matches takes < 0.5 seconds.
 
 **RQ6**. -Done.
 
@@ -82,4 +82,8 @@ database won't allow for adding these matches. Test run OK.
 **29.9.2018**: Removed all yesterdays changes to table schema and database layer. Added method to count
 home goal average up to date n. Tests run OK. Merge branches.
 
-
+## Bugs discovered
+**30.9.2018**: Reading match data in DB.ParseMatches used season and league in the wrong order
+in match constructor. This meant using parameters in wrong place in queries, 
+when using Match-object data to shape the query. Created test cases to pass after chagnes
+have been made, tests run OK.

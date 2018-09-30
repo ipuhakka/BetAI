@@ -36,3 +36,8 @@ Removed seasons and leagues table, and column matchInSeasonId from matches. Thes
 merged development to master.
 
 Added methods for counting season average goals in home and away matches. Tests run OK
+
+**30.9.2018**: Added BetAI to project. Made requirements for Match prediction. Refactored method names
+in DB.
+Implemented predicting matches. It can't yet distinquish situations where DB-calls throw 
+NotEnoughDataException.

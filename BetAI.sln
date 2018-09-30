@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{C4EC7438-2A7A-41DB-A9E4-E36D853F94ED}"
 EndProject
@@ -10,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataParser", "DataParser\DataParser.csproj", "{20E83418-2F87-4F65-968C-D97C68124B3B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataParserTestProject", "DataParserTestProject\DataParserTestProject.csproj", "{B4811642-B88A-47FE-879F-F8E684057CB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetAI", "BetAI\BetAI.csproj", "{B4B30702-37C7-4C31-90B2-C97C922E5393}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetAITestProject", "BetAITestProject\BetAITestProject.csproj", "{BD3BEC01-D729-4A68-93CD-A41E1CFAC60C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +37,19 @@ Global
 		{B4811642-B88A-47FE-879F-F8E684057CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4811642-B88A-47FE-879F-F8E684057CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4811642-B88A-47FE-879F-F8E684057CB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4B30702-37C7-4C31-90B2-C97C922E5393}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4B30702-37C7-4C31-90B2-C97C922E5393}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4B30702-37C7-4C31-90B2-C97C922E5393}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4B30702-37C7-4C31-90B2-C97C922E5393}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD3BEC01-D729-4A68-93CD-A41E1CFAC60C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD3BEC01-D729-4A68-93CD-A41E1CFAC60C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD3BEC01-D729-4A68-93CD-A41E1CFAC60C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD3BEC01-D729-4A68-93CD-A41E1CFAC60C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E762E0E5-0C06-47C8-9CBA-265479AC920E}
 	EndGlobalSection
 EndGlobal
