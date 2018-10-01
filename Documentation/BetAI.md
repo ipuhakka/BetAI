@@ -52,9 +52,9 @@ All requirements done.
 estimatedWinPercentage = (e^(-absolute(result))) * (absolute(result)) / 1; 
 betCoefficient = estimatedWinPercentage / (1 / odd); 
 bool playBet = (playLimit > betCoefficient);
-stake = baseStake* (betCoefficient / playLimit);
+stake = minimumStake* (betCoefficient / playLimit);
 ```
-based on given parameters *riskLimit* and *baseStakeCoefficient* and drawLimit.
+based on given parameters *riskLimit* and *minimumStakeCoefficient* and drawLimit.
 
 *estimatedWinPercentage* is poisson distribution probability for 
 predicted difference in the two teams goals scored. 
@@ -67,7 +67,7 @@ playing the bet.
  
 *playLimit* is parameter which sets the minimum playable
 value for a bet. 
-*baseStake* is the base stake set.
+*minimumStake* is the base stake set.
 
 2. Component needs to have a method PlayBet, which returns
 money won/lost by the bet. 
@@ -78,3 +78,43 @@ as it is the profit/loss of the bet.
 
 #### Progress
 All requirements done.
+
+### Sampling
+To get the matches used as a sample, a list of random integers
+needs to be created. This list is called Points. Points has 
+following properties:
+1. Sample can contain values from 0 to match count.
+2. Sample can't contain more than one of any value.
+3. Sample cant have more values than match count.
+
+#### Progress
+Done.
+
+### Node 
+Node is an individual node of the whole population. It has variables 
+for predicting a match result and making a bet. 
+
+1. Node has variables for riskLimit, drawLimit, sampleSize and minimumStake.
+
+Each node has a fitness value that is the amount of money won/lost
+in current match sample. 
+
+2. Node has a variable for fitness value.
+
+Each node has a probability of being selected for crossover,
+based on fitness value. A higher fitness = Higher chance of
+being selected for crossover.
+
+3. Node has a variable for weighted probability of being
+selected for crossover.
+
+Node also collects statistics:
+ Won / played / not played / skipped bets, and generation. 
+All variables are written to a file at generation,
+change with other nodes of the same generation.
+ 
+4. Node has variables for amount of bets won, lost
+ and skipped, and its generation.
+ 
+5. All node data is written in JSON-format
+to a file, with other members of its generation.

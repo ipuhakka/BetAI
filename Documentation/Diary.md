@@ -48,3 +48,8 @@ Fixed documentation mistakes for betting algorithm.
 Implemented making bets based on requirements and algorithm shown in Documentation\BetAI.md.
 Tests run OK. Algorithm leaves room for small performance tweaks if necessary. Testing should
 be done more systematically.
+
+Made requirements for individual node.
+
+Documented requirements for sampling, implemented creating a sample and tests for requirements.
+All tests run OK.
