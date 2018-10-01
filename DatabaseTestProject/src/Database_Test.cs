@@ -187,6 +187,18 @@ namespace DatabaseTestProject
             Assert.AreEqual(new DateTime(2017, 10, 14), matches[3].Date);
         }
 
+        [Test]
+        public void test_SelectNLastFromTeam_5Matches()
+        {
+            List<Match> matches = db.SelectNLastFromTeam(false, 5, new DateTime(2017, 12, 03), "Chelsea");
+            Assert.AreEqual(5, matches.Count);
+            Assert.AreEqual(new DateTime(2017, 11, 26), matches[0].Date);
+            Assert.AreEqual(new DateTime(2017, 11, 12), matches[1].Date);
+            Assert.AreEqual(new DateTime(2017, 10, 21), matches[2].Date);
+            Assert.AreEqual(new DateTime(2017, 10, 14), matches[3].Date);
+            Assert.AreEqual(new DateTime(2017, 09, 23), matches[4].Date);
+        }
+
         /// <summary>
         /// If not enough matches before specified date are not found, exception
         /// is thrown.

@@ -17,29 +17,36 @@ namespace BetAI.BetSim
         /// is thrown by a call to database layer.</exception>
         public double PredictResult(Match toPredict, string databasePath, int sampleSize)
         {
+            List<Match> hometeamPreviousMatches = new List<Match>();
+            List<Match> awayteamPreviousMatches = new List<Match>();
+            double homeScoredLeagueAvg = 0;
+            double awayScoredLeagueAvg = 0;
+
             DB db = new DB(databasePath);
-            List<Match> hometeamPreviousMatches = db.SelectNLastFromTeam(true, sampleSize, toPredict.Date, toPredict.Hometeam);
-            List<Match> awayteamPreviousMatches = db.SelectNLastFromTeam(false, sampleSize, toPredict.Date, toPredict.Awayteam);
+            try
+            {
+                hometeamPreviousMatches = db.SelectNLastFromTeam(true, sampleSize, toPredict.Date, toPredict.Hometeam);
+                awayteamPreviousMatches = db.SelectNLastFromTeam(false, sampleSize, toPredict.Date, toPredict.Awayteam);
+                homeScoredLeagueAvg = db.LeagueHomeAVGBeforeDate(toPredict.Date, toPredict.Season, toPredict.League);
+                awayScoredLeagueAvg = db.LeagueAwayAVGBeforeDate(toPredict.Date, toPredict.Season, toPredict.League);
+            }
+            catch (NotEnoughDataException)
+            {
+                throw new NotSimulatedException();
+            }
+
             double homeScoredAvg = CountMeanScoredGoals(hometeamPreviousMatches, toPredict.Hometeam);
             double awayScoredAvg = CountMeanScoredGoals(awayteamPreviousMatches, toPredict.Awayteam);
             double homeConcededAvg = CountMeanConcededGoals(hometeamPreviousMatches, toPredict.Hometeam);
             double awayConcededAvg = CountMeanConcededGoals(awayteamPreviousMatches, toPredict.Awayteam);
-            double homeScoredLeagueAvg = db.LeagueHomeAVGBeforeDate(toPredict.Date, toPredict.Season, toPredict.League);
-            double awayScoredLeagueAvg = db.LeagueAwayAVGBeforeDate(toPredict.Date, toPredict.Season, toPredict.League);
 
             double homeAttStrength = CountStrength(homeScoredAvg, homeScoredLeagueAvg);
             double homeDefStrength = CountStrength(homeConcededAvg, awayScoredLeagueAvg);
             double awayAttStrength = CountStrength(awayScoredAvg, awayScoredLeagueAvg);
             double awayDefStrength = CountStrength(awayConcededAvg, homeScoredLeagueAvg);
-            Console.WriteLine(homeConcededAvg + "/" + awayScoredLeagueAvg);
 
-            Console.WriteLine(homeAttStrength);
-            Console.WriteLine(homeDefStrength);
-            Console.WriteLine(awayAttStrength);
-            Console.WriteLine(awayDefStrength);
             double homeGoalEstimate = CountGoalEstimate(homeAttStrength, awayDefStrength, homeScoredLeagueAvg);
             double awayGoalEstimate = CountGoalEstimate(awayAttStrength, homeDefStrength, awayScoredLeagueAvg);
-            Console.WriteLine(homeGoalEstimate + "-" + awayGoalEstimate);
 
             return homeGoalEstimate - awayGoalEstimate;
         }
