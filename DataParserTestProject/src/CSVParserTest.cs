@@ -6,7 +6,7 @@ using System.IO;
 using Database;
 
 namespace DataParserTestProject
-{   [Category("ParserTests")]
+{ 
     [TestFixture]
     public class CSVParserTest
     {

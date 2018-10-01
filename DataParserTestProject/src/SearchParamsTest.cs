@@ -8,7 +8,6 @@ using DataParser;
 
 namespace DataParserTestProject
 {
-    [Category("SearchParamsTest")]
     [TestFixture]
     public class SearchParamsTest
     {

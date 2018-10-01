@@ -4,7 +4,6 @@ using DataParser;
 
 namespace DataParserTestProject
 {
-    [Category("FileLoaderTests")]
     [TestFixture]
     public class FileLoaderTest
     {

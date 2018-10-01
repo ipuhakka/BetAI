@@ -8,7 +8,6 @@ using System.Diagnostics;
 
 namespace DatabaseTestProject
 {
-    [Category("DatabaseTests")]
     [TestFixture]
     public class Database_Test
     {
