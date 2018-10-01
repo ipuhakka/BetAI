@@ -18,7 +18,7 @@ changed from *file\values.json*. Initial population is created, and algorithm
 starts.
 
 User starts the command prompt to run program with filename argument.
-FIle does exist, so program loads the data containing current 
+File does exist, so program loads the data containing current 
 population of nodes, and carries on the algorithm.
 
 ## Requirements 
@@ -41,8 +41,40 @@ awayGoalEstimate = awayAttack * homeAttack * leagueAvgGoalsAway;
 
 #result
 result = homeGoalEstimate - awayGoalEstimate;
-
 ```
 
+#### Progress
+All requirements done.
 
+### Setting bet
+1. Component needs to set a stake according to algorithm
+```
+estimatedWinPercentage = (e^(-absolute(result))) * (absolute(result)) / 1; 
+betCoefficient = estimatedWinPercentage / (1 / odd); 
+bool playBet = (playLimit > betCoefficient);
+stake = baseStake* (betCoefficient / playLimit);
+```
+based on given parameters *riskLimit* and *baseStakeCoefficient* and drawLimit.
 
+*estimatedWinPercentage* is poisson distribution probability for 
+predicted difference in the two teams goals scored. 
+
+*betCoefficient* is the found value of bet (compared to odd providers assessment).
+For example *betCoefficient* = 1, means that
+system predicts the likelyhood of a result as the same
+as odd providers did. System has not found any value in 
+playing the bet.
+ 
+*playLimit* is parameter which sets the minimum playable
+value for a bet. 
+*baseStake* is the base stake set.
+
+2. Component needs to have a method PlayBet, which returns
+money won/lost by the bet. 
+
+3. A bet is played, if betCoefficient is larger 
+than playLimit. If bet is not played, 0 is returned
+as it is the profit/loss of the bet.
+
+#### Progress
+All requirements done.

@@ -8,7 +8,7 @@ using BetAI.Exceptions;
 
 namespace BetAI.BetSim
 {
-    public class BetSimulator
+    public class Predict
     {
         /// <summary>
         /// Calculates predicted result for a match. 

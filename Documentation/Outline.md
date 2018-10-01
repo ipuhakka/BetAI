@@ -110,10 +110,10 @@ In placing bets, system needs to have a way to analyze if bet is playable. This 
 be achieved by nodes having a *risk-limit*, which decides whether or not to play bet,
 and a way to analyze the coefficient for the risk/profit value for each bet.
 ```
-estimatedWinPercentage = (e^(-result)) * (result^1) / 1;
+estimatedWinPercentage = (e^(-absolute(result)) * (absolute(result)) / 1; 
 betCoefficient = estimatedWinPercentage / (1 / odd); 
-bool playBet = (riskLimit > betCoefficient);
-stake = baseStakeCoefficient * (riskLimit / betCoefficient);
+bool playBet = (playLimit < betCoefficient);
+stake = baseStake* (riskLimit / betCoefficient);
 ```
 Algorithm controls parameters riskLimit and baseStakeCoefficient.
 

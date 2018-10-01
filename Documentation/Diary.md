@@ -40,4 +40,11 @@ Added methods for counting season average goals in home and away matches. Tests 
 **30.9.2018**: Added BetAI to project. Made requirements for Match prediction. Refactored method names
 in DB.
 Implemented predicting matches. It can't yet distinquish situations where DB-calls throw 
-NotEnoughDataException.
+NotEnoughDataException. One test case fails.
+
+1.10.2018**: Implemented PredictMatches throwing NotSimulatedException on catching NotEnoughDataException.
+Fixed documentation mistakes for betting algorithm.
+
+Implemented making bets based on requirements and algorithm shown in Documentation\BetAI.md.
+Tests run OK. Algorithm leaves room for small performance tweaks if necessary. Testing should
+be done more systematically.
