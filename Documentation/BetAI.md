@@ -70,7 +70,7 @@ value for a bet.
 *minimumStake* is the base stake set.
 
 2. Component needs to have a method PlayBet, which returns
-money won/lost by the bet. 
+profit of the bet. 
 
 3. A bet is played, if betCoefficient is larger 
 than playLimit. If bet is not played, 0 is returned
@@ -94,25 +94,26 @@ Done.
 Node is an individual node of the whole population. It has variables 
 for predicting a match result and making a bet. 
 
-1. Node has variables for riskLimit, drawLimit, sampleSize and minimumStake.
-
-Each node has a fitness value that is the amount of money won/lost
+Each node has a fitness value. It is the profit made
 in current match sample. 
-
-2. Node has a variable for fitness value. Fitness is the amount
-of money won/lost in the bets.
 
 Each node has a probability of being selected for crossover,
 based on fitness value. A higher fitness = Higher chance of
 being selected for crossover.
 
-3. Node has a variable for weighted probability of being
-selected for crossover.
-
 Node also collects statistics:
  Won / played / not played / skipped bets, and generation. 
 All variables are written to a file at generation,
 change with other nodes of the same generation.
+ 
+1. Node has variables for riskLimit, drawLimit, evaluationSampleSize and minimumStake.
+EvaluationSampleSize tells how many matches are looked for assessing strength values for 
+teams.
+ 
+2. Node has a variable for fitness value. Fitness is the profit made.
+ 
+3. Node has a variable for weighted probability of being
+selected for crossover. 
  
 4. Node has variables for amount of bets won, lost
  and skipped, and its generation.

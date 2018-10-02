@@ -73,7 +73,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\BetSim\BetTest.cs" />
     <Compile Include="src\BetSim\PredictTest.cs" />
-    <Compile Include="src\Genetics\NodeTest.cs" />
     <Compile Include="src\Utils\SampleTest.cs" />
   </ItemGroup>
   <ItemGroup>

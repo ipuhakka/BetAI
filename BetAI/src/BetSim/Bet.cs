@@ -15,7 +15,7 @@ namespace BetAI.BetSim
         /// <summary>
         /// PlayBet assesses the risk involved in playing bet for Match m,
         /// and plays the bet if it finds value based on predicted result,
-        /// given odds and a playLimit. 
+        /// given odds and a playLimit. Returns profit of the bet.
         /// </summary>
         /// <param name="m">Match predicted.</param>
         /// <param name="predictedResult">Simulated result for the match.</param>'
@@ -24,22 +24,21 @@ namespace BetAI.BetSim
         /// <param name="baseStake">Lowest stake which is played.</param>
         /// <param name="drawLimit">If result is smaller than absolute(drawLimit) bet
         /// is predicted as a draw.</param>
-        /// <returns>Amount of money won/lost by bet</returns>
+        /// <returns>Profit of the bet. If bet is lost: -stake,
+        /// if bet is won = (stake * predictedResultOdd) - stake</returns>
         public double PlayBet(Match m, double predictedResult, double playLimit, double baseStake, double drawLimit)
         {
             double expectedResultPercentage = CalculateExpectedResultPercentage(predictedResult);
             double predictedResultOdd = GetOddForPredictedResult(m, predictedResult, drawLimit);
             double betCoefficient = expectedResultPercentage / (1 / predictedResultOdd);
-            Console.WriteLine(expectedResultPercentage);
-            Console.WriteLine(1 / predictedResultOdd);
-            Console.WriteLine(betCoefficient);
+
             if (playLimit > betCoefficient)
                 return 0;
 
             double stake = baseStake * (betCoefficient / playLimit);
 
             if (GetBetResult(m, predictedResult, drawLimit) == 1)
-                return stake * predictedResultOdd;
+                return (stake * predictedResultOdd) - stake;
             else
                 return -stake;
         }

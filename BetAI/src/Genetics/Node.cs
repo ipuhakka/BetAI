@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Database;
 using BetAI.BetSim;
 using BetAI.Exceptions;
@@ -27,7 +26,16 @@ namespace BetAI.Genetics
             Generation = gen;
         }
 
-        public double EvaluateFitness(List<Match> sample, string dbPath, int sampleSize)
+        /// <summary>
+        /// Evaluates the fitness (money won/lost) for the node.
+        /// </summary>
+        /// <param name="sample">List of matches simulated.</param>
+        /// <param name="dbPath">Path to database file which is used.</param>
+        /// <param name="evaluationSampleSize">evaluationSampleSize describes
+        /// how many matches are used by Predict to make an evaluation of teams 
+        /// strength. </param>
+        /// <returns>Fitness value for the specific node.</returns>
+        public double EvaluateFitness(List<Match> sample, string dbPath, int evaluationSampleSize)
         {
             Predict predict = new Predict();
             Bet bet = new Bet();
@@ -36,7 +44,7 @@ namespace BetAI.Genetics
             {
                 try
                 {
-                    double predictedResult = predict.PredictResult(m, dbPath, sampleSize);
+                    double predictedResult = predict.PredictResult(m, dbPath, evaluationSampleSize);
                     double betProfit = bet.PlayBet(m, predictedResult, PlayLimit, MinimumStake, DrawLimit);
                     if (betProfit == 0)
                         BetsNotPlayed++;

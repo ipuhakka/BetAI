@@ -72,6 +72,11 @@ namespace BetAITestProject.Utils
             }
         }
 
+        /// <summary>
+        /// As sampling is only done once in generation, it is not necessary
+        /// for it to be handled in times such as 100ms. Handling a sample
+        /// of 2000 matches in less than 2 seconds is a minimum goal.
+        /// </summary>
         [Test]
         public void test_Sample_Performance()
         {

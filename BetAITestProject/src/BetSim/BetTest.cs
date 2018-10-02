@@ -4,7 +4,6 @@ using System.IO;
 using NUnit.Framework;
 using Database;
 using BetAI.BetSim;
-using BetAI.Exceptions;
 
 namespace BetAITestProject.BetSim
 {
@@ -63,7 +62,7 @@ namespace BetAITestProject.BetSim
             Predict betSim = new Predict();
             double result = betSim.PredictResult(toPredict, path, 3); //result is ~ -0.54
             Bet bet = new Bet();
-            Assert.AreEqual(31.22, Math.Round(bet.PlayBet(toPredict, Math.Round(result, 2), 0.5, 5, 1), 2));
+            Assert.AreEqual(21.31, Math.Round(bet.PlayBet(toPredict, Math.Round(result, 2), 0.5, 5, 1), 2));
         }
 
         [Test]

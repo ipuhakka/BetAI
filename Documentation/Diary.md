@@ -56,7 +56,11 @@ All tests run OK.
 
 **2.10.2018**: 
 Refactored Sample to create Match-list immediately. Added a performance test, which suggest that
-an alteration would be in order. Database should contains a function to get a list of N matches
-with row numbers provided by sample. 
+an alteration would be in order. Database should contain a function to get a list of N matches
+with row numbers provided by sample. This was implemented and SelectNthRow was deleted. Tests
+were designed and run OK. Peformance with creating a sample of 2000 matches was increased,
+before it took on average 13 seconds, now < 1 second.
 
 Implemented Node.EvaluateFitness().
+
+Fixed the fitness in requirements and implementation. Now fitness is the profit made by bets.
