@@ -212,30 +212,35 @@ namespace DatabaseTestProject
         public void test_SelectMatchesByRowIndex()
         {
             Match m = new Match("ManU", "Cardiff", "England", "2016-2017", new DateTime(2017, 10, 28), 2, 0, 2.2, 3.15, 2.7);
-            Match compared = db.SelectNthRow(5);
-            Assert.AreEqual(m, compared);
+            List<Match> results = db.SelectMatchesByRowIndex(new List<int> { 5 });
+            Assert.AreEqual(m, results[0]);
         }
 
         [Test]
-        public void test_SelectNthRow_zero_index()
+        public void test_SelectMatchesByRowIndex_zero_index()
         {
             Match m = new Match("ManU", "Chelsea", "England", "2016-2017",new DateTime(2017, 09, 23), 2, 1, 2.2, 3.15, 2.7);
-            Match compared = db.SelectNthRow(0);
-            Assert.AreEqual(m, compared);
+            List<Match> results = db.SelectMatchesByRowIndex(new List<int> { 0 });
+            Assert.AreEqual(m, results[0]);
         }
 
         [Test]
-        public void test_SelectNthRow_Under_Zero_Throws_IndexOutOfRangeException()
+        public void test_SelectMatchesByRowIndex_Under_Zero_Throws_IndexOutOfRangeException()
         {
-            Assert.Throws<IndexOutOfRangeException>(() => db.SelectNthRow(-1));
+            Assert.Throws<IndexOutOfRangeException>(() => db.SelectMatchesByRowIndex(new List<int> { -1 }));
         }
 
         [Test]
-        public void test_SelectNthRow_Over_Count_Throws_IndexOutOfRangeException()
+        public void test_SelectMatchesByRowIndex_Equal_To_Count_Throws_IndexOutOfRangeException()
         {
-            Assert.Throws<IndexOutOfRangeException>(() => db.SelectNthRow(13));
+            Assert.Throws<IndexOutOfRangeException>(() => db.SelectMatchesByRowIndex(new List<int> { 13 }));
         }
 
+        [Test]
+        public void test_SelectMatchesByRowIndex_runs_with_more_than_one_value()
+        {
+            Assert.DoesNotThrow(() => db.SelectMatchesByRowIndex(new List<int> { 1, 2, 5, 6 }));
+        }
 
         [Test]
         public void test_SelectCount_emptyTable()
@@ -259,7 +264,7 @@ namespace DatabaseTestProject
         [Test]
         public void test_HomeAVGBeforeDate_Match_object()
         {
-            Match m = db.SelectNthRow(7);
+            Match m = db.SelectMatchesByRowIndex(new List<int> { 7 })[0];
             Assert.AreEqual(1.43, Math.Round((double)db.LeagueHomeAVGBeforeDate(m.Date, m.Season, m.League), 2));
         }
 

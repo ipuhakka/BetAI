@@ -15,7 +15,7 @@ namespace Database
         /// <param name="filePath"></param>
         public DB(string filePath)
         {
-            connectionString = String.Format("Data Source = {0}; Version = 3; foreign keys=true; FailIfMissing=True", filePath);
+            connectionString = String.Format("Data Source = {0}; Version = 3; foreign keys=true; FailIfMissing=True;", filePath);
         }
 
         public void CreateDatabase(string filepath)
@@ -174,28 +174,42 @@ namespace Database
         }
 
         /// <summary>
-        /// Returns a match in selected row. Throws IndexOutOfRangeException
-        /// if row searched is less than 0 or at least match-count.
-        /// Indexing starts from 0.
+        /// Returns a list of matches which row index belongs to list
+        /// rowIndexes.
         /// </summary>
-        /// <param name="rowNumber">Row to be returned</param>
-        /// <exception cref="IndexOutOfRangeException"></exception>
-        public Match SelectNthRow(int rowNumber)
+        /// <param name="rowIndex">A list of indexes wanted to be fetched from database.</param>
+        /// <returns>List of matches in rows at rowIndexes.</returns>
+        /// <exception cref="SQLiteException"></exception>
+        public List<Match> SelectMatchesByRowIndex(List<int> rowIndexes)
         {
-            if (rowNumber < 0)
-                throw new IndexOutOfRangeException();
-            string query = "SELECT * FROM matches LIMIT 1 OFFSET @rowNumber;";
+            List<Match> matches = new List<Match>();
             SQLiteConnection con = new SQLiteConnection(connectionString);
             con.Open();
-            SQLiteCommand command = new SQLiteCommand(query, con);
-            command.Parameters.AddWithValue("rowNumber", rowNumber);
-            SQLiteDataReader reader = command.ExecuteReader();
-            List<Match> matches = ParseMatches(reader);
-            con.Close();
-            if (matches.Count > 0)
-                return matches[0];
-            else
-                throw new IndexOutOfRangeException();
+
+            using (var cmd = new SQLiteCommand(con))
+            using (var transaction = con.BeginTransaction())
+            {
+                foreach (int index in rowIndexes)
+                {
+                    if (index < 0)
+                        throw new IndexOutOfRangeException();
+
+                    string query = "SELECT * FROM matches LIMIT 1 OFFSET @rowNumber;";
+                    cmd.CommandText = query;
+                    cmd.Parameters.AddWithValue("rowNumber", index);
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        List<Match> readMatches = ParseMatches(reader);
+                        if (readMatches.Count > 0)
+                            matches.Add(readMatches[0]);
+                        else
+                            throw new IndexOutOfRangeException();
+                    }
+                }
+                transaction.Commit();
+                con.Close();
+            }
+            return matches;
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 using Database;
@@ -49,7 +50,7 @@ namespace BetAITestProject.BetSim
             0.620578 - 1.16666
              */
 
-            Match toPredict = db.SelectNthRow(7);
+            Match toPredict = db.SelectMatchesByRowIndex(new List<int>() { 7 })[0];
             Predict betSim = new Predict();
             double result = betSim.PredictResult(toPredict, path, 3);
             Console.WriteLine("Result: " + result);
@@ -59,7 +60,7 @@ namespace BetAITestProject.BetSim
         [Test]
         public void test_PredictResult_Throws_NotSimulatedException()
         {
-            Match toPredict = db.SelectNthRow(6);
+            Match toPredict = db.SelectMatchesByRowIndex(new List<int>() { 6 })[0];
             Predict betSim = new Predict();
             Assert.Throws<NotSimulatedException>(() => betSim.PredictResult(toPredict, path, 3));
         }

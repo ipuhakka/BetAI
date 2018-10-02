@@ -41,7 +41,7 @@ It should look for N last total matches. If there is still not enough, it throws
 **RQ5**. Adding data to table has to be fast enough. Updating 380 matches (standard for 20 team league)
   should take ~ 2 seconds.
   
-**RQ6**. Database needs to have method to return match in row n. 
+**RQ6**. Database needs to have method to return a list of matches based on row number. 
 
 **RQ7**. Database needs to have a method for returning count of matches in the database.
 
@@ -81,6 +81,9 @@ database won't allow for adding these matches. Test run OK.
 
 **29.9.2018**: Removed all yesterdays changes to table schema and database layer. Added method to count
 home goal average up to date n. Tests run OK. Merge branches.
+
+**2.10.2018**: Changed requirement **RQ6** from returning match in row N to returning list of matches based
+on list of index rows. Implemented new transactional match sampling. Tests run OK.
 
 ## Bugs discovered
 **30.9.2018**: Reading match data in DB.ParseMatches used season and league in the wrong order

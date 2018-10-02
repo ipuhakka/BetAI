@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using BetAI.Utils;
@@ -65,7 +66,7 @@ namespace BetAITestProject.Utils
                 sw.Start();
                 Sample sample = new Sample(file, 13);
                 sw.Stop();
-                System.Console.WriteLine("Took " + sw.ElapsedMilliseconds);
+                Console.WriteLine("Took " + sw.ElapsedMilliseconds);
                 sw.Reset();
                 sample.Matches.Should().OnlyHaveUniqueItems();
             }
@@ -76,9 +77,9 @@ namespace BetAITestProject.Utils
         {
             List<long> runTimes = new List<long>();
             string pathToTestFile = Path.Combine(TestContext.CurrentContext.TestDirectory, @"test-files\data.sqlite3");
-            System.Console.WriteLine(pathToTestFile);
+            
             Stopwatch sw = new Stopwatch();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
                 sw.Start();
                 Sample sample = new Sample(pathToTestFile, 2000);
@@ -86,7 +87,7 @@ namespace BetAITestProject.Utils
                 runTimes.Add(sw.ElapsedMilliseconds);
                 sw.Reset();
             }
-
+            Console.WriteLine(runTimes.Average());
             Assert.LessOrEqual(runTimes.Average(), 2000);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using NUnit.Framework;
 using Database;
@@ -41,7 +42,7 @@ namespace BetAITestProject.BetSim
              betCoefficient = 0.84.
              
              betCoefficient is smaller than playLimit, function returns 0.*/
-            Match toPredict = db.SelectNthRow(7);
+            Match toPredict = db.SelectMatchesByRowIndex(new List<int>() { 7 })[0];
             Predict betSim = new Predict();
             double result = betSim.PredictResult(toPredict, path, 3); 
             Bet bet = new Bet();
@@ -58,7 +59,7 @@ namespace BetAITestProject.BetSim
              betCoefficient = 0.991305 
              stake = 5 * (0.991305 / 0.5) = 9.91305 
              result = 9.91305 * 3.15 */
-            Match toPredict = db.SelectNthRow(7);
+            Match toPredict = db.SelectMatchesByRowIndex(new List<int>() { 7 })[0];
             Predict betSim = new Predict();
             double result = betSim.PredictResult(toPredict, path, 3); //result is ~ -0.54
             Bet bet = new Bet();
@@ -77,7 +78,7 @@ namespace BetAITestProject.BetSim
              betCoefficient = 0.8496
              stake = 5 * (0.8496 / 0.5) = 8.496 
              result = -8.496 */
-            Match toPredict = db.SelectNthRow(7);
+            Match toPredict = db.SelectMatchesByRowIndex(new List<int>() { 7 })[0];
             Predict betSim = new Predict();
             double result = betSim.PredictResult(toPredict, path, 3); //result is ~ -0.54
             Bet bet = new Bet();

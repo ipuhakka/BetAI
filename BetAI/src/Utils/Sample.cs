@@ -21,6 +21,7 @@ namespace BetAI.Utils
         /// <exception cref="SQLiteException"></exception>
         public Sample(string path, int sampleSize)
         {
+            List<int> indexes = new List<int>();
             DB db = new DB(path);
             int matchCount = db.SelectCount();
 
@@ -28,15 +29,15 @@ namespace BetAI.Utils
                 throw new NotEnoughDataException("Sample size less than match count");
 
             Matches = new List<Match>();
-            List<int> samplePoints = Enumerable.Range(0, sampleSize).ToList();
+            List<int> possibleIndexes = Enumerable.Range(0, sampleSize).ToList();
             Random rand = new Random();
             for (int i = 0; i < sampleSize; i++)
             {
-                int newPoint = rand.Next(0, samplePoints.Count);
-                Matches.Add(db.SelectNthRow(samplePoints[newPoint]));
-                samplePoints.RemoveAt(newPoint);
+                int newPoint = rand.Next(0, possibleIndexes.Count);
+                indexes.Add(possibleIndexes[newPoint]);
+                possibleIndexes.RemoveAt(newPoint);
             }
-
+            Matches = db.SelectMatchesByRowIndex(indexes);
         }
     }
 }
