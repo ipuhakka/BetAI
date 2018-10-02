@@ -209,13 +209,11 @@ namespace DatabaseTestProject
         }
 
         [Test]
-        public void test_SelectNthRow()
+        public void test_SelectMatchesByRowIndex()
         {
             Match m = new Match("ManU", "Cardiff", "England", "2016-2017", new DateTime(2017, 10, 28), 2, 0, 2.2, 3.15, 2.7);
             Match compared = db.SelectNthRow(5);
-            Assert.AreEqual(m.Hometeam, compared.Hometeam);
-            Assert.AreEqual(m.Awayteam, compared.Awayteam);
-            Assert.AreEqual(m.Date, compared.Date);
+            Assert.AreEqual(m, compared);
         }
 
         [Test]
@@ -223,9 +221,7 @@ namespace DatabaseTestProject
         {
             Match m = new Match("ManU", "Chelsea", "England", "2016-2017",new DateTime(2017, 09, 23), 2, 1, 2.2, 3.15, 2.7);
             Match compared = db.SelectNthRow(0);
-            Assert.AreEqual(m.Hometeam, compared.Hometeam);
-            Assert.AreEqual(m.Awayteam, compared.Awayteam);
-            Assert.AreEqual(m.Date, compared.Date);
+            Assert.AreEqual(m, compared);
         }
 
         [Test]
@@ -239,6 +235,7 @@ namespace DatabaseTestProject
         {
             Assert.Throws<IndexOutOfRangeException>(() => db.SelectNthRow(13));
         }
+
 
         [Test]
         public void test_SelectCount_emptyTable()

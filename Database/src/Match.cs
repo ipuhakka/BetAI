@@ -28,5 +28,26 @@ namespace Database
             DrawOdd = drawO;
             AwayOdd = awayO;
         }
+
+        /// <summary>
+        /// Two matches are considered equal, if they have the same
+        /// Date and Hometeam and Awayteam.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            Match m = obj as Match;
+            return Date.Equals(m.Date) && Hometeam.Equals(m.Hometeam) && Awayteam.Equals(m.Awayteam);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = 9;
+            hash = (hash * 3) + Date.GetHashCode();
+            hash = (hash * 4) + Hometeam.GetHashCode();
+            hash = (hash * 2) + Awayteam.GetHashCode();
+            return hash;
+        }
     }
 }
