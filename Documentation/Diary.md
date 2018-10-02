@@ -42,7 +42,7 @@ in DB.
 Implemented predicting matches. It can't yet distinquish situations where DB-calls throw 
 NotEnoughDataException. One test case fails.
 
-1.10.2018**: Implemented PredictMatches throwing NotSimulatedException on catching NotEnoughDataException.
+**1.10.2018**: Implemented PredictMatches throwing NotSimulatedException on catching NotEnoughDataException.
 Fixed documentation mistakes for betting algorithm.
 
 Implemented making bets based on requirements and algorithm shown in Documentation\BetAI.md.
@@ -53,3 +53,10 @@ Made requirements for individual node.
 
 Documented requirements for sampling, implemented creating a sample and tests for requirements.
 All tests run OK.
+
+**2.10.2018**: 
+Refactored Sample to create Match-list immediately. Added a performance test, which suggest that
+an alteration would be in order. Database should contains a function to get a list of N matches
+with row numbers provided by sample. 
+
+Implemented Node.EvaluateFitness().

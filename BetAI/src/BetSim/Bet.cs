@@ -49,8 +49,8 @@ namespace BetAI.BetSim
         /// probability of the result.
         /// e^(-absolute(result)) * (absolute(result)) / 1
         /// </summary>
-        /// <param name="expectedResult"></param>
-        /// <returns></returns>
+        /// <param name="expectedResult">Result simulated.</param>
+        /// <returns>Calculated probability of the expectedResult</returns>
         private double CalculateExpectedResultPercentage(double expectedResult)
         {
             return Math.Pow(Math.E, -Math.Abs(expectedResult)) * Math.Abs(expectedResult) / 1;

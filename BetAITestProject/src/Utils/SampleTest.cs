@@ -1,13 +1,14 @@
 ﻿using System.IO;
-using System.Linq;
+using System.Diagnostics;
 using System.Collections.Generic;
-using BetAI.Genetics;
+using BetAI.Utils;
 using NUnit.Framework;
 using Database;
 using System.Data.SQLite;
 using FluentAssertions;
+using System.Linq;
 
-namespace BetAITestProject.Genetics
+namespace BetAITestProject.Utils
 {
     [TestFixture]
     public class SampleTest
@@ -46,19 +47,47 @@ namespace BetAITestProject.Genetics
         [Test]
         public void test_Sample_Unexisting_File_Throws_SQLiteException()
         {
-            Assert.Throws<SQLiteException>(() => new Sample("unexistingFile", 13));
+            Assert.Throws<SQLiteException>(() => new Sample("unexistingfile", 13));
+        }
+
+        [Test]
+        public void test_Sample_Invalid_File_Throws_SQLiteException()
+        {
+            Assert.Throws<SQLiteException>(() => new Sample("db_schema_dump.sql", 13));
         }
 
         [Test]
         public void test_NoDuplicatesInSample()
         {
-            List<Sample> samples = new List<Sample>();
-            
+            Stopwatch sw = new Stopwatch();
             for (int i = 0; i < 100; i++)
             {
+                sw.Start();
                 Sample sample = new Sample(file, 13);
-                sample.Points.Should().OnlyHaveUniqueItems();
+                sw.Stop();
+                System.Console.WriteLine("Took " + sw.ElapsedMilliseconds);
+                sw.Reset();
+                sample.Matches.Should().OnlyHaveUniqueItems();
             }
+        }
+
+        [Test]
+        public void test_Sample_Performance()
+        {
+            List<long> runTimes = new List<long>();
+            string pathToTestFile = Path.Combine(TestContext.CurrentContext.TestDirectory, @"test-files\data.sqlite3");
+            System.Console.WriteLine(pathToTestFile);
+            Stopwatch sw = new Stopwatch();
+            for (int i = 0; i < 5; i++)
+            {
+                sw.Start();
+                Sample sample = new Sample(pathToTestFile, 2000);
+                sw.Stop();
+                runTimes.Add(sw.ElapsedMilliseconds);
+                sw.Reset();
+            }
+
+            Assert.LessOrEqual(runTimes.Average(), 2000);
         }
     }
 }

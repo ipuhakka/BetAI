@@ -99,7 +99,8 @@ for predicting a match result and making a bet.
 Each node has a fitness value that is the amount of money won/lost
 in current match sample. 
 
-2. Node has a variable for fitness value.
+2. Node has a variable for fitness value. Fitness is the amount
+of money won/lost in the bets.
 
 Each node has a probability of being selected for crossover,
 based on fitness value. A higher fitness = Higher chance of

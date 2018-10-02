@@ -73,11 +73,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\BetSim\BetTest.cs" />
     <Compile Include="src\BetSim\PredictTest.cs" />
-    <Compile Include="src\Genetics\SampleTest.cs" />
+    <Compile Include="src\Genetics\NodeTest.cs" />
+    <Compile Include="src\Utils\SampleTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <Content Include="test-files\data.sqlite3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BetAI\BetAI.csproj">
@@ -89,6 +93,7 @@
       <Name>Database</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO;
 using Database;
 using System.Data.SQLite;
 
-namespace BetAI.Genetics
+namespace BetAI.Utils
 {
     public class Sample
     {
-        public List<int> Points { get; }
+        public List<Match> Matches { get; }
 
         /// <summary>
         /// Constructor for Sample. Creates an n-sized sample, if n is less
@@ -28,13 +27,13 @@ namespace BetAI.Genetics
             if (sampleSize > matchCount)
                 throw new NotEnoughDataException("Sample size less than match count");
 
-            Points = new List<int>();
+            Matches = new List<Match>();
             List<int> samplePoints = Enumerable.Range(0, sampleSize).ToList();
             Random rand = new Random();
             for (int i = 0; i < sampleSize; i++)
             {
                 int newPoint = rand.Next(0, samplePoints.Count);
-                Points.Add(samplePoints[newPoint]);
+                Matches.Add(db.SelectNthRow(samplePoints[newPoint]));
                 samplePoints.RemoveAt(newPoint);
             }
 
