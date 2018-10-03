@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Database;
 using BetAI.BetSim;
 using BetAI.Exceptions;
+using BetAI.Data;
 
 namespace BetAITestProject.BetSim
 {
@@ -21,6 +22,7 @@ namespace BetAITestProject.BetSim
             db.CreateDatabase(path);
             db.ExecuteScript("db_schema_dump.sql");
             db.ExecuteScript("db_testdata_dump.sql");
+            QueryMatches.SetMatches(path);
         }
 
         [OneTimeTearDown]
@@ -50,9 +52,9 @@ namespace BetAITestProject.BetSim
             0.620578 - 1.16666
              */
 
-            Match toPredict = db.SelectMatchesByRowIndex(new List<int>() { 7 })[0];
+            Match toPredict = QueryMatches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
             Predict betSim = new Predict();
-            double result = betSim.PredictResult(toPredict, path, 3);
+            double result = betSim.PredictResult(toPredict, 3);
             Console.WriteLine("Result: " + result);
             Assert.AreEqual(-0.54, Math.Round(result, 2));
         }
@@ -60,9 +62,9 @@ namespace BetAITestProject.BetSim
         [Test]
         public void test_PredictResult_Throws_NotSimulatedException()
         {
-            Match toPredict = db.SelectMatchesByRowIndex(new List<int>() { 6 })[0];
+            Match toPredict = QueryMatches.SelectMatchesWithRowIndex(new List<int>() { 6 })[0];
             Predict betSim = new Predict();
-            Assert.Throws<NotSimulatedException>(() => betSim.PredictResult(toPredict, path, 3));
+            Assert.Throws<NotSimulatedException>(() => betSim.PredictResult(toPredict, 3));
         }
     }
 }

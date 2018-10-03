@@ -35,7 +35,7 @@ namespace BetAI.Genetics
         /// how many matches are used by Predict to make an evaluation of teams 
         /// strength. </param>
         /// <returns>Fitness value for the specific node.</returns>
-        public double EvaluateFitness(List<Match> sample, string dbPath, int evaluationSampleSize)
+        public double EvaluateFitness(List<Match> sample, int evaluationSampleSize)
         {
             Predict predict = new Predict();
             Bet bet = new Bet();
@@ -44,7 +44,7 @@ namespace BetAI.Genetics
             {
                 try
                 {
-                    double predictedResult = predict.PredictResult(m, dbPath, evaluationSampleSize);
+                    double predictedResult = predict.PredictResult(m, evaluationSampleSize);
                     double betProfit = bet.PlayBet(m, predictedResult, PlayLimit, MinimumStake, DrawLimit);
                     if (betProfit == 0)
                         BetsNotPlayed++;

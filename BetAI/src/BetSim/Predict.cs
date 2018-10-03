@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Database;
 using BetAI.Exceptions;
+using BetAI.Data;
 
 namespace BetAI.BetSim
 {
@@ -15,20 +16,19 @@ namespace BetAI.BetSim
         /// </summary>
         /// <exception cref="NotSimulatedException">Thrown when NotEnoughDataException
         /// is thrown by a call to database layer.</exception>
-        public double PredictResult(Match toPredict, string databasePath, int sampleSize)
+        public double PredictResult(Match toPredict, int sampleSize)
         {
             List<Match> hometeamPreviousMatches = new List<Match>();
             List<Match> awayteamPreviousMatches = new List<Match>();
             double homeScoredLeagueAvg = 0;
             double awayScoredLeagueAvg = 0;
 
-            DB db = new DB(databasePath);
             try
             {
-                hometeamPreviousMatches = db.SelectNLastFromTeam(true, sampleSize, toPredict.Date, toPredict.Hometeam);
-                awayteamPreviousMatches = db.SelectNLastFromTeam(false, sampleSize, toPredict.Date, toPredict.Awayteam);
-                homeScoredLeagueAvg = db.LeagueHomeAVGBeforeDate(toPredict.Date, toPredict.Season, toPredict.League);
-                awayScoredLeagueAvg = db.LeagueAwayAVGBeforeDate(toPredict.Date, toPredict.Season, toPredict.League);
+                hometeamPreviousMatches = QueryMatches.SelectNLastFromTeam(true, sampleSize, toPredict.Date, toPredict.Hometeam);
+                awayteamPreviousMatches = QueryMatches.SelectNLastFromTeam(false, sampleSize, toPredict.Date, toPredict.Awayteam);
+                homeScoredLeagueAvg = QueryMatches.SeasonHomeGoalAvgBeforeDate(toPredict);
+                awayScoredLeagueAvg = QueryMatches.SeasonAwayGoalAvgBeforeDate(toPredict);
             }
             catch (NotEnoughDataException)
             {

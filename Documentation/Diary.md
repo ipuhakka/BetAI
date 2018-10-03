@@ -64,3 +64,12 @@ before it took on average 13 seconds, now < 1 second.
 Implemented Node.EvaluateFitness().
 
 Fixed the fitness in requirements and implementation. Now fitness is the profit made by bets.
+
+Next up -> Design tests for Node, start working on initializing generation 0, Crossover and Mutation. 
+
+**3.10.2018**: Yesterdays performance test for Node suggests that an in memory access for match-data
+is required. This means removing all database query matches methods and handling querying the
+results in BetAI.
+
+Change was implemented, unused functions in DB-class deleted, tests ported for new class,
+and tests run OK. 

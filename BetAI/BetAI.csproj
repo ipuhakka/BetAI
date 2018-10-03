@@ -63,6 +63,8 @@
   <ItemGroup>
     <Compile Include="src\BetSim\Bet.cs" />
     <Compile Include="src\BetSim\Predict.cs" />
+    <Compile Include="src\Data\QueryMatches.cs" />
+    <Compile Include="src\Exceptions\NotEnoughDataException.cs" />
     <Compile Include="src\Exceptions\NotSimulatedException.cs" />
     <Compile Include="src\Genetics\Node.cs" />
     <Compile Include="src\Utils\Sample.cs" />

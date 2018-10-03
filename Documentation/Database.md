@@ -28,25 +28,14 @@ Season:
 ```
 
 ## Requirements
-**RQ1**. Database needs to have a method to return N last home- or awaymatches from a given team
-starting from a given date. 
 
-**RQ2**. If database doesn't have N previous home/away matches from team A starting from a given date,
-It should look for N last total matches. If there is still not enough, it throws an error.
+**RQ1**. Database can't have duplicate matches. Duplicate = same date, hometeam and awayteam.
 
-**RQ3**. Database can't have duplicate matches. Duplicate = same date, hometeam and awayteam.
+**RQ2**. Database needs to have methods to create a database and set a schema.
 
-**RQ4**. Database needs to have methods to create a database and set a schema.
-
-**RQ5**. Adding data to table has to be fast enough. Updating 380 matches (standard for 20 team league)
+**RQ3**. Adding data to table has to be fast enough. Updating 380 matches (standard for 20 team league)
   should take ~ 2 seconds.
-  
-**RQ6**. Database needs to have method to return a list of matches based on row number. 
 
-**RQ7**. Database needs to have a method for returning count of matches in the database.
-
-**RQ8**. Database needs to have a method to count mean home/away -goals from a league
-in a given season, before match n.
   
 ## Progress
 **RQ1**. - Done.
@@ -54,16 +43,6 @@ in a given season, before match n.
 **RQ2**. - Done.
 
 **RQ3**. - Done.
-
-**RQ4**. - Done.
-
-**RQ5**. - Done. Updating 380 matches takes < 0.5 seconds.
-
-**RQ6**. -Done.
-
-**RQ7**. -Done.
-
-**RQ8**. -Done.
 
 ## Future changes.
 Once BetSimulator is done to the stage that it can be tested, results on how well 
@@ -83,7 +62,11 @@ database won't allow for adding these matches. Test run OK.
 home goal average up to date n. Tests run OK. Merge branches.
 
 **2.10.2018**: Changed requirement **RQ6** from returning match in row N to returning list of matches based
-on list of index rows. Implemented new transactional match sampling. Tests run OK.
+on list of index rows. Implemented new transactional match sampling. Tests run OK.'
+
+**3.10.2018**: Working directly with the database is far too slow for BetAI. Therefore, database
+is redesigned to only have a query method for returning all matches. Unused query methods were removed from database
+layer and requirements.
 
 ## Bugs discovered
 **30.9.2018**: Reading match data in DB.ParseMatches used season and league in the wrong order

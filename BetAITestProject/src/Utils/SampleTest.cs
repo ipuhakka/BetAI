@@ -1,13 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Diagnostics;
+using System.Linq;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using BetAI.Utils;
+using BetAI.Data;
+using BetAI.Exceptions;
 using NUnit.Framework;
 using Database;
-using System.Data.SQLite;
 using FluentAssertions;
-using System.Linq;
 
 namespace BetAITestProject.Utils
 {
@@ -36,35 +38,25 @@ namespace BetAITestProject.Utils
         [Test]
         public void test_Sample_sampleSizeLargerThanMatchCount()
         {
-            Assert.Throws<NotEnoughDataException>(() => new Sample(file, 14));
+            Assert.Throws<NotEnoughDataException>(() => new Sample(14));
         }
 
         [Test]
         public void test_Sample_sampleSizeEqualToMatchCount()
         {
-            Assert.DoesNotThrow(() => new Sample(file, 13));
-        }
-
-        [Test]
-        public void test_Sample_Unexisting_File_Throws_SQLiteException()
-        {
-            Assert.Throws<SQLiteException>(() => new Sample("unexistingfile", 13));
-        }
-
-        [Test]
-        public void test_Sample_Invalid_File_Throws_SQLiteException()
-        {
-            Assert.Throws<SQLiteException>(() => new Sample("db_schema_dump.sql", 13));
+            QueryMatches.SetMatches(file);
+            Assert.DoesNotThrow(() => new Sample(13));
         }
 
         [Test]
         public void test_NoDuplicatesInSample()
         {
+            QueryMatches.SetMatches(file);
             Stopwatch sw = new Stopwatch();
             for (int i = 0; i < 100; i++)
             {
                 sw.Start();
-                Sample sample = new Sample(file, 13);
+                Sample sample = new Sample(13);
                 sw.Stop();
                 Console.WriteLine("Took " + sw.ElapsedMilliseconds);
                 sw.Reset();
@@ -82,12 +74,12 @@ namespace BetAITestProject.Utils
         {
             List<long> runTimes = new List<long>();
             string pathToTestFile = Path.Combine(TestContext.CurrentContext.TestDirectory, @"test-files\data.sqlite3");
-            
+            QueryMatches.SetMatches(pathToTestFile);
             Stopwatch sw = new Stopwatch();
             for (int i = 0; i < 10; i++)
             {
                 sw.Start();
-                Sample sample = new Sample(pathToTestFile, 2000);
+                Sample sample = new Sample(2000);
                 sw.Stop();
                 runTimes.Add(sw.ElapsedMilliseconds);
                 sw.Reset();

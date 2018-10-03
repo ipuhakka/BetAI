@@ -8,6 +8,14 @@ BetAI requires a component for:
 5. Fitness function for assessing the fitness of each node
 6. With weighted probability select nodes based on fitness and reproduce 
 with some mutation probability, replace least-fit nodes with new individuals.
+7. Handling of matches:
+	- method to return a list of matches based on row number
+	- method for returning count of matches in memory
+	- method to count mean home/away -goals in league
+in a given season, before match n. 
+	- method to return N last home- or awaymatches from a given team
+starting from a given date. If team doesn't have n home/awaymatches,
+n previous all matches are returned.
 
 ## Use cases
 User starts the command prompt to run the program with filename argument.
@@ -22,6 +30,18 @@ File does exist, so program loads the data containing current
 population of nodes, and carries on the algorithm.
 
 ## Requirements 
+
+### Data handling
+1. method to return a list of matches based on row number
+2. method for returning count of matches in memory
+3. method to count mean home/away -goals in league
+in a given season, before match n. 
+4. method to return N last home- or awaymatches from a given team
+starting from a given date. If team doesn't have n home/awaymatches,
+n previous all matches are returned.
+
+#### Progress
+All done. 
 
 ### Predicting results:
 1. System needs to get a list of n previous matches for home and away team.

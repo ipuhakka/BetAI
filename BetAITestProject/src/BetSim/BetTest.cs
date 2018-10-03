@@ -4,6 +4,7 @@ using System.IO;
 using NUnit.Framework;
 using Database;
 using BetAI.BetSim;
+using BetAI.Data;
 
 namespace BetAITestProject.BetSim
 {
@@ -21,6 +22,7 @@ namespace BetAITestProject.BetSim
             db.CreateDatabase(path);
             db.ExecuteScript("db_schema_dump.sql");
             db.ExecuteScript("db_testdata_dump.sql");
+            QueryMatches.SetMatches(path);
         }
 
         [OneTimeTearDown]
@@ -41,9 +43,9 @@ namespace BetAITestProject.BetSim
              betCoefficient = 0.84.
              
              betCoefficient is smaller than playLimit, function returns 0.*/
-            Match toPredict = db.SelectMatchesByRowIndex(new List<int>() { 7 })[0];
+            Match toPredict = QueryMatches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
             Predict betSim = new Predict();
-            double result = betSim.PredictResult(toPredict, path, 3); 
+            double result = betSim.PredictResult(toPredict, 3); 
             Bet bet = new Bet();
             Assert.AreEqual(0, bet.PlayBet(toPredict, result, 1.05, 5, 0.2));
         }
@@ -58,9 +60,9 @@ namespace BetAITestProject.BetSim
              betCoefficient = 0.991305 
              stake = 5 * (0.991305 / 0.5) = 9.91305 
              result = 9.91305 * 3.15 */
-            Match toPredict = db.SelectMatchesByRowIndex(new List<int>() { 7 })[0];
+            Match toPredict = QueryMatches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
             Predict betSim = new Predict();
-            double result = betSim.PredictResult(toPredict, path, 3); //result is ~ -0.54
+            double result = betSim.PredictResult(toPredict, 3); //result is ~ -0.54
             Bet bet = new Bet();
             Assert.AreEqual(21.31, Math.Round(bet.PlayBet(toPredict, Math.Round(result, 2), 0.5, 5, 1), 2));
         }
@@ -77,9 +79,9 @@ namespace BetAITestProject.BetSim
              betCoefficient = 0.8496
              stake = 5 * (0.8496 / 0.5) = 8.496 
              result = -8.496 */
-            Match toPredict = db.SelectMatchesByRowIndex(new List<int>() { 7 })[0];
+            Match toPredict = QueryMatches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
             Predict betSim = new Predict();
-            double result = betSim.PredictResult(toPredict, path, 3); //result is ~ -0.54
+            double result = betSim.PredictResult(toPredict, 3); //result is ~ -0.54
             Bet bet = new Bet();
             Assert.AreEqual(-8.5, Math.Round(bet.PlayBet(toPredict, Math.Round(result, 2), 0.5, 5, 0.53), 2));
         }
