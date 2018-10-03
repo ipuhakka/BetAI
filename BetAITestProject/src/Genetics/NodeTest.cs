@@ -30,13 +30,14 @@ namespace BetAITestProject.Genetics
             Assert.DoesNotThrow(() => node.EvaluateFitness(sample.Matches, 5));
         }
 
-        /*[Test]
+        [Test]
         public void test_EvaluateFitness_performance()
         {
             List<Node> nodes = new List<Node>();
             string path = "test-files/data.sqlite3";
-            Sample sample = new Sample(path, 200);
-            for (var i = 0; i < 10; i++)
+            QueryMatches.SetMatches(path);
+            Sample sample = new Sample(200);
+            for (var i = 0; i < 5; i++)
             {
                 nodes.Add(new Node(2.8, 3.14, 5, 0));
             }
@@ -44,11 +45,11 @@ namespace BetAITestProject.Genetics
             sw.Start();
             foreach(Node n in nodes)
             {
-                n.EvaluateFitness(sample.Matches, path, 5);
+                n.EvaluateFitness(sample.Matches, 5);
             }
             sw.Stop();
             Console.WriteLine("Took " + sw.ElapsedMilliseconds);
-            Assert.LessOrEqual(10000, sw.ElapsedMilliseconds);
-        } */
+            Assert.LessOrEqual(sw.ElapsedMilliseconds, 5000);
+        } 
     }
 }
