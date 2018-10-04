@@ -17,13 +17,15 @@ namespace BetAI.Genetics
         public int BetsLost { get; private set; }
         public int BetsNotPlayed { get; private set; }
         public int BetsSkipped { get; private set; }
+        public int SimulationSampleSize { get; private set; }
 
-        public Node(double playL, double drawL, double minStake, int gen)
+        public Node(double playL, double drawL, double minStake, int gen, int sampleS)
         {
             PlayLimit = playL;
             DrawLimit = drawL;
             MinimumStake = minStake;
             Generation = gen;
+            SimulationSampleSize = sampleS;
         }
 
         /// <summary>
@@ -35,7 +37,7 @@ namespace BetAI.Genetics
         /// how many matches are used by Predict to make an evaluation of teams 
         /// strength. </param>
         /// <returns>Fitness value for the specific node.</returns>
-        public double EvaluateFitness(List<Match> sample, int evaluationSampleSize)
+        public double EvaluateFitness(List<Match> sample)
         {
             Predict predict = new Predict();
             Bet bet = new Bet();
@@ -44,7 +46,7 @@ namespace BetAI.Genetics
             {
                 try
                 {
-                    double predictedResult = predict.PredictResult(m, evaluationSampleSize);
+                    double predictedResult = predict.PredictResult(m, SimulationSampleSize);
                     double betProfit = bet.PlayBet(m, predictedResult, PlayLimit, MinimumStake, DrawLimit);
                     if (betProfit == 0)
                         BetsNotPlayed++;

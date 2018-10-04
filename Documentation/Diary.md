@@ -73,3 +73,8 @@ results in BetAI.
 
 Change was implemented, unused functions in DB-class deleted, tests ported for new class,
 and tests run OK. 
+
+**4.10.2018**: Although performance was raised yeasterday, it still needs honing in order for the
+simulation to be faster. 
+
+Created Master-class, which runs the simulation. 

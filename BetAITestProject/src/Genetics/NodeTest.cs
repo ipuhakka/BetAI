@@ -26,8 +26,8 @@ namespace BetAITestProject.Genetics
         {
             QueryMatches.SetMatches(path);
             Sample sample = new Sample(200);
-            Node node = new Node(2.8, 3.14, 5, 0);
-            Assert.DoesNotThrow(() => node.EvaluateFitness(sample.Matches, 5));
+            Node node = new Node(2.8, 3.14, 5, 0, 5);
+            Assert.DoesNotThrow(() => node.EvaluateFitness(sample.Matches));
         }
 
         [Test]
@@ -39,13 +39,13 @@ namespace BetAITestProject.Genetics
             Sample sample = new Sample(200);
             for (var i = 0; i < 5; i++)
             {
-                nodes.Add(new Node(2.8, 3.14, 5, 0));
+                nodes.Add(new Node(2.8, 3.14, 5, 0, 5));
             }
             Stopwatch sw = new Stopwatch();
             sw.Start();
             foreach(Node n in nodes)
             {
-                n.EvaluateFitness(sample.Matches, 5);
+                n.EvaluateFitness(sample.Matches);
             }
             sw.Stop();
             Console.WriteLine("Took " + sw.ElapsedMilliseconds);
