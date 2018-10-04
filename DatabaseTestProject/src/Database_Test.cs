@@ -8,7 +8,6 @@ using System.Diagnostics;
 
 namespace DatabaseTestProject
 {
-    [Category("DatabaseTests")]
     [TestFixture]
     public class Database_Test
     {
@@ -73,7 +72,7 @@ namespace DatabaseTestProject
         }
 
         [Test]
-        public void test_AddSeason_Invalid_format_throws_ArgumentException()
+        public void test_AddMatches_Invalid_format_throws_ArgumentException()
         {
             List<Match> matches = new List<Match>();
             matches.Add(new Match("ManU", "Nor", "England", "2016/2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2));
@@ -148,134 +147,17 @@ namespace DatabaseTestProject
             Assert.AreEqual(380, count);
         }
 
-        /// <summary>
-        /// ManU has over three homematches before date 2017-11-12, so function
-        /// should return a list of three previous matches.
-        /// </summary>
         [Test]
-        public void test_SelectNLastFromTeam_3homeMatches()
+        public void test_SelectAllFromDatabase()
         {
-            List<Match> matches = db.SelectNLastFromTeam(true, 3, new DateTime(2017, 11, 12), "ManU");
-            Assert.AreEqual(3, matches.Count);
-            Assert.AreEqual(new DateTime(2017, 11, 05), matches[0].Date);
-            Assert.AreEqual(new DateTime(2017, 10, 28), matches[1].Date);
-            Assert.AreEqual(new DateTime(2017, 10, 7), matches[2].Date);
+            Assert.AreEqual(13, db.SelectAllMatchesFromDatabase().Count);
         }
 
         [Test]
-        public void test_SelectNLastFromTeam_3_awayMatches()
+        public void test_SelectAllFromDatabase_throws_SQLiteException()
         {
-            List<Match> matches = db.SelectNLastFromTeam(false, 3, new DateTime(2017, 12, 03), "Chelsea");
-            Assert.AreEqual(3, matches.Count);
-            Assert.AreEqual(new DateTime(2017, 11, 12), matches[0].Date);
-            Assert.AreEqual(new DateTime(2017, 10, 14), matches[1].Date);
-            Assert.AreEqual(new DateTime(2017, 09, 23), matches[2].Date);
-        }
-
-        /// <summary>
-        /// When a team doesn't have N previous home/away matches before specified date,
-        /// N previous total matches are searched for.
-        /// </summary>
-        [Test]
-        public void test_SelectNLastFromTeam_4Matches()
-        {
-            List<Match> matches = db.SelectNLastFromTeam(false, 4, new DateTime(2017, 12, 03), "Chelsea");
-            Assert.AreEqual(4, matches.Count);
-            Assert.AreEqual(new DateTime(2017, 11, 26), matches[0].Date);
-            Assert.AreEqual(new DateTime(2017, 11, 12), matches[1].Date);
-            Assert.AreEqual(new DateTime(2017, 10, 21), matches[2].Date);
-            Assert.AreEqual(new DateTime(2017, 10, 14), matches[3].Date);
-        }
-
-        /// <summary>
-        /// If not enough matches before specified date are not found, exception
-        /// is thrown.
-        /// </summary>
-        [Test]
-        public void test_SelectNLastFromTeam_throws_NotEnoughDataException()
-        {
-            Assert.Throws<NotEnoughDataException>(() => db.SelectNLastFromTeam(false, 6, new DateTime(2017, 12, 03), "Chelsea"));
-        }
-
-        [Test]
-        public void test_SelectNthRow()
-        {
-            Match m = new Match("ManU", "Cardiff", "England", "2016-2017", new DateTime(2017, 10, 28), 2, 0, 2.2, 3.15, 2.7);
-            Match compared = db.SelectNthRow(5);
-            Assert.AreEqual(m.Hometeam, compared.Hometeam);
-            Assert.AreEqual(m.Awayteam, compared.Awayteam);
-            Assert.AreEqual(m.Date, compared.Date);
-        }
-
-        [Test]
-        public void test_SelectNthRow_zero_index()
-        {
-            Match m = new Match("ManU", "Chelsea", "England", "2016-2017",new DateTime(2017, 09, 23), 2, 1, 2.2, 3.15, 2.7);
-            Match compared = db.SelectNthRow(0);
-            Assert.AreEqual(m.Hometeam, compared.Hometeam);
-            Assert.AreEqual(m.Awayteam, compared.Awayteam);
-            Assert.AreEqual(m.Date, compared.Date);
-        }
-
-        [Test]
-        public void test_SelectNthRow_Under_Zero_Throws_IndexOutOfRangeException()
-        {
-            Assert.Throws<IndexOutOfRangeException>(() => db.SelectNthRow(-1));
-        }
-
-        [Test]
-        public void test_SelectNthRow_Over_Count_Throws_IndexOutOfRangeException()
-        {
-            Assert.Throws<IndexOutOfRangeException>(() => db.SelectNthRow(13));
-        }
-
-        [Test]
-        public void test_SelectCount_emptyTable()
-        {
-            db.ClearDatabase();
-            Assert.AreEqual(0, db.SelectCount());
-        }
-
-        [Test]
-        public void test_SelectCount()
-        {
-            Assert.AreEqual(13, db.SelectCount());
-        }
-
-        [Test]
-        public void test_HomeAVGBeforeDate()
-        {
-            Assert.AreEqual(1.5, Math.Round((double) db.HomeAVGBeforeDate(new DateTime(2017, 11, 05), "2016-2017", "England"), 2));
-        }
-
-        [Test]
-        public void test_HomeAVGBeforeDate_Unexisting_league_NotEnoughDataException()
-        {
-            Assert.Throws<NotEnoughDataException>(() => db.HomeAVGBeforeDate(new DateTime(2017, 11, 05), "2016-2017", "Unexisting league"));
-        }
-
-        [Test]
-        public void test_HomeAVGBeforeDate_Unexisting_season_NotEnoughDataException()
-        {
-            Assert.Throws<NotEnoughDataException>(() => db.HomeAVGBeforeDate(new DateTime(2017, 11, 05), "2016-2014", "England"));
-        }
-
-        [Test]
-        public void test_AwayAVGBeforeDate()
-        {
-            Assert.AreEqual(1.17, Math.Round((double)db.AwayAVGBeforeDate(new DateTime(2017, 11, 05), "2016-2017", "England"), 2));
-        }
-
-        [Test]
-        public void test_AwayAVGBeforeDate_Unexisting_league_throws_NotEnoughDataException()
-        {
-            Assert.Throws<NotEnoughDataException>(() => db.AwayAVGBeforeDate(new DateTime(2017, 11, 05), "2016-2017", "Unexisting league"));
-        }
-
-        [Test]
-        public void test_AwayAVGBeforeDate_Unexisting_season_NotEnoughDataException()
-        {
-            Assert.Throws<NotEnoughDataException>(() => db.AwayAVGBeforeDate(new DateTime(2017, 11, 05), "2016-2014", "England"));
+            DB test = new DB("unexistingfile");
+            Assert.Throws<SQLiteException>(() => test.SelectAllMatchesFromDatabase());
         }
     }
 }
