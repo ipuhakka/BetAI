@@ -10,8 +10,6 @@ namespace BetAI.Utils
 {
     public class Sample
     {
-        public List<Match> Matches { get; }
-
         /// <summary>
         /// Constructor for Sample. Creates an n-sized sample, if n is less
         /// than count of matches-table rows in path.
@@ -21,7 +19,7 @@ namespace BetAI.Utils
         /// <exception cref="NotEnoughDataException">Thrown if sampleSize is less
         /// than amount of matches in database.</exception>
         /// <exception cref="SQLiteException"></exception>
-        public Sample(int sampleSize)
+        public static List<Match> CreateSample(int sampleSize)
         {
             List<int> indexes = new List<int>();
 
@@ -29,7 +27,6 @@ namespace BetAI.Utils
             if (sampleSize > matchCount)
                 throw new NotEnoughDataException();
 
-            Matches = new List<Match>();
             List<int> possibleIndexes = Enumerable.Range(0, sampleSize).ToList();
             Random rand = new Random();
             for (int i = 0; i < sampleSize; i++)
@@ -38,7 +35,7 @@ namespace BetAI.Utils
                 indexes.Add(possibleIndexes[newPoint]);
                 possibleIndexes.RemoveAt(newPoint);
             }
-            Matches = QueryMatches.SelectMatchesWithRowIndex(indexes);
+            return QueryMatches.SelectMatchesWithRowIndex(indexes);
         }
     }
 }

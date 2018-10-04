@@ -18,27 +18,27 @@ namespace BetAI.BetSim
         /// is thrown by a call to database layer.</exception>
         public double PredictResult(Match toPredict, int sampleSize)
         {
-            List<Match> hometeamPreviousMatches = new List<Match>();
-            List<Match> awayteamPreviousMatches = new List<Match>();
+            Match[] hometeamPreviousMatches;
+            Match[] awayteamPreviousMatches;
             double homeScoredLeagueAvg = 0;
             double awayScoredLeagueAvg = 0;
 
             try
             {
-                hometeamPreviousMatches = QueryMatches.SelectNLastFromTeam(true, sampleSize, toPredict.Date, toPredict.Hometeam);
-                awayteamPreviousMatches = QueryMatches.SelectNLastFromTeam(false, sampleSize, toPredict.Date, toPredict.Awayteam);
-                homeScoredLeagueAvg = QueryMatches.SeasonHomeGoalAvgBeforeDate(toPredict);
-                awayScoredLeagueAvg = QueryMatches.SeasonAwayGoalAvgBeforeDate(toPredict);
+                hometeamPreviousMatches = QueryMatches.GetNLastFromTeamBeforeMatch(true, toPredict, sampleSize);
+                awayteamPreviousMatches = QueryMatches.GetNLastFromTeamBeforeMatch(false, toPredict, sampleSize);
+                homeScoredLeagueAvg = QueryMatches.GetSeasonAverage(true, toPredict);
+                awayScoredLeagueAvg = QueryMatches.GetSeasonAverage(false, toPredict);
             }
             catch (NotEnoughDataException)
             {
                 throw new NotSimulatedException();
             }
 
-            double homeScoredAvg = CountMeanScoredGoals(hometeamPreviousMatches, toPredict.Hometeam);
-            double awayScoredAvg = CountMeanScoredGoals(awayteamPreviousMatches, toPredict.Awayteam);
-            double homeConcededAvg = CountMeanConcededGoals(hometeamPreviousMatches, toPredict.Hometeam);
-            double awayConcededAvg = CountMeanConcededGoals(awayteamPreviousMatches, toPredict.Awayteam);
+            double homeScoredAvg = CountMeanScoredGoals(hometeamPreviousMatches.ToArray(), toPredict.Hometeam);
+            double awayScoredAvg = CountMeanScoredGoals(awayteamPreviousMatches.ToArray(), toPredict.Awayteam);
+            double homeConcededAvg = CountMeanConcededGoals(hometeamPreviousMatches.ToArray(), toPredict.Hometeam);
+            double awayConcededAvg = CountMeanConcededGoals(awayteamPreviousMatches.ToArray(), toPredict.Awayteam);
 
             double homeAttStrength = CountStrength(homeScoredAvg, homeScoredLeagueAvg);
             double homeDefStrength = CountStrength(homeConcededAvg, awayScoredLeagueAvg);
@@ -76,19 +76,19 @@ namespace BetAI.BetSim
         /// <param name="previousMatches">Matches used to calculate average for team</param>
         /// <param name="team">Team from which average goals is calculated</param>
         /// <returns>Average number of goals scored.</returns>
-        private double CountMeanScoredGoals(List<Match> previousMatches, string team)
+        private double CountMeanScoredGoals(Match[] previousMatches, string team)
         {
             double sum = 0;
 
-            foreach(Match m in previousMatches)
+            for (int i = 0; i < previousMatches.Length; i++)
             {
-                if (m.Hometeam.Equals(team))
-                    sum = sum + m.Homescore;
-                else if (m.Awayteam.Equals(team))
-                    sum = sum + m.Awayscore;
+                if (previousMatches[i].Hometeam.Equals(team))
+                    sum = sum + previousMatches[i].Homescore;
+                else if (previousMatches[i].Awayteam.Equals(team))
+                    sum = sum + previousMatches[i].Awayscore;
             }
 
-            return sum / previousMatches.Count;
+            return sum / previousMatches.Length;
         }
 
         /// <summary>
@@ -97,19 +97,19 @@ namespace BetAI.BetSim
         /// <param name="previousMatches">Matches used to calculate average for team</param>
         /// <param name="team">Team from which average goals is calculated</param>
         /// <returns>Average number of goals conceded by team.</returns>
-        private double CountMeanConcededGoals(List<Match> previousMatches, string team)
+        private double CountMeanConcededGoals(Match[] previousMatches, string team)
         {
             double sum = 0;
 
-            foreach (Match m in previousMatches)
+            for (int i = 0; i < previousMatches.Length; i++)
             {
-                if (m.Hometeam.Equals(team))
-                    sum = sum + m.Awayscore;
-                else if (m.Awayteam.Equals(team))
-                    sum = sum + m.Homescore;
+                if (previousMatches[i].Hometeam.Equals(team))
+                    sum = sum + previousMatches[i].Awayscore;
+                else if (previousMatches[i].Awayteam.Equals(team))
+                    sum = sum + previousMatches[i].Homescore;
             }
 
-            return sum / previousMatches.Count;
+            return sum / previousMatches.Length;
         }
     }
 }
