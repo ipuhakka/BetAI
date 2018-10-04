@@ -32,6 +32,20 @@ population of nodes, and carries on the algorithm.
 ## Requirements 
 
 ### Data handling
+Data handling is now done as follows: When the program starts, all matches
+in database are loaded into QueryMatches. Then, for each generation
+as Sample is created, sample matches are loaded into QueryMatches as an 
+array of MatchData-structures, under conditions set by the node with maximum
+sample size. Each node then in its fitness evaluation takes the chunks that it
+needs. Array and structure use, together with algorithm change so that
+simulation data is only loaded once per generation makes this functionality meet 
+the performance requirements it needs has.
+
+Now, when Master creates the sample, it also calls QueryMatches.CreateMatchDataStructs. 
+One MatchData structures have been created, they can be called from Predict to get
+match specific data. Call methods in predict change to GetNLastFromTeamBeforeMatch, and
+GetSeasonAverage. NotEnoughDataException still needs to be caught. 
+
 1. method to return a list of matches based on row number
 2. method for returning count of matches in memory
 3. method to count mean home/away -goals in league
@@ -41,7 +55,7 @@ starting from a given date. If team doesn't have n home/awaymatches,
 n previous all matches are returned.
 
 #### Progress
-All done. 
+All done.
 
 ### Predicting results:
 1. System needs to get a list of n previous matches for home and away team.
@@ -140,3 +154,6 @@ selected for crossover.
  
 5. All node data is written in JSON-format
 to a file, with other members of its generation.
+
+6. Node has a method for calculating fitness value. Fitness evaluation
+should not last for more than 50ms as average.
