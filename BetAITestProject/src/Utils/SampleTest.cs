@@ -38,14 +38,14 @@ namespace BetAITestProject.Utils
         [Test]
         public void test_Sample_sampleSizeLargerThanMatchCount()
         {
-            Assert.Throws<NotEnoughDataException>(() => new Sample(14));
+            Assert.Throws<NotEnoughDataException>(() => Sample.CreateSample(14));
         }
 
         [Test]
         public void test_Sample_sampleSizeEqualToMatchCount()
         {
             QueryMatches.SetMatches(file);
-            Assert.DoesNotThrow(() => new Sample(13));
+            Assert.DoesNotThrow(() => Sample.CreateSample(13));
         }
 
         [Test]
@@ -56,11 +56,11 @@ namespace BetAITestProject.Utils
             for (int i = 0; i < 100; i++)
             {
                 sw.Start();
-                Sample sample = new Sample(13);
+                List<Match> sample = Sample.CreateSample(13);
                 sw.Stop();
                 Console.WriteLine("Took " + sw.ElapsedMilliseconds);
                 sw.Reset();
-                sample.Matches.Should().OnlyHaveUniqueItems();
+                sample.Should().OnlyHaveUniqueItems();
             }
         }
 
@@ -79,7 +79,7 @@ namespace BetAITestProject.Utils
             for (int i = 0; i < 10; i++)
             {
                 sw.Start();
-                Sample sample = new Sample(2000);
+                List<Match> sample = Sample.CreateSample(2000);
                 sw.Stop();
                 runTimes.Add(sw.ElapsedMilliseconds);
                 sw.Reset();

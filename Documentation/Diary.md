@@ -74,7 +74,22 @@ results in BetAI.
 Change was implemented, unused functions in DB-class deleted, tests ported for new class,
 and tests run OK. 
 
-**4.10.2018**: Although performance was raised yeasterday, it still needs honing in order for the
+**4.10.2018**: Although performance was raised yesterday, it still needs honing in order for the
 simulation to be faster. 
 
 Created Master-class, which runs the simulation. 
+
+Implemented MatchData structure to match simulation: Now, instead of 
+getting previous matches and goal averages for each simulated match
+individually, they are searched only once, according to the needs 
+of the node with biggest SimulationSampleSize. Individual nodes
+then cut these readily made arrays of matches into sized chunks that 
+they need. Now, matchData is not searched by lists but by structure. 
+Many of the list operations were also converted for array use instead 
+of lists. 
+
+Now, from initial 13-15 second runtime for node, algorithm got down to
+1.5 seconds time by yesterdays changes, and after this performance refactoring 
+it now takes anything from 0.2ms - 30ms. This cuts the performance of
+fitness evaluation for 2000 nodes from 7-9 hours to < 1 minute. Goal set
+acceptable was one evalution per second, but now the system is clearly above that.

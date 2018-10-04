@@ -22,7 +22,9 @@ namespace BetAITestProject.BetSim
             db.CreateDatabase(path);
             db.ExecuteScript("db_schema_dump.sql");
             db.ExecuteScript("db_testdata_dump.sql");
+            List<Match> matches = db.SelectAllMatchesFromDatabase();
             QueryMatches.SetMatches(path);
+            QueryMatches.CreateMatchDataStructs(matches, 7);
         }
 
         [OneTimeTearDown]
