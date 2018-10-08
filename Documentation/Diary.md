@@ -93,3 +93,17 @@ Now, from initial 13-15 second runtime for node, algorithm got down to
 it now takes anything from 0.2ms - 30ms. This cuts the performance of
 fitness evaluation for 2000 nodes from 7-9 hours to < 1 minute. Goal set
 acceptable was one evalution per second, but now the system is clearly above that.
+
+**8.10.2018**: 
+Started working on crossover of nodes to produce new nodes. Implemented Crossover.
+
+Changed Outline.md to say that minimumStake is not controlled
+by algorithm: It is not used as an optimized parameter. This is
+because changing stake would produce results that vary from the
+goal of the program: Goal is to analyze risks better, and 
+if the stake is same for all nodes, this can be achieved better.
+
+Changed Node constructor to throw ArgumentException on invalid parameters given.
+
+Created tests for Crossover and added new for Node to test ArgumentException being
+thrown. All tests run OK.

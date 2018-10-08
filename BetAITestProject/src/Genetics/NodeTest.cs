@@ -24,6 +24,16 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
+        public void test_Node_constructor_throws_ArgumentException()
+        {
+            Assert.Throws<ArgumentException>(() => new Node(-0.1, 1, 1, 1, 1));
+            Assert.Throws<ArgumentException>(() => new Node(1, -0.1, 1, 1, 1));
+            Assert.Throws<ArgumentException>(() => new Node(1, 1, -0.1, 1, 1));
+            Assert.Throws<ArgumentException>(() => new Node(1, 1, 1, -1, 1));
+            Assert.Throws<ArgumentException>(() => new Node(1, 1, 1, 1, -1));
+        }
+
+        [Test]
         public void test_EvaluateFitness_runs()
         {
             QueryMatches.SetMatches(path);

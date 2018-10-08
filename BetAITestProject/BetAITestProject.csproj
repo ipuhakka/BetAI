@@ -74,6 +74,7 @@
     <Compile Include="src\BetSim\BetTest.cs" />
     <Compile Include="src\BetSim\PredictTest.cs" />
     <Compile Include="src\Data\QueryMatchesTest.cs" />
+    <Compile Include="src\Genetics\CrossoverTest.cs" />
     <Compile Include="src\Genetics\NodeTest.cs" />
     <Compile Include="src\Utils\SampleTest.cs" />
   </ItemGroup>

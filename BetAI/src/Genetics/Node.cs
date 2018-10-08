@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Database;
 using BetAI.BetSim;
 using BetAI.Exceptions;
@@ -19,8 +20,21 @@ namespace BetAI.Genetics
         public int BetsSkipped { get; private set; }
         public int SimulationSampleSize { get; private set; }
 
+        /// <summary>
+        /// Constructor for node.
+        /// </summary>
+        /// <param name="playL"></param>
+        /// <param name="drawL"></param>
+        /// <param name="minStake"></param>
+        /// <param name="gen"></param>
+        /// <param name="sampleS"></param>
+        /// <exception cref="ArgumentException">Thrown if sample size
+        /// is less than 1 or if any other parameter is less than 0.</exception>
         public Node(double playL, double drawL, double minStake, int gen, int sampleS)
         {
+            if (sampleS < 1 || playL < 0 || drawL < 0 || minStake < 0 || gen < 0)
+                throw new ArgumentException();
+
             PlayLimit = playL;
             DrawLimit = drawL;
             MinimumStake = minStake;

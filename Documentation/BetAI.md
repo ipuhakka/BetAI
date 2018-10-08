@@ -21,7 +21,7 @@ n previous all matches are returned.
 User starts the command prompt to run the program with filename argument.
 File doesn't exist, so it is created.
 Value for mutation probability and percentage of population to go the 
-reproduction process are asked to be inputted. These values can later be 
+reproduction process are asked to be inputted along with minimumStake. These values can later be 
 changed from *file\values.json*. Initial population is created, and algorithm 
 starts.
 
@@ -157,3 +157,32 @@ to a file, with other members of its generation.
 
 6. Node has a method for calculating fitness value. Fitness evaluation
 should not last for more than 50ms as average.
+
+7. SimulationSampleSize cant be less than 1.
+
+### Crossover
+Crossover creates new nodes based on the genetic data of parents. 
+Values for child nodes are generated using BLX-alpha algorithm. 
+Each parent creates two children.
+
+1. Childrens PlayLimit, DrawLimit, and SimulationSampleSize variable values are always between 
+```
+(min - alpha * d ,max + alpha * d)
+```
+where d is the difference in value between the parents,
+min is the minimum of the two parents value for parameter, max
+is the maximum value for parameter between two parents, and alpha
+is the set parameter for BLX.
+
+2. Number of children created is always 
+```
+floor(selectedCrossoverNodes / 2) * 2
+```
+
+3. Created children should have the same minimumstake as their parents
+and Generation should be added by one per generation.
+
+4. SimulationSampleSize cant be less than 1.
+
+#### Progress
+All requirements are met in tests.

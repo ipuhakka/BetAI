@@ -115,7 +115,7 @@ betCoefficient = estimatedWinPercentage / (1 / odd);
 bool playBet = (playLimit < betCoefficient);
 stake = baseStake* (riskLimit / betCoefficient);
 ```
-Algorithm controls parameters riskLimit and baseStakeCoefficient.
+Algorithm controls parameter riskLimit.
 
 ### Fitness function
 -----------------------
