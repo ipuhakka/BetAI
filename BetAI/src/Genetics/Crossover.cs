@@ -125,7 +125,7 @@ namespace BetAI.Genetics
                 int d = Math.Abs(val1 - val2);
                 int min = Math.Min(val1, val2);
                 int max = Math.Max(val1, val2);
-                newValues[0] = rand.Next((int) Math.Round(min - alpha * d), (int) Math.Round(max + alpha * d));
+                newValues[0] = rand.Next((int)Math.Round(min - alpha * d), (int) Math.Round(max + alpha * d));
                 newValues[1] = rand.Next((int)Math.Round(min - alpha * d), (int)Math.Round(max + alpha * d));
                 return newValues;
             }

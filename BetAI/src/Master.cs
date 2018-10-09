@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Database;
+using BetAI.Genetics;
 
-namespace BetAI.Genetics
+namespace BetAI
 {
     /// <summary>
     /// Master is responsible for running the evolution.
@@ -17,7 +18,7 @@ namespace BetAI.Genetics
         /// Constructor for master. If generation is 0, nodes should be initialized
         /// randomly, otherwise they are loaded from memory.
         /// </summary>
-        public Master()
+        public Master(string filename)
         {
             nodes = new List<Node>();
             sample = new List<Match>();

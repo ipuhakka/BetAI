@@ -7,7 +7,7 @@ using BetAI.Exceptions;
 
 namespace BetAI.Data
 {
-    public class QueryMatches
+    public class Matches
     {
         private static List<Match> matches;
         private static MatchData[] matchesData;

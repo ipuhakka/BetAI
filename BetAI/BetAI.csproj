@@ -63,11 +63,11 @@
   <ItemGroup>
     <Compile Include="src\BetSim\Bet.cs" />
     <Compile Include="src\BetSim\Predict.cs" />
-    <Compile Include="src\Data\QueryMatches.cs" />
+    <Compile Include="src\Data\Matches.cs" />
     <Compile Include="src\Exceptions\NotEnoughDataException.cs" />
     <Compile Include="src\Exceptions\NotSimulatedException.cs" />
     <Compile Include="src\Genetics\Crossover.cs" />
-    <Compile Include="src\Genetics\Master.cs" />
+    <Compile Include="src\Master.cs" />
     <Compile Include="src\Genetics\Node.cs" />
     <Compile Include="src\Utils\Sample.cs" />
     <Compile Include="src\Program.cs" />

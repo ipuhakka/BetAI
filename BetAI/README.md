@@ -2,10 +2,28 @@
 
 This document describes how the simulation works.
 
-## Master
-Simulation is run by Master-class. 
+Simulation is run by Master.cs. 
 
 ## Start
+
+Master is the driver of simulation. When program is started witha argument file,
+new Master is created with parameter filename. It checks whether *BetAI\Files* contains a
+folder named filename. If not, this folder is created, and *values.json*-file is created inside.
+This is filled with a json-object containing simulation data, either with user given
+parameters or values from *BetAI\Files\default.json*. 
+
+```
+{
+	"alpha": "0.5",
+	"minimumStake": "3.0",
+	"numberOfNodes": "2000",
+	"sampleSize": "200",
+	"database": "path\to\db\file"
+}
+```
+On starting the program these can be given as parameters. If not, values from *default.json* 
+are used.
+
 
 ## Set up for generation fitness evaluation
 First, generation nodes are initialized.
