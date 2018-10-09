@@ -114,4 +114,4 @@ to generate random first generation for the simulation.
 Created test cases to verify that produces values are valid.
 Modified Node constructor to make sure that values are within the set limits. 
 
-Next up -> Create method to choose Nodes for Crossover and start to create Master.cs. 
+Next up -> Create method to choose Nodes for Crossover and start to implement Master.cs. 

@@ -146,9 +146,10 @@ teams.
  
 2. Node has a variable for fitness value. Fitness is the profit made.
  
-3. Node has a variable for weighted probability of being
-selected for crossover. 
- 
+3. Node has a variable for probability of being
+selected for crossover. CrossoverFactor contains a
+weighted factor for that node to be selected for crossover.
+
 4. Node has variables for amount of bets won, lost
  and skipped, and its generation.
  

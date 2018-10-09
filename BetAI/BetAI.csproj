@@ -67,6 +67,7 @@
     <Compile Include="src\Exceptions\NotEnoughDataException.cs" />
     <Compile Include="src\Exceptions\NotSimulatedException.cs" />
     <Compile Include="src\Genetics\Crossover.cs" />
+    <Compile Include="src\Genetics\Selection.cs" />
     <Compile Include="src\Master.cs" />
     <Compile Include="src\Genetics\Node.cs" />
     <Compile Include="src\Utils\Sample.cs" />

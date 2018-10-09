@@ -12,7 +12,7 @@ namespace BetAI.Genetics
         public double DrawLimit { get; private set; }
         public double MinimumStake { get; private set; }
         public double Fitness { get; private set; }
-        public double CrossOverProbability { get; private set; }
+        public double CrossoverFactor{ get; private set; }
         public int Generation { get; private set; }
         public int BetsWon { get; private set; }
         public int BetsLost { get; private set; }
@@ -21,7 +21,7 @@ namespace BetAI.Genetics
         public int SimulationSampleSize { get; private set; }
 
         /// <summary>
-        /// Constructor for node.If PlayLimit, drawLimit or sampleSize are under/over
+        /// Constructor for node. If PlayLimit, drawLimit or sampleSize are under/over
         /// the limits, they are corrected to be right at the limit.
         /// </summary>
         /// <param name="playL"></param>
