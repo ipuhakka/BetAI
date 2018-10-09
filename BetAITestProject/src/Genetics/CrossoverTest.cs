@@ -213,5 +213,23 @@ namespace BetAITestProject.Genetics
                 children[0].SimulationSampleSize.Should().BeInRange(4, 9);
             }
         }
+
+        [Test]
+        public void test_Reproduce_SimulationSampleSize_1_does_not_throw_ArgumentException()
+        {
+            // SimulationSampleSize can never be less than 1 or larger than 100.
+            List<Node> nodes;
+
+            Crossover co = new Crossover();
+            for (int i = 0; i < 100; i++)
+            {
+                nodes = new List<Node>();
+                nodes.Add(new Node(1, 0.3, 5, 0, 1));
+                nodes.Add(new Node(2, 0.6, 5, 0, 2));
+                Console.WriteLine(nodes.Count);
+                Assert.DoesNotThrow(() => co.Reproduce(nodes, 5));
+               
+            }
+        }
     }
 }

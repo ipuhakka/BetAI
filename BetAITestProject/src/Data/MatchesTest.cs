@@ -10,7 +10,7 @@ using System.Data.SQLite;
 namespace BetAITestProject.Data
 {
     [TestFixture]
-    public class QueryMatchesTest
+    public class MatchesTest
     {
         private string database = "test.db";
         private DB db;
@@ -24,7 +24,7 @@ namespace BetAITestProject.Data
             db.CreateDatabase(database);
             db.ExecuteScript("db_schema_dump.sql");
             db.ExecuteScript("db_testdata_dump.sql");
-            QueryMatches.SetMatches(database);
+            Matches.SetMatches(database);
             matches = db.SelectAllMatchesFromDatabase();
         }
 
@@ -38,7 +38,7 @@ namespace BetAITestProject.Data
         public void test_SelectMatchesWithRowIndex()
         {
             Match m = new Match("ManU", "Cardiff", "England", "2016-2017", new DateTime(2017, 10, 28), 2, 0, 2.2, 3.15, 2.7);
-            List<Match> results = QueryMatches.SelectMatchesWithRowIndex(new List<int> { 5 });
+            List<Match> results = Matches.SelectMatchesWithRowIndex(new List<int> { 5 });
             Assert.AreEqual(m, results[0]);
             Assert.AreEqual(1, results.Count);
         }
@@ -46,22 +46,22 @@ namespace BetAITestProject.Data
         [Test]
         public void test_SetMatches_throws_ArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => QueryMatches.SetMatches(null));
+            Assert.Throws<ArgumentNullException>(() => Matches.SetMatches(null));
         }
 
         [Test]
         public void test_SetMatches_throws_SQLiteException()
         {
             /* If database set does not exist SQLiteException is thrown.*/
-            Assert.Throws<SQLiteException>(() => QueryMatches.SetMatches("unexistingDBFile"));
-            QueryMatches.SetMatches(database);
+            Assert.Throws<SQLiteException>(() => Matches.SetMatches("unexistingDBFile"));
+            Matches.SetMatches(database);
         }
 
         [Test]
         public void test_SelectMatchesWithRowIndex_zero_index()
         {
             Match m = new Match("ManU", "Chelsea", "England", "2016-2017", new DateTime(2017, 09, 23), 2, 1, 2.2, 3.15, 2.7);
-            List<Match> results = QueryMatches.SelectMatchesWithRowIndex(new List<int> { 5, 0 });
+            List<Match> results = Matches.SelectMatchesWithRowIndex(new List<int> { 5, 0 });
             Assert.AreEqual(m, results[1]);
             Assert.AreEqual(2, results.Count);
         }
@@ -69,33 +69,33 @@ namespace BetAITestProject.Data
         [Test]
         public void test_SelectMatchesByRowIndex_Under_Zero_Throws_IndexOutOfRangeException()
         {
-            Assert.Throws<IndexOutOfRangeException>(() => QueryMatches.SelectMatchesWithRowIndex(new List<int> { -1 }));
+            Assert.Throws<IndexOutOfRangeException>(() => Matches.SelectMatchesWithRowIndex(new List<int> { -1 }));
         }
 
         [Test]
         public void test_SelectMatchesByRowIndex_Equal_To_Count_Throws_IndexOutOfRangeException()
         {
-            Assert.Throws<IndexOutOfRangeException>(() => QueryMatches.SelectMatchesWithRowIndex(new List<int> { 13 }));
+            Assert.Throws<IndexOutOfRangeException>(() => Matches.SelectMatchesWithRowIndex(new List<int> { 13 }));
         }
 
         [Test]
         public void test_SelectMatchesByRowIndex_runs_with_more_than_one_value()
         {
-            Assert.DoesNotThrow(() => QueryMatches.SelectMatchesWithRowIndex(new List<int> { 1, 2, 5, 6 }));
+            Assert.DoesNotThrow(() => Matches.SelectMatchesWithRowIndex(new List<int> { 1, 2, 5, 6 }));
         }
 
         [Test]
         public void test_GetMatchCount_returns_13()
         {
-            Assert.AreEqual(13, QueryMatches.GetMatchCount());
+            Assert.AreEqual(13, Matches.GetMatchCount());
         }
 
         [Test]
         public void test_GetNLastFromTeamBeforeMatch_throws_NotEnoughDataException()
         {
             Match m = new Match("West Ham", "Chelsea", "England", "2016-2017", new DateTime(2017, 12, 03), 0, 2, 2.2, 3.15, 2.7);
-            QueryMatches.CreateMatchDataStructs(matches, 6);
-            Assert.Throws<NotEnoughDataException>(() => QueryMatches.GetNLastFromTeamBeforeMatch(false, m, 6));
+            Matches.CreateMatchDataStructs(matches, 6);
+            Assert.Throws<NotEnoughDataException>(() => Matches.GetNLastFromTeamBeforeMatch(false, m, 6));
         }
 
         [Test]
@@ -106,9 +106,9 @@ namespace BetAITestProject.Data
              * calling that throws NotEnoughDataException,
               because not enough matches for selected sample size were ever
               set for the structure.*/
-            QueryMatches.CreateMatchDataStructs(matches, 4);
+            Matches.CreateMatchDataStructs(matches, 4);
             Console.WriteLine(matches[10].Hometeam + matches[10].Awayteam);
-            Assert.Throws<NotEnoughDataException>(() => QueryMatches.GetNLastFromTeamBeforeMatch(false, matches[10], 5));
+            Assert.Throws<NotEnoughDataException>(() => Matches.GetNLastFromTeamBeforeMatch(false, matches[10], 5));
         }
 
         [Test]
@@ -117,9 +117,9 @@ namespace BetAITestProject.Data
             /* Chelsea has 5 matches before game on 2017/12/03, and sampleSize
              of 5 is less than max size of 6, so function call should run and
              return an array of 5 matches.*/
-            QueryMatches.CreateMatchDataStructs(matches, 6);
+            Matches.CreateMatchDataStructs(matches, 6);
             Console.WriteLine(matches[10].Hometeam + matches[10].Awayteam);
-            Match[] results = QueryMatches.GetNLastFromTeamBeforeMatch(false, matches[10], 5);
+            Match[] results = Matches.GetNLastFromTeamBeforeMatch(false, matches[10], 5);
             Assert.AreEqual(5, results.Length);
             Assert.AreEqual(new DateTime(2017, 11, 26), results[0].Date);
             Assert.AreEqual(new DateTime(2017, 11, 12), results[1].Date);
@@ -134,9 +134,9 @@ namespace BetAITestProject.Data
             /* Chelsea has 5 matches before game on 2017/12/03, and sampleSize
              of 5 is less than max size of 6, so function call should run and
              return an array of 5 matches.*/
-            QueryMatches.CreateMatchDataStructs(matches, 6);
+            Matches.CreateMatchDataStructs(matches, 6);
             Console.WriteLine(matches[10].Hometeam + matches[10].Awayteam);
-            Match[] results = QueryMatches.GetNLastFromTeamBeforeMatch(false, matches[10], 4);
+            Match[] results = Matches.GetNLastFromTeamBeforeMatch(false, matches[10], 4);
             Assert.AreEqual(4, results.Length);
             Assert.AreEqual(new DateTime(2017, 11, 26), results[0].Date);
             Assert.AreEqual(new DateTime(2017, 11, 12), results[1].Date);
@@ -154,9 +154,9 @@ namespace BetAITestProject.Data
                If it fails, it means that function most likely returned
                first 3 matches, ignoring whether they are home- or awaymatches.
              */
-            QueryMatches.CreateMatchDataStructs(matches, 6);
+            Matches.CreateMatchDataStructs(matches, 6);
             Console.WriteLine(matches[10].Hometeam + matches[10].Awayteam);
-            Match[] results = QueryMatches.GetNLastFromTeamBeforeMatch(false, matches[10], 3);
+            Match[] results = Matches.GetNLastFromTeamBeforeMatch(false, matches[10], 3);
             Assert.AreEqual(3, results.Length);
             Assert.AreEqual(new DateTime(2017, 11, 12), results[0].Date);
             Assert.AreEqual(new DateTime(2017, 10, 14), results[1].Date);
@@ -166,19 +166,19 @@ namespace BetAITestProject.Data
         [Test]
         public void test_GetSeasonAverage_throws_NotEnoughDataException()
         {
-            Assert.Throws<NotEnoughDataException>(() => QueryMatches.GetSeasonAverage(true, matches[0]));
+            Assert.Throws<NotEnoughDataException>(() => Matches.GetSeasonAverage(true, matches[0]));
         }
 
         public void test_GetSeasonAverage_runs()
         {
-            Assert.DoesNotThrow(() => QueryMatches.GetSeasonAverage(true, matches[1]));
+            Assert.DoesNotThrow(() => Matches.GetSeasonAverage(true, matches[1]));
         }
 
         [Test]
         public void test_CreateMatchDataStructs_Runs()
         {
             /*CreateMatchDataStructs should not throw errors when samplesize is too long.*/
-            Assert.DoesNotThrow(() => QueryMatches.CreateMatchDataStructs(matches, 6));
+            Assert.DoesNotThrow(() => Matches.CreateMatchDataStructs(matches, 6));
         }
     }
 }

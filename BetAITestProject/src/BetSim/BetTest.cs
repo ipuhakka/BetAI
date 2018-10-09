@@ -23,8 +23,8 @@ namespace BetAITestProject.BetSim
             db.ExecuteScript("db_schema_dump.sql");
             db.ExecuteScript("db_testdata_dump.sql");
             List<Match> matches = db.SelectAllMatchesFromDatabase();
-            QueryMatches.SetMatches(path);
-            QueryMatches.CreateMatchDataStructs(matches, 7);
+            Matches.SetMatches(path);
+            Matches.CreateMatchDataStructs(matches, 7);
         }
 
         [OneTimeTearDown]
@@ -45,7 +45,7 @@ namespace BetAITestProject.BetSim
              betCoefficient = 0.84.
              
              betCoefficient is smaller than playLimit, function returns 0.*/
-            Match toPredict = QueryMatches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
+            Match toPredict = Matches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
             Predict betSim = new Predict();
             double result = betSim.PredictResult(toPredict, 3); 
             Bet bet = new Bet();
@@ -62,7 +62,7 @@ namespace BetAITestProject.BetSim
              betCoefficient = 0.991305 
              stake = 5 * (0.991305 / 0.5) = 9.91305 
              result = 9.91305 * 3.15 */
-            Match toPredict = QueryMatches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
+            Match toPredict = Matches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
             Predict betSim = new Predict();
             double result = betSim.PredictResult(toPredict, 3); //result is ~ -0.54
             Bet bet = new Bet();
@@ -81,7 +81,7 @@ namespace BetAITestProject.BetSim
              betCoefficient = 0.8496
              stake = 5 * (0.8496 / 0.5) = 8.496 
              result = -8.496 */
-            Match toPredict = QueryMatches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
+            Match toPredict = Matches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
             Predict betSim = new Predict();
             double result = betSim.PredictResult(toPredict, 3); //result is ~ -0.54
             Bet bet = new Bet();

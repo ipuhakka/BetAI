@@ -74,8 +74,8 @@ results in BetAI.
 Change was implemented, unused functions in DB-class deleted, tests ported for new class,
 and tests run OK. 
 
-**4.10.2018**: Although performance was raised yesterday, it still needs honing in order for the
-simulation to be faster. 
+**4.10.2018**: Although performance was raised yesterday, it still needs honing
+in order for the simulation to be faster. 
 
 Created Master-class, which runs the simulation. 
 
@@ -105,5 +105,13 @@ if the stake is same for all nodes, this can be achieved better.
 
 Changed Node constructor to throw ArgumentException on invalid parameters given.
 
-Created tests for Crossover and added new for Node to test ArgumentException being
+Created tests for Crossover and added new tests for Node to test ArgumentException being
 thrown. All tests run OK.
+
+**9.10.2018**: 
+Created a new Constructor for node which provides the possibility
+to generate random first generation for the simulation.
+Created test cases to verify that produces values are valid.
+Modified Node constructor to make sure that values are within the set limits. 
+
+Next up -> Create method to choose Nodes for Crossover and start to create Master.cs. 
