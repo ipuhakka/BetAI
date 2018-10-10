@@ -20,8 +20,7 @@ namespace BetAITestProject.Genetics
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory));
-            
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory));      
         }
 
         // If minimumstake less than or equal to 0 or generation less than 0

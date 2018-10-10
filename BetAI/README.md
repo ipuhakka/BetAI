@@ -24,8 +24,14 @@ parameters or values from *BetAI\Files\default.json*.
 On starting the program these can be given as parameters. If not, values from *default.json* 
 are used.
 
+On start, matches used are set.
+```
+Matches.SetMatches(pathToDatabaseFile);
+```
+
 
 ## Set up for generation fitness evaluation
+
 First, generation nodes are initialized.
 
 Sample with new matches is created 
@@ -35,8 +41,8 @@ List<Match> sample = Sample.CreateSample(13);
 
 Then, MatchData structures in **QueryMatches** are set
 ```
-int maxSampleSize = nodes.OrderBy(node => node.SimulationSampleSize).ToList()[0].SimulationSampleSize);
-QueryMatches.CreateMatchDataStructs(sample.Matches, maxSampleSize);
+int maxSampleSize = nodes.OrderBy(node => node.SimulationSampleSize).ToList()[0].SimulationSampleSize;
+Matches.CreateMatchDataStructs(sample, maxSampleSize);
 ```
 
 Now individual nodes can be evaluated
@@ -44,4 +50,10 @@ Now individual nodes can be evaluated
 for (int i = 0; i < nodes.Length; i++){
 	nodes[i].EvaluateFitness(sample);
 }
+```
+
+Then, parents can be selected
+```
+Selection sel = new Selection();
+List<Node> toReproduce = sel.SelectForCrossover(nodes);
 ```

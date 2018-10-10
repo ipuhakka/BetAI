@@ -115,3 +115,6 @@ Created test cases to verify that produces values are valid.
 Modified Node constructor to make sure that values are within the set limits. 
 
 Next up -> Create method to choose Nodes for Crossover and start to implement Master.cs. 
+
+**10.10.2018**: 
+Implemented selection of parents and test cases. Tests run ok.

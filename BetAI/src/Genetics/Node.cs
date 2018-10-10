@@ -12,7 +12,7 @@ namespace BetAI.Genetics
         public double DrawLimit { get; private set; }
         public double MinimumStake { get; private set; }
         public double Fitness { get; private set; }
-        public double CrossoverFactor{ get; private set; }
+        public double CrossoverFactor{ get; set; }
         public int Generation { get; private set; }
         public int BetsWon { get; private set; }
         public int BetsLost { get; private set; }
