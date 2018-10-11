@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using BetAI.Exceptions;
+using BetAI.Genetics;
 using Newtonsoft.Json;
 
 namespace BetAI.FileOperations
@@ -26,6 +27,7 @@ namespace BetAI.FileOperations
                 throw new DirectoryExistsException();
 
             Directory.CreateDirectory(relativePath);
+            Directory.CreateDirectory(Path.Combine(relativePath, "gen_data"));
 
             if (args == null || args.Length == 0)
             {
@@ -60,6 +62,21 @@ namespace BetAI.FileOperations
                 }
             }
             File.WriteAllText(Path.Combine(relativePath, "values.json"), JsonConvert.SerializeObject(json));
+        }
+
+        /// <summary>
+        /// Function writes a list of nodes into a file named genX,
+        /// where X is generation number
+        /// </summary>
+        /// <param name="filename">Save to which data is appended.</param>
+        /// <param name="nodes">List of nodes to write into a file.</param>
+        /// <param name="generation">Number of the nodes generation.</param>
+        /// <exception cref="DirectoryNotFoundException"></exception>
+        public static void WriteGeneration(string filename, List<Node> nodes, int generation)
+        {
+            string directory = Path.Combine(@"Files\", filename, "gen_data");
+            string json = JsonConvert.SerializeObject(nodes);
+            File.WriteAllText(Path.Combine(directory, String.Format("gen{0}.json", generation)), json);
         }
     }
 }

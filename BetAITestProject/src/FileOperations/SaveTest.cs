@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using NUnit.Framework;
 using BetAI.FileOperations;
-using System.IO;
+using BetAI.Genetics;
 using BetAI.Exceptions;
 using Newtonsoft.Json;
 
@@ -22,7 +24,8 @@ namespace BetAITestProject.FileOperations
         public void TearDown()
         {
             var dir = new DirectoryInfo(Path.Combine(@"Files\", testFile));
-            dir.Delete(true);
+            if (dir.Exists)
+                dir.Delete(true);
         }
 
         [Test]
@@ -67,6 +70,19 @@ namespace BetAITestProject.FileOperations
             Save.InitializeSave(testFile, args);
             dynamic data = JsonConvert.DeserializeObject(File.ReadAllText(Path.Combine(@"Files\", testFile, "values.json")));
             Assert.AreEqual(@"backslashes\\need\\to\\be\\escaped", data["database"].ToString());
+        }
+
+        [Test]
+        public void test_WriteGeneration_DirectoryNotFoundException()
+        {
+            Assert.Throws<DirectoryNotFoundException>(() => Save.WriteGeneration(testFile, new List<Node>(), 0));
+        }
+
+        [Test]
+        public void test_WriteGeneration_runs()
+        {
+            Save.InitializeSave(testFile);
+            Assert.DoesNotThrow(() => Save.WriteGeneration(testFile, new List<Node>(), 0));
         }
     }
 }

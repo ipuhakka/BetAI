@@ -124,4 +124,8 @@ Next up -> Design starting in Master.
 **11.10.2018**:
 Implemented initializing a save. Created tests, they run OK.
 
+Fixed documentation error in BetAI.README.
+
+Implemented writing generation data to Files\savefile\gen_data\gen{i}.
+
 Next up -> Create a file for Node-generation.

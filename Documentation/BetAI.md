@@ -216,8 +216,16 @@ If *args[]* is empty, values from *BetAI\Files\defaults.json* are written to *va
 If any of the parameters described in Master are given as part of *args[]*, that value overwrites
 the value from *defaults.json*.
 
-1. On creating a new save, new folder named *filename* is created, and inside it a file *values.json*
-is created.
+1. On creating a new save, new folder named *filename* is created, and inside it, a file *values.json*
+and a folder gen_data is created. 
+
+Done.
 
 2. *values.json* has values from *BetAI\Files\defaults.json*, unless any variable is given a value as
 parameter. That value is then written into *values.json*.
+
+Done.
+
+#### Reporting data
+1. Each generation of nodes is written as json file with name genX.json, where X is the current generation.
+-Done.

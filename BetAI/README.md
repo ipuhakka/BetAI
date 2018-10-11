@@ -25,7 +25,7 @@ These arguments can be given as program arguments when starting simulation
 with a new file.
 
 ```
-BetAI.exe mynewfilename alpha="0.4" minimumStake="4" numberOfNodes="1000" sampleSize="100" database="path\to\used\database\file"
+BetAI.exe mynewfilename alpha=0.4 minimumStake=4 numberOfNodes=1000 sampleSize=100 database="path\to\used\database\file"
 ```
 
 ```
