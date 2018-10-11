@@ -1,0 +1,7 @@
+{
+	"alpha": "0.2",
+	"minimumStake": "5.0",
+	"numberOfNodes": "2000",
+	"sampleSize": "200",
+	"database": "../../Database/db/data.sqlite"
+}

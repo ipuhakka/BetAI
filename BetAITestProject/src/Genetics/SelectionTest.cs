@@ -18,7 +18,7 @@ namespace BetAITestProject.Genetics
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory));
+            Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
             nodes = new List<Node>();
             Random rand = new Random();
             for (int i = 0; i < 100; i++)

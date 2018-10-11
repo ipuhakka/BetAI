@@ -15,10 +15,10 @@ namespace BetAI
         private List<Match> sample;
 
         /// <summary>
-        /// Constructor for master. If generation is 0, nodes should be initialized
-        /// randomly, otherwise they are loaded from memory.
+        /// Constructor for master. If BetAI\Files does not containg a folder named
+        /// filename, a new folder is created.
         /// </summary>
-        public Master(string filename)
+        public Master(string filename, params string[] args)
         {
             nodes = new List<Node>();
             sample = new List<Match>();

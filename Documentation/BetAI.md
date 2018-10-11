@@ -205,3 +205,19 @@ parameters or values from *BetAI\Files\default.json*.
 	"database": "path\to\db\file"
 }
 ```
+
+
+#### Creating a new save
+Master.cs -operates the simulation. If it is launched with an unexisting *filename*,
+it means that new file is started. 
+
+Each save folder is named *filename*. A file called *values.json* is created in the folder.
+If *args[]* is empty, values from *BetAI\Files\defaults.json* are written to *values.json*. 
+If any of the parameters described in Master are given as part of *args[]*, that value overwrites
+the value from *defaults.json*.
+
+1. On creating a new save, new folder named *filename* is created, and inside it a file *values.json*
+is created.
+
+2. *values.json* has values from *BetAI\Files\defaults.json*, unless any variable is given a value as
+parameter. That value is then written into *values.json*.

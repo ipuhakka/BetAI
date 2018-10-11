@@ -20,6 +20,14 @@ parameters or values from *BetAI\Files\default.json*.
 	"sampleSize": "200",
 	"database": "path\to\db\file"
 }
+
+These arguments can be given as program arguments when starting simulation
+with a new file.
+
+```
+BetAI.exe mynewfilename alpha="0.4" minimumStake="4" numberOfNodes="1000" sampleSize="100" database="path\to\used\database\file"
+```
+
 ```
 On starting the program these can be given as parameters. If not, values from *default.json* 
 are used.

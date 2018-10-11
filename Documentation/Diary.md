@@ -118,3 +118,10 @@ Next up -> Create method to choose Nodes for Crossover and start to implement Ma
 
 **10.10.2018**: 
 Implemented selection of parents and test cases. Tests run ok.
+
+Next up -> Design starting in Master.
+
+**11.10.2018**:
+Implemented initializing a save. Created tests, they run OK.
+
+Next up -> Create a file for Node-generation.
