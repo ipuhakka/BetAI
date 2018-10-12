@@ -229,3 +229,17 @@ Done.
 #### Reporting data
 1. Each generation of nodes is written as json file with name genX.json, where X is the current generation.
 -Done.
+
+2. Once a new generation of nodes has been created, it is written into *BetAI\Files\savefile\genX.json*.
+This file is overwritten once generation has been evaluated.
+
+
+3. After a generation has been evaluated, results are logged to console:
+Worst fitness, average fitness, and maximum fitness are logged to screen.
+These are also logged to file *BetAI\Files\savefile\log.txt*.
+
+#### Loading data
+If the file that was given as argument to start the program was an existing one,
+most previous generation is loaded to memory. 
+
+1. Most previous generation is loaded into memory.

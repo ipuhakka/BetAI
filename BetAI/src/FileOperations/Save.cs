@@ -65,8 +65,8 @@ namespace BetAI.FileOperations
         }
 
         /// <summary>
-        /// Function writes a list of nodes into a file named genX,
-        /// where X is generation number
+        /// Function writes a list of nodes into a file named gen{X}.json,
+        /// where X is generation number.
         /// </summary>
         /// <param name="filename">Save to which data is appended.</param>
         /// <param name="nodes">List of nodes to write into a file.</param>
