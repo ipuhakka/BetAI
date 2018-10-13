@@ -10,7 +10,8 @@ namespace BetAI.FileOperations
     public class Save
     {
         /// <summary>
-        /// Function creates a new folder named filename to Files-folder.
+        /// Function creates a new folder named filename to Files-folder and creates a file
+        /// values.json to that folder.
         /// If no args are given, values from Files\defaults.json are used.
         /// If any of the arguments (alpha, minimumStake, numberOfNodes, sampleSize, database)
         /// are given, they are written to values.json instead of value described in defaults.json.

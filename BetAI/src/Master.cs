@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Database;
 using BetAI.Genetics;
+using BetAI.FileOperations;
 
 namespace BetAI
 {
@@ -15,21 +16,27 @@ namespace BetAI
         private List<Match> sample;
 
         /// <summary>
-        /// Constructor for master. If BetAI\Files does not containg a folder named
-        /// filename, a new folder is created.
+        /// Constructor for master. Loads latest generation of nodes into memory.
+        /// If save does not exist, it is created and first generation of nodes as well.
         /// </summary>
         public Master(string filename, params string[] args)
         {
-            nodes = new List<Node>();
-            sample = new List<Match>();
+            if (Load.SaveExists(filename))
+            {
+                nodes = Load.LoadLatestGeneration(filename);
+                // Load values.json to find numberOfNodes
+                if (nodes == null)
+                {
+                    Random rand = new Random();
+
+                }
+            }
+            else
+            {
+                Save.InitializeSave(filename, args);
+                ///Load values from values.json to find numberOfNodes.
+            }
         }
 
-        /// <summary>
-        /// Function creates a sample list of Match-objects to be used in simulation.
-        /// </summary>
-        private void SetUpGeneration()
-        {
-
-        }
     }
 }

@@ -134,4 +134,6 @@ Implemented writing generation data to Files\savefile\gen_data\gen{i}.
  
  **13.10.2018**: 
  Created test cases for loading a generation. Created a JsonConstructor
- for node. All tests run OK.
+ for node. All tests run OK. Added a function to see if a save exists.
+ 
+ Next up -> Implement a function that returns the values from *values.json* for a save.
