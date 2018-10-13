@@ -9,6 +9,20 @@ namespace BetAI.FileOperations
     public class Load
     {
         /// <summary>
+        /// Returns true if the savefile exists, false otherwise.
+        /// </summary>
+        /// <param name="savefile">Name of the save.</param>
+        /// <returns></returns>
+        public static bool SaveExists(string savefile)
+        {
+            string directory = Path.Combine(@"Files\", savefile);
+
+            if (Directory.Exists(directory))
+                return true;
+            return false;
+        }
+
+        /// <summary>
         /// Function returns the latest generation of nodes.
         /// </summary>
         /// <param name="savefile">Name of the savefile from which generation is loaded.</param>

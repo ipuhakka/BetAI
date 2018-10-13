@@ -90,5 +90,18 @@ namespace BetAITestProject.FileOperations
             }
         }
 
+        [Test]
+        public void SaveExists_existing_Save_return_true()
+        {
+            Save.InitializeSave(save);
+            Assert.IsTrue(Load.SaveExists(save));
+        }
+
+        [Test]
+        public void SaveExists_unexisting_Save_return_false()
+        {
+            Assert.IsFalse(Load.SaveExists(save));
+        }
+
     }
 }
