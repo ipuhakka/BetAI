@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using BetAI.FileOperations;
 using BetAI.Genetics;
+using BetAI.Utils;
 
 namespace BetAITestProject.FileOperations
 {
@@ -103,5 +104,22 @@ namespace BetAITestProject.FileOperations
             Assert.IsFalse(Load.SaveExists(save));
         }
 
+        [Test]
+        public void test_LoadValues_throws_DirectoryNotFoundException()
+        {
+            Assert.Throws<DirectoryNotFoundException>(() => Load.LoadValues(save));
+        }
+
+        [Test]
+        public void test_LoadValues()
+        {
+            Save.InitializeSave(save);
+            Values values = Load.LoadValues(save);
+            Assert.AreEqual(0.2, values.Alpha);
+            Assert.AreEqual(5, values.MinimumStake);
+            Assert.AreEqual(2000, values.NumberOfNodes);
+            Assert.AreEqual(200, values.SampleSize);
+            Assert.AreEqual("../../Database/db/data.sqlite", values.Database);
+        } 
     }
 }

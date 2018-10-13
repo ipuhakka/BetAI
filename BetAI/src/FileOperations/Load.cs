@@ -2,6 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using BetAI.Genetics;
+using BetAI.Utils;
 using Newtonsoft.Json;
 
 namespace BetAI.FileOperations
@@ -20,6 +21,19 @@ namespace BetAI.FileOperations
             if (Directory.Exists(directory))
                 return true;
             return false;
+        }
+
+        /// <summary>
+        /// returns values from BetAI\Files\{savefile}\values.json.
+        /// </summary>
+        /// <param name="savefile">Name of the save.</param>
+        /// <returns>Values object - values that are used in the simulation.</returns>
+        /// <exception cref="DirectoryNotFoundException"></exception>
+        public static Values LoadValues(string savefile)
+        {
+            string path = Path.Combine(@"Files\", savefile, "values.json");
+            string json = File.ReadAllText(path);
+            return JsonConvert.DeserializeObject<Values>(json);
         }
 
         /// <summary>

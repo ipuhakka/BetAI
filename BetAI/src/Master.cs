@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Database;
 using BetAI.Genetics;
 using BetAI.FileOperations;
+using BetAI.Utils;
 
 namespace BetAI
 {
@@ -14,6 +14,7 @@ namespace BetAI
     {
         private List<Node> nodes;
         private List<Match> sample;
+        private Values values;
 
         /// <summary>
         /// Constructor for master. Loads latest generation of nodes into memory.
@@ -24,18 +25,33 @@ namespace BetAI
             if (Load.SaveExists(filename))
             {
                 nodes = Load.LoadLatestGeneration(filename);
-                // Load values.json to find numberOfNodes
+                values = Load.LoadValues(filename);
                 if (nodes == null)
                 {
-                    Random rand = new Random();
-
+                    nodes = RandomiseNodes();
                 }
             }
             else
             {
                 Save.InitializeSave(filename, args);
-                ///Load values from values.json to find numberOfNodes.
+                values = Load.LoadValues(filename);
+                nodes = RandomiseNodes();
             }
+        }
+
+        /// <summary>
+        /// Uses the random-constructor of Node to create values.NumberOfNodes-amount
+        /// of nodes.
+        /// </summary>
+        private List<Node> RandomiseNodes()
+        {
+            Random rand = new Random();
+            List<Node> generation = new List<Node>();
+            for (int i = 0; i < values.NumberOfNodes; i++)
+            {
+                generation.Add(new Node(rand, values.MinimumStake));
+            }
+            return generation;
         }
 
     }
