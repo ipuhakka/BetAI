@@ -79,5 +79,18 @@ namespace BetAI.FileOperations
             string json = JsonConvert.SerializeObject(nodes);
             File.WriteAllText(Path.Combine(directory, String.Format("gen{0}.json", generation)), json);
         }
+
+        /// <summary>
+        /// Function appends lines to BetAI\Files\{savefile}\log.txt.
+        /// </summary>
+        /// <param name="savefile"></param>
+        /// <param name="lines"></param>
+        /// <exception cref="DirectoryNotFoundException"></exception>
+        public static void Log(string savefile, string[] lines)
+        {
+            string path = Path.Combine(@"Files\", savefile, "log.txt");
+            Console.WriteLine(path);
+            File.AppendAllLines(path, lines);
+        }
     }
 }

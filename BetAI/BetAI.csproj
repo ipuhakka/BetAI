@@ -68,6 +68,7 @@
     <Compile Include="src\BetSim\Predict.cs" />
     <Compile Include="src\Data\Matches.cs" />
     <Compile Include="src\Exceptions\DirectoryExistsException.cs" />
+    <Compile Include="src\Exceptions\InitializationException.cs" />
     <Compile Include="src\Exceptions\NotEnoughDataException.cs" />
     <Compile Include="src\Exceptions\NotSimulatedException.cs" />
     <Compile Include="src\FileOperations\Load.cs" />

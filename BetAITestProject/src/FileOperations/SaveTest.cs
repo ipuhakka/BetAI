@@ -84,5 +84,26 @@ namespace BetAITestProject.FileOperations
             Save.InitializeSave(testFile);
             Assert.DoesNotThrow(() => Save.WriteGeneration(testFile, new List<Node>(), 0));
         }
+
+        [Test]
+        public void test_Log_DoesNotOverWriteData()
+        {
+            Save.InitializeSave(testFile);
+            string[] lines = { "Line 1", "Line 2", "Line 3"};
+            Save.Log(testFile, lines);
+
+            string[] newLines = { "Line 4", "Line 5" };
+            Save.Log(testFile, newLines);
+
+            string[] allLines = File.ReadAllLines(@"Files\test\log.txt");
+            Assert.AreEqual(5, allLines.Length);
+        }
+
+        [Test]
+        public void test_Log_throws_DirectoryNotFoundException()
+        {
+            string[] lines = { "Line 1", "Line 2", "Line 3" };
+            Assert.Throws<DirectoryNotFoundException>(() => Save.Log(testFile, lines));
+        }
     }
 }
