@@ -15,7 +15,7 @@ namespace BetAI.FileOperations
         /// <exception cref="DirectoryNotFoundException">Savefile was not found.</exception>
         /// <returns>A list of nodes read from the most previous generation file.
         /// null if no generational data was not found.</returns>
-        public static List<Node> LoadGeneration(string savefile)
+        public static List<Node> LoadLatestGeneration(string savefile)
         {
             string directory = Path.Combine(@"Files\", savefile, "gen_data");
             int latestGeneration = LatestGeneration(directory);

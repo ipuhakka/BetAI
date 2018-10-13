@@ -41,6 +41,14 @@ Matches.SetMatches(pathToDatabaseFile);
 ## Set up for generation fitness evaluation
 
 First, generation nodes are initialized.
+```
+List<Node> generation = Load.LoadLatestGeneration(savefile);
+
+if (generation == null)
+{
+	//create random nodes	
+}
+```
 
 Sample with new matches is created 
 ```

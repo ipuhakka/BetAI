@@ -32,7 +32,7 @@ namespace BetAITestProject.FileOperations
         [Test]
         public void test_LoadGeneration_throws_DirectoryNotFoundException()
         {
-            Assert.Throws<DirectoryNotFoundException>(() => Load.LoadGeneration("unexistingsave"));
+            Assert.Throws<DirectoryNotFoundException>(() => Load.LoadLatestGeneration("unexistingsave"));
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace BetAITestProject.FileOperations
         public void test_LoadGeneration_return_null()
         {
             Save.InitializeSave(save);
-            Assert.IsNull(Load.LoadGeneration(save));
+            Assert.IsNull(Load.LoadLatestGeneration(save));
         }
 
         [Test]
@@ -56,8 +56,38 @@ namespace BetAITestProject.FileOperations
             }
             Save.InitializeSave(save);
             Save.WriteGeneration(save, nodes, nodes[0].Generation);
-            List<Node> loadedGen = Load.LoadGeneration(save);
+            List<Node> loadedGen = Load.LoadLatestGeneration(save);
             Assert.AreEqual(nodes, loadedGen);
+        }
+
+        /// <summary>
+        /// This test checks that correct generation of nodes is returned
+        /// when the value indicating generation number consists of more than
+        /// 1 digits.
+        /// </summary>
+        [Test]
+        public void test_LoadGeneration_10generations()
+        {
+            List<Node> nodes = new List<Node>();
+            Random rand = new Random();
+            for (int i = 0; i < 4; i++)
+            {
+                nodes.Add(new Node(rand, 2));
+            }
+            Save.InitializeSave(save);
+            Save.WriteGeneration(save, nodes, 0);
+            for (int j = 0; j < 10; j++)
+            {
+                Crossover co = new Crossover();
+                nodes = co.Reproduce(nodes, 0.2);
+                Save.WriteGeneration(save, nodes, nodes[0].Generation);
+            }
+            List<Node> loadedGen = Load.LoadLatestGeneration(save);
+            
+            foreach(Node n in loadedGen)
+            {
+                Assert.AreEqual(10, n.Generation);
+            }
         }
 
     }
