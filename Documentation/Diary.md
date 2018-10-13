@@ -131,3 +131,7 @@ Implemented writing generation data to Files\savefile\gen_data\gen{i}.
 
 **12.10.2018**: Implemented loading a generation of nodes.
  Next up -> create test cases.
+ 
+ **13.10.2018**: 
+ Created test cases for loading a generation. Created a JsonConstructor
+ for node. All tests run OK.

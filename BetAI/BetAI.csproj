@@ -70,6 +70,7 @@
     <Compile Include="src\Exceptions\DirectoryExistsException.cs" />
     <Compile Include="src\Exceptions\NotEnoughDataException.cs" />
     <Compile Include="src\Exceptions\NotSimulatedException.cs" />
+    <Compile Include="src\FileOperations\Load.cs" />
     <Compile Include="src\FileOperations\Save.cs" />
     <Compile Include="src\Genetics\Crossover.cs" />
     <Compile Include="src\Genetics\Selection.cs" />

@@ -3,22 +3,40 @@ using System.Collections.Generic;
 using Database;
 using BetAI.BetSim;
 using BetAI.Exceptions;
+using Newtonsoft.Json;
 
 namespace BetAI.Genetics
 {
     public class Node
     {
+        [JsonProperty]
         public double PlayLimit { get; private set; }
+        [JsonProperty]
         public double DrawLimit { get; private set; }
+        [JsonProperty]
         public double MinimumStake { get; private set; }
+        [JsonProperty]
         public double Fitness { get; private set; }
+        [JsonProperty]
         public double CrossoverFactor{ get; set; }
+        [JsonProperty]
         public int Generation { get; private set; }
+        [JsonProperty]
         public int BetsWon { get; private set; }
+        [JsonProperty]
         public int BetsLost { get; private set; }
+        [JsonProperty]
         public int BetsNotPlayed { get; private set; }
+        [JsonProperty]
         public int BetsSkipped { get; private set; }
+        [JsonProperty]
         public int SimulationSampleSize { get; private set; }
+
+        [JsonConstructor]
+        public Node()
+        {
+
+        }
 
         /// <summary>
         /// Constructor for node. If PlayLimit, drawLimit or sampleSize are under/over
@@ -115,5 +133,23 @@ namespace BetAI.Genetics
             return Fitness;
         }
 
+        public override bool Equals(object obj)
+        {
+            Node comp = obj as Node;
+            return PlayLimit.Equals(comp.PlayLimit) && DrawLimit.Equals(comp.DrawLimit) &&
+                MinimumStake.Equals(comp.MinimumStake) && Fitness.Equals(comp.Fitness) &&
+                CrossoverFactor.Equals(comp.CrossoverFactor) && Generation.Equals(comp.Generation)
+                && BetsWon.Equals(comp.BetsWon) && BetsLost.Equals(comp.BetsLost) &&
+                BetsNotPlayed.Equals(comp.BetsNotPlayed) && BetsSkipped.Equals(comp.BetsSkipped)
+                && SimulationSampleSize.Equals(comp.SimulationSampleSize);
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = PlayLimit.GetHashCode() * 12;
+            hash = hash * SimulationSampleSize.GetHashCode() * 5;
+            hash = hash * DrawLimit.GetHashCode() + 2;
+            return hash;
+        }
     }
 }

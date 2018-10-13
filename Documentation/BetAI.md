@@ -242,4 +242,6 @@ These are also logged to file *BetAI\Files\savefile\log.txt*.
 If the file that was given as argument to start the program was an existing one,
 most previous generation is loaded to memory. 
 
-1. Most previous generation is loaded into memory.
+1. Most previous generation is loaded into memory. If no generation data is
+written, null is returned.
+-Done.
