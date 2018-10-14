@@ -94,7 +94,7 @@ namespace BetAITestProject.Genetics
         /// floor(selectedCrossoverNodes / 2) * 2 -children should be returned.
         /// </summary>
         [Test]
-        public void test_Reproduce_100_nodes_returns_100_children()
+        public void test_Reproduce_100_nodes_returns_200_children()
         {
             List<Node> nodes = new List<Node>();
 
@@ -104,14 +104,14 @@ namespace BetAITestProject.Genetics
             }
 
             Crossover co = new Crossover();
-            Assert.AreEqual(100, co.Reproduce(nodes, 0.0).Count);
+            Assert.AreEqual(200, co.Reproduce(nodes, 0.0).Count);
         }
 
         /// <summary>
         /// floor(selectedCrossoverNodes / 2) * 2 -children should be returned.
         /// </summary>
         [Test]
-        public void test_Reproduce_101_nodes_returns_100_children()
+        public void test_Reproduce_101_nodes_returns_200_children()
         {
             List<Node> nodes = new List<Node>();
 
@@ -121,14 +121,14 @@ namespace BetAITestProject.Genetics
             }
 
             Crossover co = new Crossover();
-            Assert.AreEqual(100, co.Reproduce(nodes, 0.0).Count);
+            Assert.AreEqual(200, co.Reproduce(nodes, 0.0).Count);
         }
 
         /// <summary>
         /// floor(selectedCrossoverNodes / 2) * 2 -children should be returned.
         /// </summary>
         [Test]
-        public void test_Reproduce_99_nodes_returns_100_children()
+        public void test_Reproduce_99_nodes_returns_196_children()
         {
             List<Node> nodes = new List<Node>();
 
@@ -138,7 +138,7 @@ namespace BetAITestProject.Genetics
             }
 
             Crossover co = new Crossover();
-            Assert.AreEqual(98, co.Reproduce(nodes, 0.0).Count);
+            Assert.AreEqual(196, co.Reproduce(nodes, 0.0).Count);
         }
 
         [Test]

@@ -53,6 +53,12 @@ namespace BetAI.Genetics
             return pairs;
         }
 
+        /// <summary>
+        /// Function creates 4 children
+        /// </summary>
+        /// <param name="pairs"></param>
+        /// <param name="alpha"></param>
+        /// <returns></returns>
         private List<Node> CreateChildren(Pair[] pairs, double alpha)
         {
             List<Node> children = new List<Node>();
@@ -83,14 +89,16 @@ namespace BetAI.Genetics
 
                 Node child1 = new Node(playLimits[0], drawLimits[0], parent1.MinimumStake, parent1.Generation + 1, simulationSampleSizes[0]);
                 Node child2 = new Node(playLimits[1], drawLimits[1], parent2.MinimumStake, parent2.Generation + 1, simulationSampleSizes[1]);
-                return new List<Node> { child1, child2 };
+                Node child3 = new Node(playLimits[2], drawLimits[2], parent2.MinimumStake, parent2.Generation + 1, simulationSampleSizes[2]);
+                Node child4 = new Node(playLimits[3], drawLimits[3], parent2.MinimumStake, parent2.Generation + 1, simulationSampleSizes[3]);
+                return new List<Node> { child1, child2, child3, child4 };
             }
 
             /// <summary>
             /// Function performs a crossover of values. 
             /// Newly created values should always be in between 
             /// (min - alpha * d ,max + alpha * d). Function
-            /// returns two values, producing two different
+            /// returns 4 values, producing 4 different
             /// values based on parent genes.
             /// </summary>
             /// <param name="rand">Random-object which is used to produce
@@ -102,12 +110,14 @@ namespace BetAI.Genetics
             /// <returns></returns>
             private double[] BlendDoubles(Random rand, double alpha, double val1, double val2)
             {
-                double[] newValues = new double[2];
+                double[] newValues = new double[4];
                 double d = Math.Abs(val1 - val2);
                 double min = Math.Min(val1, val2);
                 double max = Math.Max(val1, val2);
                 newValues[0] = rand.NextDouble() *  (max + alpha * d - min - alpha * d) + min - alpha * d;
                 newValues[1] = rand.NextDouble() * (max + alpha * d - min - alpha * d) + min - alpha * d;
+                newValues[2] = rand.NextDouble() * (max + alpha * d - min - alpha * d) + min - alpha * d;
+                newValues[3] = rand.NextDouble() * (max + alpha * d - min - alpha * d) + min - alpha * d;
                 return newValues;
             }
 
@@ -121,12 +131,14 @@ namespace BetAI.Genetics
             /// <returns></returns>
             private int[] BlendInts(Random rand, double alpha, int val1, int val2)
             {
-                int[] newValues = new int[2];
+                int[] newValues = new int[4];
                 int d = Math.Abs(val1 - val2);
                 int min = Math.Min(val1, val2);
                 int max = Math.Max(val1, val2);
                 newValues[0] = rand.Next((int)Math.Round(min - alpha * d), (int) Math.Round(max + alpha * d));
                 newValues[1] = rand.Next((int)Math.Round(min - alpha * d), (int)Math.Round(max + alpha * d));
+                newValues[2] = rand.Next((int)Math.Round(min - alpha * d), (int)Math.Round(max + alpha * d));
+                newValues[3] = rand.Next((int)Math.Round(min - alpha * d), (int)Math.Round(max + alpha * d));
                 return newValues;
             }
         }

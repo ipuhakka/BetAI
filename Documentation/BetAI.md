@@ -177,7 +177,7 @@ is the set parameter for BLX.
 
 2. Number of children created is always 
 ```
-floor(selectedCrossoverNodes / 2) * 2
+floor(selectedCrossoverNodes / 2) * 4
 ```
 
 3. Created children should have the same minimumstake as their parents

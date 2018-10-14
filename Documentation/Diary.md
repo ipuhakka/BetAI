@@ -142,3 +142,6 @@ Implemented writing generation data to Files\savefile\gen_data\gen{i}.
  
  Next up -> Gather all requirements to an idividual requirements.txt and test the system.
  
+ **14.10.2018**: Fixed child generation loss. This was because for every generation generation.Count
+ / 2 nodes where created instead of equal to generation count.
+ 
