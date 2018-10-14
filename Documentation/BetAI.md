@@ -21,7 +21,7 @@ n previous all matches are returned.
 User starts the command prompt to run the program with filename argument.
 File doesn't exist, so it is created.
 Value for mutation probability and percentage of population to go the 
-reproduction process are asked to be inputted. These values can later be 
+reproduction process are asked to be inputted along with minimumStake. These values can later be 
 changed from *file\values.json*. Initial population is created, and algorithm 
 starts.
 
@@ -146,9 +146,10 @@ teams.
  
 2. Node has a variable for fitness value. Fitness is the profit made.
  
-3. Node has a variable for weighted probability of being
-selected for crossover. 
- 
+3. Node has a variable for probability of being
+selected for crossover. CrossoverFactor contains a
+weighted factor for that node to be selected for crossover.
+
 4. Node has variables for amount of bets won, lost
  and skipped, and its generation.
  
@@ -157,3 +158,90 @@ to a file, with other members of its generation.
 
 6. Node has a method for calculating fitness value. Fitness evaluation
 should not last for more than 50ms as average.
+
+7. SimulationSampleSize cant be less than 1.
+
+### Crossover
+Crossover creates new nodes based on the genetic data of parents. 
+Values for child nodes are generated using BLX-alpha algorithm. 
+Each parent creates two children.
+
+1. Childrens PlayLimit, DrawLimit, and SimulationSampleSize variable values are always between 
+```
+(min - alpha * d ,max + alpha * d)
+```
+where d is the difference in value between the parents,
+min is the minimum of the two parents value for parameter, max
+is the maximum value for parameter between two parents, and alpha
+is the set parameter for BLX.
+
+2. Number of children created is always 
+```
+floor(selectedCrossoverNodes / 2) * 4
+```
+
+3. Created children should have the same minimumstake as their parents
+and Generation should be added by one per generation.
+
+4. SimulationSampleSize cant be less than 1.
+
+#### Progress
+All requirements are met in tests.
+
+
+### Master
+Master is the driver of simulation. When program is started witha argument file,
+new Master is created with parameter filename. It checks whether *BetAI\Files* contains a
+folder named filename. If not, this folder is created, and *values.json*-file is created.
+This is filled with a json object containing simulation data, either with user given
+parameters or values from *BetAI\Files\default.json*. 
+
+```
+{
+	"alpha": "0.5",
+	"minimumStake": "3.0",
+	"numberOfNodes": "2000",
+	"sampleSize": "200",
+	"database": "path\to\db\file"
+}
+```
+
+
+#### Creating a new save
+Master.cs -operates the simulation. If it is launched with an unexisting *filename*,
+it means that new file is started. 
+
+Each save folder is named *filename*. A file called *values.json* is created in the folder.
+If *args[]* is empty, values from *BetAI\Files\defaults.json* are written to *values.json*. 
+If any of the parameters described in Master are given as part of *args[]*, that value overwrites
+the value from *defaults.json*.
+
+1. On creating a new save, new folder named *filename* is created, and inside it, a file *values.json*
+and a folder gen_data is created. 
+
+Done.
+
+2. *values.json* has values from *BetAI\Files\defaults.json*, unless any variable is given a value as
+parameter. That value is then written into *values.json*.
+
+Done.
+
+#### Reporting data
+1. Each generation of nodes is written as json file with name genX.json, where X is the current generation.
+-Done.
+
+2. Once a new generation of nodes has been created, it is written into *BetAI\Files\savefile\genX.json*.
+This file is overwritten once generation has been evaluated.
+
+
+3. After a generation has been evaluated, results are logged to console:
+Worst fitness, average fitness, and maximum fitness are logged to screen.
+These are also logged to file *BetAI\Files\savefile\log.txt*.
+
+#### Loading data
+If the file that was given as argument to start the program was an existing one,
+most previous generation is loaded to memory. 
+
+1. Most previous generation is loaded into memory. If no generation data is
+written, null is returned.
+-Done.

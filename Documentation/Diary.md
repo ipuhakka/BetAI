@@ -74,8 +74,8 @@ results in BetAI.
 Change was implemented, unused functions in DB-class deleted, tests ported for new class,
 and tests run OK. 
 
-**4.10.2018**: Although performance was raised yesterday, it still needs honing in order for the
-simulation to be faster. 
+**4.10.2018**: Although performance was raised yesterday, it still needs honing
+in order for the simulation to be faster. 
 
 Created Master-class, which runs the simulation. 
 
@@ -93,3 +93,55 @@ Now, from initial 13-15 second runtime for node, algorithm got down to
 it now takes anything from 0.2ms - 30ms. This cuts the performance of
 fitness evaluation for 2000 nodes from 7-9 hours to < 1 minute. Goal set
 acceptable was one evalution per second, but now the system is clearly above that.
+
+**8.10.2018**: 
+Started working on crossover of nodes to produce new nodes. Implemented Crossover.
+
+Changed Outline.md to say that minimumStake is not controlled
+by algorithm: It is not used as an optimized parameter. This is
+because changing stake would produce results that vary from the
+goal of the program: Goal is to analyze risks better, and 
+if the stake is same for all nodes, this can be achieved better.
+
+Changed Node constructor to throw ArgumentException on invalid parameters given.
+
+Created tests for Crossover and added new tests for Node to test ArgumentException being
+thrown. All tests run OK.
+
+**9.10.2018**: 
+Created a new Constructor for node which provides the possibility
+to generate random first generation for the simulation.
+Created test cases to verify that produces values are valid.
+Modified Node constructor to make sure that values are within the set limits. 
+
+Next up -> Create method to choose Nodes for Crossover and start to implement Master.cs. 
+
+**10.10.2018**: 
+Implemented selection of parents and test cases. Tests run ok.
+
+Next up -> Design starting in Master.
+
+**11.10.2018**:
+Implemented initializing a save. Created tests, they run OK.
+
+Fixed documentation error in BetAI.README.
+
+Implemented writing generation data to Files\savefile\gen_data\gen{i}.
+
+
+**12.10.2018**: Implemented loading a generation of nodes.
+ Next up -> create test cases.
+ 
+ **13.10.2018**: 
+ Created test cases for loading a generation. Created a JsonConstructor
+ for node. All tests run OK. Added a function to see if a save exists.
+ 
+ Added Values.cs and implemented loading values from values.json. Implemented
+ Master constructor. Implemented Master.run(). Now, program is ready for testing.
+ It has features to do everything it is supposed to do.
+ 
+ Next up -> Gather all requirements to an idividual requirements.txt and test the system.
+ 
+ **14.10.2018**: Fixed child generation loss. This was because for every generation generation.Count
+ / 2 nodes where created instead of equal to generation count.
+ 

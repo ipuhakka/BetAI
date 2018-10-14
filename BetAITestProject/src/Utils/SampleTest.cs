@@ -44,14 +44,14 @@ namespace BetAITestProject.Utils
         [Test]
         public void test_Sample_sampleSizeEqualToMatchCount()
         {
-            QueryMatches.SetMatches(file);
+            Matches.SetMatches(file);
             Assert.DoesNotThrow(() => Sample.CreateSample(13));
         }
 
         [Test]
         public void test_NoDuplicatesInSample()
         {
-            QueryMatches.SetMatches(file);
+            Matches.SetMatches(file);
             Stopwatch sw = new Stopwatch();
             for (int i = 0; i < 100; i++)
             {
@@ -74,7 +74,7 @@ namespace BetAITestProject.Utils
         {
             List<long> runTimes = new List<long>();
             string pathToTestFile = Path.Combine(TestContext.CurrentContext.TestDirectory, @"test-files\data.sqlite3");
-            QueryMatches.SetMatches(pathToTestFile);
+            Matches.SetMatches(pathToTestFile);
             Stopwatch sw = new Stopwatch();
             for (int i = 0; i < 10; i++)
             {

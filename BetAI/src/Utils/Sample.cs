@@ -23,7 +23,7 @@ namespace BetAI.Utils
         {
             List<int> indexes = new List<int>();
 
-            int matchCount = QueryMatches.GetMatchCount();
+            int matchCount = Matches.GetMatchCount();
             if (sampleSize > matchCount)
                 throw new NotEnoughDataException();
 
@@ -35,7 +35,7 @@ namespace BetAI.Utils
                 indexes.Add(possibleIndexes[newPoint]);
                 possibleIndexes.RemoveAt(newPoint);
             }
-            return QueryMatches.SelectMatchesWithRowIndex(indexes);
+            return Matches.SelectMatchesWithRowIndex(indexes);
         }
     }
 }

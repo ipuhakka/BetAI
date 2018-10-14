@@ -7,7 +7,7 @@ using BetAI.Exceptions;
 
 namespace BetAI.Data
 {
-    public class QueryMatches
+    public class Matches
     {
         private static List<Match> matches;
         private static MatchData[] matchesData;
@@ -122,7 +122,7 @@ namespace BetAI.Data
         /// have not been created using CreateMatchDataStructs-function.</exception>
         /// <returns>Average goals scored by hometeam up to Match m, -1 if
         /// no matches had been played before Match m.</returns>
-        public static double SeasonHomeGoalAvgBeforeDate(Match m)
+        private static double SeasonHomeGoalAvgBeforeDate(Match m)
         {
             List<Match> seasonMatchesBeforeDate = matches.Where(x => x.Season == m.Season && x.Date < m.Date && x.League == m.League).ToList();
             if (seasonMatchesBeforeDate.Count == 0)
@@ -139,7 +139,7 @@ namespace BetAI.Data
         /// no matches had been played before Match m.</returns>
         /// <exception cref="ArgumentNullException">Thrown if MatchData structures
         /// have not been created using CreateMatchDataStructs-function.</exception>
-        public static double SeasonAwayGoalAvgBeforeDate(Match m)
+        private static double SeasonAwayGoalAvgBeforeDate(Match m)
         {
             List<Match> seasonMatchesBeforeDate = matches.Where(x => x.Season == m.Season && x.Date < m.Date && x.League == m.League).ToList();
             if (seasonMatchesBeforeDate.Count == 0)
@@ -153,7 +153,7 @@ namespace BetAI.Data
         /// and returned.
         /// </summary>
         /// <returns>Match-array the size of n or of match count prior to beforeDate.</returns>
-        public static Match[] SelectNLastFromTeam(bool searchHomeMatches, int n, DateTime beforeDate, string teamname)
+        private static Match[] SelectNLastFromTeam(bool searchHomeMatches, int n, DateTime beforeDate, string teamname)
         {
             List<Match> nLast = new List<Match>();
             if (searchHomeMatches)
@@ -178,12 +178,12 @@ namespace BetAI.Data
         /// and average number of goals scored that season in league both home
         /// and away.
         /// </summary>
-        private struct MatchData
+        protected struct MatchData
         {
-            public double homeAvg, awayAvg;
-            public Match[] hometeamPreviousMatches;
-            public Match[] awayteamPreviousMatches;
             public Match toPredict;
+            double homeAvg, awayAvg;
+            Match[] hometeamPreviousMatches;
+            Match[] awayteamPreviousMatches;
 
             public MatchData(double homeA, double awayA, Match[] hometeamPM, Match[] awayteamPM, Match toPred )
             {

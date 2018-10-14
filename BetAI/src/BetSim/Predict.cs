@@ -25,10 +25,10 @@ namespace BetAI.BetSim
 
             try
             {
-                hometeamPreviousMatches = QueryMatches.GetNLastFromTeamBeforeMatch(true, toPredict, sampleSize);
-                awayteamPreviousMatches = QueryMatches.GetNLastFromTeamBeforeMatch(false, toPredict, sampleSize);
-                homeScoredLeagueAvg = QueryMatches.GetSeasonAverage(true, toPredict);
-                awayScoredLeagueAvg = QueryMatches.GetSeasonAverage(false, toPredict);
+                hometeamPreviousMatches = Matches.GetNLastFromTeamBeforeMatch(true, toPredict, sampleSize);
+                awayteamPreviousMatches = Matches.GetNLastFromTeamBeforeMatch(false, toPredict, sampleSize);
+                homeScoredLeagueAvg = Matches.GetSeasonAverage(true, toPredict);
+                awayScoredLeagueAvg = Matches.GetSeasonAverage(false, toPredict);
             }
             catch (NotEnoughDataException)
             {
