@@ -85,11 +85,9 @@ namespace BetAI.FileOperations
                 }
                 catch (FormatException)
                 {
-                    Console.WriteLine("catched");
                     continue;
                 }
             }
-            Console.WriteLine("returning " + max);
             return max;
         }
     }

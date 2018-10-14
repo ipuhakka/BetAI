@@ -20,6 +20,7 @@ parameters or values from *BetAI\Files\default.json*.
 	"sampleSize": "200",
 	"database": "path\to\db\file"
 }
+```
 
 These arguments can be given as program arguments when starting simulation
 with a new file.

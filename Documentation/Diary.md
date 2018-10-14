@@ -137,7 +137,8 @@ Implemented writing generation data to Files\savefile\gen_data\gen{i}.
  for node. All tests run OK. Added a function to see if a save exists.
  
  Added Values.cs and implemented loading values from values.json. Implemented
- Master constructor.
+ Master constructor. Implemented Master.run(). Now, program is ready for testing.
+ It has features to do everything it is supposed to do.
  
- Next up -> Implement a function that returns the values from *values.json* for a save.
+ Next up -> Gather all requirements to an idividual requirements.txt and test the system.
  

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.IO;
 using System.Linq;
 using Database;
 using BetAI.Genetics;
@@ -16,18 +18,22 @@ namespace BetAI
     public class Master
     {
         private List<Node> nodes;
-        private List<Match> sample;
         private string savefile;
         private Values values;
+        private CancellationToken cancelToken;
 
         /// <summary>
         /// Constructor for master. Loads latest generation of nodes into memory.
         /// If save does not exist, it is created and first generation of nodes as well.
         /// </summary>
-        public Master(string filename, params string[] args)
+        /// <param name="args">Optional arguments that replace values from defaults.json
+        /// in values.json and are used in simulation.</param>
+        /// <param name="filename">Name of the savefile.</param>
+        /// <param name="cancel">CancellationToken used by the main thread to stop simulation.</param>
+        public Master(string filename, CancellationToken cancel, params string[] args)
         {
             savefile = filename;
-
+            cancelToken = cancel;
             if (Load.SaveExists(filename))
             {
                 nodes = Load.LoadLatestGeneration(filename);
@@ -44,6 +50,7 @@ namespace BetAI
                 nodes = RandomiseNodes();
             }
             Matches.SetMatches(values.Database);
+            Console.WriteLine("Found " + Matches.GetMatchCount() + " matches in database");
         }
 
         /// <summary>
@@ -64,9 +71,13 @@ namespace BetAI
                 throw new InitializationException();
             }
 
-            while (true)
+            LogArguments();
+
+            while (!cancelToken.IsCancellationRequested)
             {
                 List<Match> sample = Sample.CreateSample(values.SampleSize);
+                int maxSampleSize = nodes.Max(n => n.SimulationSampleSize);
+                Matches.CreateMatchDataStructs(sample, maxSampleSize);
                 EvaluateNodes(sample);
                 Save.WriteGeneration(savefile, nodes, nodes[0].Generation);
                 Log();
@@ -74,6 +85,7 @@ namespace BetAI
                 nodes = co.Reproduce(toReproduce, values.Alpha);
                 Save.WriteGeneration(savefile, nodes, nodes[0].Generation);
             }
+            Console.WriteLine("Stopping simulation");
         }
 
         private void EvaluateNodes(List<Match> sample)
@@ -82,6 +94,17 @@ namespace BetAI
             {
                 nodes[i].EvaluateFitness(sample);
             }
+        }
+
+        private void LogArguments()
+        {
+            Console.WriteLine("Starting with arguments:");
+            FileInfo file = new FileInfo(values.Database);
+            Console.WriteLine("Database: " + file.FullName);
+            Console.WriteLine("Number of nodes: " + values.NumberOfNodes);
+            Console.WriteLine("Alpha: " + values.Alpha);
+            Console.WriteLine("Sample size: " + values.SampleSize);
+            Console.WriteLine("Minimum stake: " + values.MinimumStake);
         }
 
         private void Log()
