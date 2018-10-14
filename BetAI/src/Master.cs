@@ -79,9 +79,9 @@ namespace BetAI
                 int maxSampleSize = nodes.Max(n => n.SimulationSampleSize);
                 Matches.CreateMatchDataStructs(sample, maxSampleSize);
                 EvaluateNodes(sample);
-                Save.WriteGeneration(savefile, nodes, nodes[0].Generation);
                 Log();
                 List<Node> toReproduce = sel.SelectForCrossover(nodes);
+                Save.WriteGeneration(savefile, nodes, nodes[0].Generation);
                 nodes = co.Reproduce(toReproduce, values.Alpha);
                 Save.WriteGeneration(savefile, nodes, nodes[0].Generation);
             }
@@ -166,11 +166,9 @@ namespace BetAI
 
         private double FindAverageFitness()
         {
-            double sum = 0;
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                sum += nodes[i].Fitness;
-            }
+            double sum = nodes.Sum(n => n.Fitness);
+            Console.WriteLine("Fitness sum: " + sum);
+
             return sum / nodes.Count;
         }
 

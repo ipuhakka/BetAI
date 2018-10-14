@@ -9,6 +9,10 @@ namespace BetAI.Genetics
 {
     public class Node
     {
+        public const int MaxSimulationSampleSize = 40;
+        public const double MaxDrawLimit = 5;
+        public const double MaxPlayLimit = 2;
+
         [JsonProperty]
         public double PlayLimit { get; private set; }
         [JsonProperty]
@@ -53,18 +57,18 @@ namespace BetAI.Genetics
         {
             if (sampleSize < 1)
                 sampleSize = 1;
-            else if (sampleSize > 100)
-                sampleSize = 100;
+            else if (sampleSize > MaxSimulationSampleSize)
+                sampleSize = MaxSimulationSampleSize;
 
             if (drawLimit < 0)
                 drawLimit = 0.0;
-            else if (drawLimit > 10.0)
-                drawLimit = 10;
+            else if (drawLimit > MaxDrawLimit)
+                drawLimit = MaxDrawLimit;
 
             if (playLimit < 0)
                 playLimit = 0.0;
-            else if (playLimit > 5)
-                playLimit = 5;
+            else if (playLimit > MaxPlayLimit)
+                playLimit = MaxPlayLimit;
 
             if (minStake <= 0 || gen < 0)
                 throw new ArgumentException();
@@ -90,9 +94,9 @@ namespace BetAI.Genetics
         {
             Generation = 0;
             MinimumStake = minimumStake;
-            SimulationSampleSize = rand.Next(1, 100);
-            PlayLimit = rand.NextDouble() * (5 - 0) + 0;
-            DrawLimit = rand.NextDouble() * (10 - 0) + 0;
+            SimulationSampleSize = rand.Next(1, MaxSimulationSampleSize);
+            PlayLimit = rand.NextDouble() * (MaxPlayLimit - 0) + 0;
+            DrawLimit = rand.NextDouble() * (MaxDrawLimit - 0) + 0;
         }
 
         /// <summary>

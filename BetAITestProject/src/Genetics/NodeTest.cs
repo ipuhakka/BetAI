@@ -16,6 +16,9 @@ namespace BetAITestProject.Genetics
     public class NodeTest
     {
         private string path = "test-files/data.sqlite3";
+        const int MaxSample = 40;
+        const double MaxDrawLimit = 5;
+        const double MaxPlayLimit = 2;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -40,7 +43,7 @@ namespace BetAITestProject.Genetics
             Node n = new Node(1, 1, 1, 1, 0);
             Assert.AreEqual(n.SimulationSampleSize, 1);
             Node n2 = new Node(1, 1, 1, 1, 101);
-            Assert.AreEqual(n2.SimulationSampleSize, 100);
+            Assert.AreEqual(n2.SimulationSampleSize, MaxSample);
         }
 
         [Test]
@@ -51,7 +54,7 @@ namespace BetAITestProject.Genetics
             Node n = new Node(1, -0.1, 1, 1, 1);
             Assert.AreEqual(n.DrawLimit, 0);
             Node n2 = new Node(1, 10.1, 1, 1, 1);
-            Assert.AreEqual(n2.DrawLimit, 10);
+            Assert.AreEqual(n2.DrawLimit, MaxDrawLimit);
         }
 
         [Test]
@@ -62,7 +65,7 @@ namespace BetAITestProject.Genetics
             Node n = new Node(-0.1, 1, 1, 1, 1);
             Assert.AreEqual(n.PlayLimit, 0);
             Node n2 = new Node(5.1, 1, 1, 1, 1);
-            Assert.AreEqual(n2.PlayLimit, 5);
+            Assert.AreEqual(n2.PlayLimit, MaxPlayLimit);
         }
 
         [Test]
@@ -72,7 +75,7 @@ namespace BetAITestProject.Genetics
             for (int i = 0; i < 100; i++)
             {
                 Node n = new Node(rand, 1);
-                n.SimulationSampleSize.Should().BeInRange(1, 100);
+                n.SimulationSampleSize.Should().BeInRange(1, MaxSample);
             }
 
         }
@@ -84,7 +87,7 @@ namespace BetAITestProject.Genetics
             for (int i = 0; i < 100; i++)
             {
                 Node n = new Node(rand, 1);
-                n.PlayLimit.Should().BeInRange(0.0, 5.0);
+                n.PlayLimit.Should().BeInRange(0.0, MaxPlayLimit);
             }
         }
 
@@ -95,7 +98,7 @@ namespace BetAITestProject.Genetics
             for (int i = 0; i < 100; i++)
             {
                 Node n = new Node(rand, 1);
-                n.DrawLimit.Should().BeInRange(0.0, 10.0);
+                n.DrawLimit.Should().BeInRange(0.0, MaxDrawLimit);
             }
         }
 

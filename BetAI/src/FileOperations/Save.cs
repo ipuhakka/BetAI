@@ -89,7 +89,6 @@ namespace BetAI.FileOperations
         public static void Log(string savefile, string[] lines)
         {
             string path = Path.Combine(@"Files\", savefile, "log.txt");
-            Console.WriteLine(path);
             File.AppendAllLines(path, lines);
         }
     }
