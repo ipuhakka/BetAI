@@ -145,3 +145,6 @@ Implemented writing generation data to Files\savefile\gen_data\gen{i}.
  **14.10.2018**: Fixed child generation loss. This was because for every generation generation.Count
  / 2 nodes where created instead of equal to generation count.
  
+ **15.10.2018**: Double values with '.' decimal point given as program argument caused a crash.
+ Fixed this with using InvariantCulture in converting double values. Created tests and runs OK.
+ 

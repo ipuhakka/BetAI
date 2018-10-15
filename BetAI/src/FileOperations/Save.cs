@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Globalization;
 using BetAI.Exceptions;
 using BetAI.Genetics;
 using Newtonsoft.Json;
@@ -44,10 +45,10 @@ namespace BetAI.FileOperations
                 switch (argument[0].Trim().ToLower())
                 {
                     case "alpha":
-                        json["alpha"] = Convert.ToDouble(argument[1]);
+                        json["alpha"] = Convert.ToDouble(argument[1], CultureInfo.InvariantCulture);
                         break;
                     case "minimumstake":
-                        json["minimumStake"] = Convert.ToDouble(argument[1]);
+                        json["minimumStake"] = Convert.ToDouble(argument[1], CultureInfo.InvariantCulture);
                         break;
                     case "numberofnodes":
                         json["numberOfNodes"] = Convert.ToInt32(argument[1]);
