@@ -23,7 +23,7 @@ namespace BetAI.Genetics
         [JsonProperty]
         public double Fitness { get; private set; }
         [JsonProperty]
-        public double CrossoverFactor{ get; set; }
+        public double CrossoverValue{ get; set; }
         [JsonProperty]
         public int Generation { get; private set; }
         [JsonProperty]
@@ -148,7 +148,7 @@ namespace BetAI.Genetics
             Node comp = obj as Node;
             return PlayLimit.Equals(comp.PlayLimit) && DrawLimit.Equals(comp.DrawLimit) &&
                 MinimumStake.Equals(comp.MinimumStake) && Fitness.Equals(comp.Fitness) &&
-                CrossoverFactor.Equals(comp.CrossoverFactor) && Generation.Equals(comp.Generation)
+                CrossoverValue.Equals(comp.CrossoverValue) && Generation.Equals(comp.Generation)
                 && BetsWon.Equals(comp.BetsWon) && BetsLost.Equals(comp.BetsLost) &&
                 BetsNotPlayed.Equals(comp.BetsNotPlayed) && BetsSkipped.Equals(comp.BetsSkipped)
                 && SimulationSampleSize.Equals(comp.SimulationSampleSize);

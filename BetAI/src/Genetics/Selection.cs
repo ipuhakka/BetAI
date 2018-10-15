@@ -22,29 +22,30 @@ namespace BetAI.Genetics
         /// Returns Math.Floor(generation / 2) nodes. For every selected node,
         /// function randomises a number
         /// between 0 and sum of CrossoverFactors of still not chosen nodes. 
-        /// First variable which has a CrossoverFactor value lower than the random value is 
-        /// selected. If no variable have a lower CrossoverFactor value, first one from
+        /// First variable which has a CrossoverValue value lower than the random value is 
+        /// selected. If no variable have a lower CrossoverValue value, first one from
         /// sorted list (has the highest Crossoverfactor) will be selected.
         /// This is then removed from original list and added to the list of nodes
         /// that go to crossover process.
         /// </summary>
         private List<Node> ProbabilityRandomise(List<Node> generation)
         {
-            generation = generation.OrderByDescending(n => n.CrossoverFactor).ToList();
-            double probabilitySum = generation.Sum(n => n.CrossoverFactor);
+            generation = generation.OrderByDescending(n => n.CrossoverValue).ToList();
+            double probabilitySum = generation.Sum(n => n.CrossoverValue);
             List<Node> toReproduce = new List<Node>();
             int nodesToCrossover = (int) Math.Floor((double) generation.Count / 2);
             Random rand = new Random();
 
             for (int i = 0; i < nodesToCrossover; i++)
             {
-                double next = rand.NextDouble() * (probabilitySum - 0);
-                Node selected = generation.FirstOrDefault(n => n.CrossoverFactor < next);
+                double minimumCrossoverFactor = generation.Min(n => n.CrossoverValue);
+                double next = rand.NextDouble() * (probabilitySum - minimumCrossoverFactor);
+                Node selected = generation.FirstOrDefault(n => n.CrossoverValue < next);
                 if (selected == null)
                     selected = generation[0];
                 toReproduce.Add(selected);
                 generation.Remove(selected);
-                probabilitySum -= selected.CrossoverFactor;
+                probabilitySum -= selected.CrossoverValue;
             }
 
             return toReproduce;
@@ -54,7 +55,7 @@ namespace BetAI.Genetics
         /// Sets the probability for each node to be selected for 
         /// crossover. This is set as follows:
         /// 
-        /// Node[i].CrossoverFactor = Node[i].Fitness - Min(Fitness).
+        /// Node[i].CrossoverValue = Node[i].Fitness - Min(Fitness).
         /// This does mean that node with minimum fitness has
         /// crossover probability of 0.
         /// </summary>
@@ -65,7 +66,7 @@ namespace BetAI.Genetics
             double minimumFitness = MinimumFitness(generation);
             for (var i = 0; i < generation.Length; i++)
             {
-                generation[i].CrossoverFactor = generation[i].Fitness - minimumFitness;
+                generation[i].CrossoverValue = generation[i].Fitness - minimumFitness;
             }
 
             return generation.ToList();

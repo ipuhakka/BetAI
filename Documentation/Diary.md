@@ -152,3 +152,8 @@ Program argument values should be checked that they match boundaries before star
 
 NaN-bug found: If PlayLimit is 0 and bet is played, Bet.PlayBet()-will return NaN. To fix this,
 Node's minimum value for PlayLimit should be upped to 0.01. Tests created,everything OK.
+
+Changed Selection.ProbabilityRandomise() - to generate values from 
+minimum crossovervalue to maximum.
+
+Refactoring: CrossoverFactor -> CrossoverValue.

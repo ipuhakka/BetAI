@@ -53,9 +53,9 @@ namespace BetAITestProject.Genetics
             foreach (Node n in nodes)
             {
                 if (n.Fitness != minFitness)
-                    Assert.AreEqual(n.Fitness - minFitness, n.CrossoverFactor);
+                    Assert.AreEqual(n.Fitness - minFitness, n.CrossoverValue);
                 else
-                    Assert.AreEqual(0, n.CrossoverFactor);
+                    Assert.AreEqual(0, n.CrossoverValue);
             }
         }
 
