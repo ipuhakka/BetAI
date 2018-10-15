@@ -148,3 +148,7 @@ Implemented writing generation data to Files\savefile\gen_data\gen{i}.
  **15.10.2018**: Double values with '.' decimal point given as program argument caused a crash.
  Fixed this with using InvariantCulture in converting double values. Created tests and runs OK.
  
+Program argument values should be checked that they match boundaries before starting.
+
+NaN-bug found: If PlayLimit is 0 and bet is played, Bet.PlayBet()-will return NaN. To fix this,
+Node's minimum value for PlayLimit should be upped to 0.01. Tests created,everything OK.

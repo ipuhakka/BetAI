@@ -9,9 +9,10 @@ namespace BetAI.Genetics
 {
     public class Node
     {
-        public const int MaxSimulationSampleSize = 40;
-        public const double MaxDrawLimit = 5;
-        public const double MaxPlayLimit = 2;
+        const int MaxSimulationSampleSize = 40;
+        const double MaxDrawLimit = 5;
+        const double MaxPlayLimit = 2;
+        const double MinPlayLimit = 0.01;
 
         [JsonProperty]
         public double PlayLimit { get; private set; }
@@ -65,8 +66,8 @@ namespace BetAI.Genetics
             else if (drawLimit > MaxDrawLimit)
                 drawLimit = MaxDrawLimit;
 
-            if (playLimit < 0)
-                playLimit = 0.0;
+            if (playLimit < MinPlayLimit)
+                playLimit = MinPlayLimit;
             else if (playLimit > MaxPlayLimit)
                 playLimit = MaxPlayLimit;
 
@@ -95,7 +96,7 @@ namespace BetAI.Genetics
             Generation = 0;
             MinimumStake = minimumStake;
             SimulationSampleSize = rand.Next(1, MaxSimulationSampleSize);
-            PlayLimit = rand.NextDouble() * (MaxPlayLimit - 0) + 0;
+            PlayLimit = rand.NextDouble() * (MaxPlayLimit - MinPlayLimit) + MinPlayLimit;
             DrawLimit = rand.NextDouble() * (MaxDrawLimit - 0) + 0;
         }
 
@@ -136,6 +137,11 @@ namespace BetAI.Genetics
             }
             return Fitness;
         }
+
+        public double GetMaxPlayLimit() { return MaxPlayLimit; }
+        public double GetMinPlayLimit() { return MinPlayLimit; }
+        public double GetMaxDrawLimit() { return MaxDrawLimit; }
+        public int GetMaxSimulationSampleSize() { return MaxSimulationSampleSize; }
 
         public override bool Equals(object obj)
         {
