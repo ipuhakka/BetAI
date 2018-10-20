@@ -64,7 +64,7 @@ namespace BetAI
         public void Run()
         {
             Crossover co = new Crossover();
-            Selection sel = new Selection();
+            Selection sel = new WeightedSelection();
             if (nodes == null || savefile == null || values == null)
             {
                 Console.WriteLine("Initialization failed");

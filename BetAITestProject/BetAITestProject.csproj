@@ -81,7 +81,7 @@
     <Compile Include="src\FileOperations\SaveTest.cs" />
     <Compile Include="src\Genetics\CrossoverTest.cs" />
     <Compile Include="src\Genetics\NodeTest.cs" />
-    <Compile Include="src\Genetics\SelectionTest.cs" />
+    <Compile Include="src\Genetics\WeightedSelectionTest.cs" />
     <Compile Include="src\Utils\SampleTest.cs" />
     <Compile Include="src\Utils\ValuesTest.cs" />
   </ItemGroup>

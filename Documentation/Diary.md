@@ -157,3 +157,6 @@ Changed Selection.ProbabilityRandomise() - to generate values from
 minimum crossovervalue to maximum.
 
 Refactoring: CrossoverFactor -> CrossoverValue.
+
+**20.10.2018**: Changed Selection of nodes to WeightedSelection, which implements an interface Selection-this allows
+us to create a design based on using different selection methods to select nodes for crossover.

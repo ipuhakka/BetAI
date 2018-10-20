@@ -74,9 +74,10 @@
     <Compile Include="src\FileOperations\Load.cs" />
     <Compile Include="src\FileOperations\Save.cs" />
     <Compile Include="src\Genetics\Crossover.cs" />
-    <Compile Include="src\Genetics\Selection.cs" />
-    <Compile Include="src\Master.cs" />
     <Compile Include="src\Genetics\Node.cs" />
+    <Compile Include="src\Genetics\Selection.cs" />
+    <Compile Include="src\Genetics\WeightedSelection.cs" />
+    <Compile Include="src\Master.cs" />
     <Compile Include="src\Utils\Sample.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

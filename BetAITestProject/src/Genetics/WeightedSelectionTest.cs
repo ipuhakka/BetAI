@@ -11,7 +11,7 @@ using Database;
 namespace BetAITestProject.Genetics
 {
     [TestFixture]
-    public class SelectionTest
+    public class WeightedSelectionTest
     {
         List<Node> nodes;
 
@@ -46,7 +46,7 @@ namespace BetAITestProject.Genetics
         [Test]
         public void test_Selection_CrossoverFactors()
         {
-            Selection sel = new Selection();
+            WeightedSelection sel = new WeightedSelection();
             double minFitness = nodes.Min(n => n.Fitness);
             sel.SelectForCrossover(nodes);
 
@@ -68,7 +68,7 @@ namespace BetAITestProject.Genetics
             {
                 gen.Add(new Node(rand, 5));
             }
-            Selection sel = new Selection();
+            WeightedSelection sel = new WeightedSelection();
             List<Node> selectedParents = sel.SelectForCrossover(gen);
             Assert.AreEqual(50, selectedParents.Count);
         }
@@ -82,7 +82,7 @@ namespace BetAITestProject.Genetics
             {
                 gen.Add(new Node(rand, 5));
             }
-            Selection sel = new Selection();
+            WeightedSelection sel = new WeightedSelection();
             List<Node> selectedParents = sel.SelectForCrossover(gen);
             Assert.AreEqual(50, selectedParents.Count);
         }
@@ -96,7 +96,7 @@ namespace BetAITestProject.Genetics
             {
                 gen.Add(new Node(rand, 5));
             }
-            Selection sel = new Selection();
+            WeightedSelection sel = new WeightedSelection();
             List<Node> selectedParents = sel.SelectForCrossover(gen);
             Assert.AreEqual(49, selectedParents.Count);
         }
