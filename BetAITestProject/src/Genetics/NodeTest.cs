@@ -127,7 +127,7 @@ namespace BetAITestProject.Genetics
             List<long> runtimes = new List<long>();
             string path = "test-files/data.sqlite3";
             Matches.SetMatches(path);
-            List<Match> sample = Sample.CreateSample(13);
+            List<Match> sample = Sample.CreateSample(100);
 
             for (var i = 0; i < 100; i++)
             {
@@ -155,7 +155,7 @@ namespace BetAITestProject.Genetics
             List<long> runtimes = new List<long>();
             string path = "test-files/data.sqlite3";
             Matches.SetMatches(path);
-            List<Match> sample = Sample.CreateSample(13);
+            List<Match> sample = Sample.CreateSample(100);
 
             for (var i = 0; i < 100; i++)
             {

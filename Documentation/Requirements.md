@@ -47,21 +47,18 @@ from input file can then follow in any order.
 # BetAI
 
 ## Creating match sample for simulation
+
 **RQ11**. n-sized sample list of matches is created based on parameter *sampleSize* 
 defined in *values.json*. 
+
 **RQ12**. Matches are selected for sample based on their row number: that means 
 matches from 0 to (database match count - 1) can belong to sample.
+
 **RQ13**. Sample can't have a same match more than once.
+
 **RQ14**. Sample size cannot be larger than number of matches in the used database.
 
 ## Using matches from database
-1. method to return a list of matches based on row number
-2. method for returning count of matches in memory
-3. method to count mean home/away -goals in league
-in a given season, before match n. 
-4. method to return N last home- or awaymatches from a given team
-starting from a given date. If team doesn't have n home/awaymatches,
-n previous all matches are returned.
 
 **RQ15**. System needs a method to return a list of matches
 based on row number. It takes an n-sized list of index numbers ranging from 0 to 
@@ -76,3 +73,119 @@ in a specified league and season, up to match m. Matches after m and m are not c
 n home or awaymatches before a given date, both are searched. If there still aren't enough matches,
 a match cannot be simulated.
 
+## Predicting results:
+**RQ19**. System needs to get a list of n previous matches for home and away team.
+
+**RQ20**. System needs to count mean values for goals scored/conceded for both teams.
+
+**RQ21**. Result is calculated as follows:
+```
+homeAttack = (homeGoals / sampleSize) / leagueAvgGoalsHome;
+homeDef = (homeConceded/ sampleSize) / leagueAvgGoalsAway;
+awayAttack = (awayGoals / sampleSize) / leagueAvgGoalsAway;
+awayDef = (awayConceded / sampleSize) / leagueAvgGoalsHome;
+
+#Goal estimates are the poisson distribution expected values
+homeGoalEstimate = homeAttack * awayDef * leagueAvgGoalsHome;
+awayGoalEstimate = awayAttack * homeAttack * leagueAvgGoalsAway;
+
+#result
+result = homeGoalEstimate - awayGoalEstimate;
+```
+
+## Setting a bet
+**RQ22**. Component needs to set a stake according to algorithm
+```
+estimatedWinPercentage = (e^(-absolute(result))) * (absolute(result)) / 1; 
+betCoefficient = estimatedWinPercentage / (1 / odd); 
+bool playBet = (playLimit > betCoefficient);
+stake = minimumStake* (betCoefficient / playLimit);
+```
+based on given parameters *riskLimit* and *minimumStakeCoefficient* and drawLimit.
+
+*estimatedWinPercentage* is poisson distribution probability for 
+predicted difference in the two teams goals scored. 
+
+*betCoefficient* is the found value of bet (compared to odd providers assessment).
+For example *betCoefficient* = 1, means that
+system predicts the likelyhood of a result as the same
+as odd providers did. System has not found any value in 
+playing the bet.
+ 
+*playLimit* is parameter which sets the minimum playable
+value for a bet. 
+*minimumStake* is the base stake set.
+
+**RQ23**. Component needs to have a method PlayBet, which returns
+profit of the bet. Profit is 0 if bet was not played at all,
+its (-stake), if bet was lost, and its stake * odd - stake, if bet was
+predicted correctly.
+
+**RQ24**. A bet is played, if betCoefficient is larger 
+than playLimit. If bet is not played, 0 is returned
+as it is the profit/loss of the bet as bet was not played. 
+
+## Node
+**RQ25**. Node holds data for fitness, number of bets won, lost, not played and 
+skipped. Skipped are not simulated due to not having enough data to simulate a match.
+ 
+**RQ26**. Node fitness is defined by how much node made profit playing the sample of matches.
+ 
+**RQ27**. Node has a CrossoverValue, which is used to select or not select node to crossover. 
+
+**RQ28**. Fitness evaluation for node should not last more than 50ms, given a match samplesize
+of 100. 
+
+**RQ29**. SimulationSampleSize cant be less than 1 or over 40.
+
+**RQ30**. DrawLimit is between 0.0 and 5.
+
+**RQ31**. PlayLimit is between 0.01 and 2.
+
+**RQ32**. Minimumstake is over 0.
+
+## Crossover
+
+**RQ33**. Childrens PlayLimit, DrawLimit, and SimulationSampleSize variable values are always between 
+```
+(min - alpha * d ,max + alpha * d)
+```
+where d is the difference in value between the parents,
+min is the minimum of the two parents value for parameter, max
+is the maximum value for parameter between two parents, and alpha
+is the set parameter for BLX.
+
+**RQ34**. Number of children created is always 
+```
+floor(selectedCrossoverNodes / 2) * 4
+```
+
+**RQ35**. Created children should have the same minimumstake as their parents
+and Generation should be added by one per generation.'
+
+## Program data
+
+**RQ36**. On creating a new save, new folder named *filename* is created, and inside it, a file *values.json*
+and a folder gen_data is created. 
+
+
+**RQ37**. *values.json* has values from *BetAI\Files\defaults.json*, unless any variable is given a value as
+parameter. That value is then written into *values.json*.'
+
+**RQ38**. If program is started with a savefile that exists, that file is loaded. Newest
+generation of nodes is loaded from *gen_data* folder into program memory and simulation is continued
+there.
+
+## Data reporting
+
+**RQ39**. Each generation of nodes is written as json file with name genX.json, where X is the
+current generation. 
+
+
+**RQ40**. Once a new generation of nodes has been created, it is written into *BetAI\Files\savefile\genX.json*.
+This file is overwritten once generation has been evaluated.
+
+
+**RQ41**. After a generation has been evaluated, results are logged to console:
+Fitness sum of generation, worst fitness, average fitness, and maximum fitness are logged to screen.
+These are also logged to file *BetAI\Files\savefile\log.txt*.

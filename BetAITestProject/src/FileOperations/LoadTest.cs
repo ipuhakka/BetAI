@@ -117,7 +117,7 @@ namespace BetAITestProject.FileOperations
             Values values = Load.LoadValues(save);
             Assert.AreEqual(0.2, values.Alpha);
             Assert.AreEqual(5, values.MinimumStake);
-            Assert.AreEqual(2000, values.NumberOfNodes);
+            Assert.AreEqual(200, values.NumberOfNodes);
             Assert.AreEqual(200, values.SampleSize);
             Assert.AreEqual("../../../Database/db/data.sqlite3", values.Database);
         } 
