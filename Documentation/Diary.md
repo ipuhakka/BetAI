@@ -160,3 +160,5 @@ Refactoring: CrossoverFactor -> CrossoverValue.
 
 **20.10.2018**: Changed Selection of nodes to WeightedSelection, which implements an interface Selection-this allows
 us to create a design based on using different selection methods to select nodes for crossover.
+
+**22.10.2018**: Crossover and selection of parents should be merged into a component provided by an interface. 

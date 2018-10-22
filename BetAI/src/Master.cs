@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using Database;
 using BetAI.Genetics;
+using BetAI.Genetics.Crossover;
+using BetAI.Genetics.Selection;
 using BetAI.FileOperations;
 using BetAI.Utils;
 using BetAI.Data;
@@ -21,6 +23,8 @@ namespace BetAI
         private string savefile;
         private Values values;
         private CancellationToken cancelToken;
+        private ISelection selection;
+        private ICrossover crossover;
 
         /// <summary>
         /// Constructor for master. Loads latest generation of nodes into memory.
@@ -49,8 +53,49 @@ namespace BetAI
                 values = Load.LoadValues(filename);
                 nodes = RandomiseNodes();
             }
+            InitializeSelectionMethod();
+            InitializeCrossoverMethod();
+            Randomise.InitRandom();
             Matches.SetMatches(values.Database);
             Console.WriteLine("Found " + Matches.GetMatchCount() + " matches in database");
+        }
+
+        /// <summary>
+        ///  Creates a new instance of ISelection interface, based on the parameter 
+        /// parentSelectionMethod in values.json.
+        /// </summary>
+        /// <exception cref="InitializationException">Parent selection method is not identified.</exception>
+        private void InitializeSelectionMethod()
+        {
+            string method = values.ParentSelectionMethod;
+
+            switch (method.Trim().ToLower())
+            {
+                case "weighted":
+                    selection = new WeightedSelection();
+                    break;
+                default:
+                    throw new InitializationException("Parent selection method not identified");
+            }
+        }
+
+        /// <summary>
+        /// Creates a new instance of ICrossover interface, based on the parameter 
+        /// crossoverMethod in values.json.
+        /// </summary>
+        /// <exception cref="InitializationException">Crossover method is not identified.</exception>
+        private void InitializeCrossoverMethod()
+        {
+            string method = values.CrossoverMethod;
+
+            switch (method.Trim().ToLower())
+            {
+                case "blx":
+                    crossover = new BLXAlpha(values.Alpha);
+                    break;
+                default:
+                    throw new InitializationException("Crossover method not identified");
+            }
         }
 
         /// <summary>
@@ -63,8 +108,7 @@ namespace BetAI
         /// <exception cref="InitializationException"></exception>
         public void Run()
         {
-            Crossover co = new Crossover();
-            Selection sel = new WeightedSelection();
+            Reproduce reproduce = new Reproduce(crossover, selection);
             if (nodes == null || savefile == null || values == null)
             {
                 Console.WriteLine("Initialization failed");
@@ -80,13 +124,13 @@ namespace BetAI
                 Matches.CreateMatchDataStructs(sample, maxSampleSize);
                 EvaluateNodes(sample);
                 Log();
-                List<Node> toReproduce = sel.SelectForCrossover(nodes);
+                List<Node> newGeneration = reproduce.CreateNewGeneration(nodes);
                 Save.WriteGeneration(savefile, nodes, nodes[0].Generation);
-                nodes = co.Reproduce(toReproduce, values.Alpha);
-                Save.WriteGeneration(savefile, nodes, nodes[0].Generation);
+                Save.WriteGeneration(savefile, newGeneration, newGeneration[0].Generation);
+                nodes = newGeneration;
             }
             Console.WriteLine("Stopping simulation");
-        }
+        } 
 
         private void EvaluateNodes(List<Match> sample)
         {
@@ -171,6 +215,5 @@ namespace BetAI
 
             return sum / nodes.Count;
         }
-
     }
 }

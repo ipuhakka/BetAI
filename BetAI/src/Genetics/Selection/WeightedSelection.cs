@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BetAI.Utils;
 
-namespace BetAI.Genetics
+namespace BetAI.Genetics.Selection
 {
-    public class WeightedSelection: Selection
+    public class WeightedSelection: ISelection
     {
         /// <summary>
         /// Uses a probability based randomisation process
-        /// to select Math.Floor(n / 2) nodes for crossover.
+        /// to select 2 nodes for crossover. Weights for each node in generation are calculated
+        /// based on fitness, and then 2 nodes are selected randomly by using this weighted
+        /// probability model. Nodes cannot be the same, meaning that two different nodes
+        /// are always returned.
         /// </summary>
-        /// <param name="generation">Set of nodes from which the ones
-        /// to crossover are selected.</param>
+        /// <param name="generation">Set of nodes from which nodes for crossover
+        /// are selected.</param>
         public List<Node> SelectForCrossover(List<Node> generation)
         {
             generation = SetWeights(generation.ToArray());
@@ -31,21 +35,21 @@ namespace BetAI.Genetics
         private List<Node> ProbabilityRandomise(List<Node> generation)
         {
             generation = generation.OrderByDescending(n => n.CrossoverValue).ToList();
-            double probabilitySum = generation.Sum(n => n.CrossoverValue);
             List<Node> toReproduce = new List<Node>();
-            int nodesToCrossover = (int) Math.Floor((double) generation.Count / 2);
-            Random rand = new Random();
 
-            for (int i = 0; i < nodesToCrossover; i++)
+            for (int i = 0; i < 2; i++)
             {
-                double minimumCrossoverFactor = generation.Min(n => n.CrossoverValue);
-                double next = rand.NextDouble() * (probabilitySum - minimumCrossoverFactor);
+                double minimumCrossoverValue = generation.Min(n => n.CrossoverValue);
+                double maximumCrossoverValue = generation.Max(n => n.CrossoverValue);
+                double next = Randomise.random.NextDouble() * (maximumCrossoverValue - minimumCrossoverValue) + minimumCrossoverValue;
+
                 Node selected = generation.FirstOrDefault(n => n.CrossoverValue < next);
                 if (selected == null)
+                {
                     selected = generation[0];
+                }
                 toReproduce.Add(selected);
                 generation.Remove(selected);
-                probabilitySum -= selected.CrossoverValue;
             }
 
             return toReproduce;
@@ -53,23 +57,41 @@ namespace BetAI.Genetics
 
         /// <summary>
         /// Sets the probability for each node to be selected for 
-        /// crossover. This is set as follows:
+        /// crossover. This is done as follows:
         /// 
-        /// Node[i].CrossoverValue = Node[i].Fitness - Min(Fitness).
-        /// This does mean that node with minimum fitness has
-        /// crossover probability of 0.
-        /// </summary>
+        /// K-nodes are ordered by fitness from lowest to highest.
+        /// Lowest fitness node has CrossoverValue of 0.
+        /// Node n CrossoverValue is (n.Fitness - [n-1].Fitness) + runningSum.
+        /// This way, CrossoverValue gives node a unique CrossoverValue.
+        /// CrossoverValues range from
+        /// 0 to
+        /// (n[k].Fitness - n[k-1].Fitness) + runningCrossoverSum, where k-nodes are ordered
+        /// from lowest fitness to highest.
         /// <param name="generation"></param>
         /// <returns></returns>
         private List<Node> SetWeights(Node[] generation)
         {
-            double minimumFitness = MinimumFitness(generation);
-            for (var i = 0; i < generation.Length; i++)
+            bool crossoverValuesCalculated = generation.ToList().Any(node => node.CrossoverValue != 0);
+
+            if (crossoverValuesCalculated) //CrossoverValues already calculated, no excess calculation should be done
             {
-                generation[i].CrossoverValue = generation[i].Fitness - minimumFitness;
+                return generation.ToList();
             }
 
-            return generation.ToList();
+            List<Node> sortedByFitness = generation.ToList().OrderBy(n => n.Fitness).ToList();
+            double runningSum = 0;
+            for (int i = 0; i < sortedByFitness.Count; i++)
+            {
+                if (i == 0)
+                    sortedByFitness[i].CrossoverValue = 0;
+                else
+                    sortedByFitness[i].CrossoverValue = runningSum + (sortedByFitness[i].Fitness - sortedByFitness[i - 1].Fitness);
+                
+                
+                runningSum += sortedByFitness[i].CrossoverValue;
+            }
+
+            return sortedByFitness;
         }
 
         /// <summary>
