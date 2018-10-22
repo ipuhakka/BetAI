@@ -34,7 +34,7 @@ namespace BetAI.Genetics.Selection
         /// </summary>
         private List<Node> ProbabilityRandomise(List<Node> generation)
         {
-            generation = generation.OrderByDescending(n => n.CrossoverValue).ToList();
+            generation = generation.OrderBy(n => n.CrossoverValue).ToList();
             List<Node> toReproduce = new List<Node>();
 
             for (int i = 0; i < 2; i++)
@@ -43,7 +43,7 @@ namespace BetAI.Genetics.Selection
                 double maximumCrossoverValue = generation.Max(n => n.CrossoverValue);
                 double next = Randomise.random.NextDouble() * (maximumCrossoverValue - minimumCrossoverValue) + minimumCrossoverValue;
 
-                Node selected = generation.FirstOrDefault(n => n.CrossoverValue < next);
+                Node selected = generation.FirstOrDefault(n => n.CrossoverValue > next);
                 if (selected == null)
                 {
                     selected = generation[0];

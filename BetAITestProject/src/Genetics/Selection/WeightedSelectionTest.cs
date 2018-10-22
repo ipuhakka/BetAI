@@ -72,8 +72,6 @@ namespace BetAITestProject.Genetics.Selection
             for (int j = 0; j < 100; j++)
             {
                 List<Node> selectedParents = sel.SelectForCrossover(nodes);
-                Console.WriteLine(nodes.FindIndex(node => node.Equals(selectedParents[0])));
-                Console.WriteLine(nodes.FindIndex(node => node.Equals(selectedParents[1])));
                 Assert.AreEqual(2, selectedParents.Count);
             }
         }

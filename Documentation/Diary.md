@@ -162,3 +162,8 @@ Refactoring: CrossoverFactor -> CrossoverValue.
 us to create a design based on using different selection methods to select nodes for crossover.
 
 **22.10.2018**: Crossover and selection of parents should be merged into a component provided by an interface. 
+These were done and first implementations, WeightedSelection and BLX-alpha were done. WeightedSelection was fixed. However
+it doesn't work too well as it focuses too heavily on top nodes and immediately it loses all diversity.
+
+Static random class was created wj´hic can be used throughout the program.
+Values format was changes to take parameters for parentSelectionMethod and crossoverMethod.
