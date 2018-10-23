@@ -79,9 +79,10 @@
     <Compile Include="src\Data\MatchesTest.cs" />
     <Compile Include="src\FileOperations\LoadTest.cs" />
     <Compile Include="src\FileOperations\SaveTest.cs" />
-    <Compile Include="src\Genetics\CrossoverTest.cs" />
+    <Compile Include="src\Genetics\Crossover\BLXAlphaTest.cs" />
     <Compile Include="src\Genetics\NodeTest.cs" />
-    <Compile Include="src\Genetics\SelectionTest.cs" />
+    <Compile Include="src\Genetics\ReproduceTest.cs" />
+    <Compile Include="src\Genetics\Selection\WeightedSelectionTest.cs" />
     <Compile Include="src\Utils\SampleTest.cs" />
     <Compile Include="src\Utils\ValuesTest.cs" />
   </ItemGroup>

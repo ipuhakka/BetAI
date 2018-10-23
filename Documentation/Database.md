@@ -1,53 +1,28 @@
 # Database
 
 ## Description
-Database is a C#/SQLite implementation for storing sports match data. It is designed 
+Database is a C#/SQLite library implementation for storing and accessing 
+1X2-betting data. It is designed 
 to store data from several different leagues, in a simple table containing all the data needed
 to simulate betting results. 
 
+
 ## Table structure
 ```
-Match:
-	TEXT playedDate,
-	INTEGER league REFER League,
-	INTEGER season REFER Season,
-	TEXT hometeam,
-	TEXT awayteam,
-	INTEGER homescore,
-	INTEGER awayscore,
-	REAL homeOdd,
-	REAL drawOdd,
-	REAL awayOdd
-	
-League:
-	TEXT name,
-	INTEGER id
-Season: 
-	CHAR(9) season,
-	INTEGER id
+CREATE TABLE IF NOT EXISTS matches(
+	playedDate TEXT,
+	hometeam TEXT,
+	awayteam TEXT,
+	league TEXT,
+	season CHAR(9),
+	homescore INTEGER,
+	awayscore INTEGER,
+	homeOdd REAL,
+	drawOdd REAL,
+	awayOdd REAL,
+	CONSTRAINT PK_matches PRIMARY KEY(playedDate, hometeam, awayteam)
+);
 ```
-
-## Requirements
-
-**RQ1**. Database can't have duplicate matches. Duplicate = same date, hometeam and awayteam.
-
-**RQ2**. Database needs to have methods to create a database and set a schema.
-
-**RQ3**. Adding data to table has to be fast enough. Updating 380 matches (standard for 20 team league)
-  should take ~ 2 seconds.
-
-  
-## Progress
-**RQ1**. - Done.
-
-**RQ2**. - Done.
-
-**RQ3**. - Done.
-
-## Future changes.
-Once BetSimulator is done to the stage that it can be tested, results on how well 
-selecting N last from team works in the solution. There is a chance that it is 
-too slow, in which case an alternative solution has to be found.
 
 ## Made changes
 **27.9.2018**: Changed matches table structure to include column for season and league, and corresponding methods. 

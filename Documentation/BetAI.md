@@ -42,7 +42,7 @@ simulation data is only loaded once per generation makes this functionality meet
 the performance requirements it needs has.
 
 Now, when Master creates the sample, it also calls QueryMatches.CreateMatchDataStructs. 
-One MatchData structures have been created, they can be called from Predict to get
+Once MatchData structures have been created, they can be called from Predict to get
 match specific data. Call methods in predict change to GetNLastFromTeamBeforeMatch, and
 GetSeasonAverage. NotEnoughDataException still needs to be caught. 
 

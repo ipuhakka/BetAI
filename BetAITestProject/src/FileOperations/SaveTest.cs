@@ -64,6 +64,20 @@ namespace BetAITestProject.FileOperations
         }
 
         [Test]
+        public void test_InitializeSave_double_with_point_runs()
+        {
+            string[] args = { "minimumStake=0.5" };
+            Assert.DoesNotThrow(() => Save.InitializeSave(testFile, args));
+        }
+
+        [Test]
+        public void test_InitializeSave_double_with_comma_runs()
+        {
+            string[] args = { "minimumStake=0,5" };
+            Assert.DoesNotThrow(() => Save.InitializeSave(testFile, args));
+        }
+
+        [Test]
         public void test_InitializeSave_fixes_database_path()
         {
             string[] args = { @"database=backslashes\need\to\be\escaped"};

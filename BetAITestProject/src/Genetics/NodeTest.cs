@@ -16,9 +16,6 @@ namespace BetAITestProject.Genetics
     public class NodeTest
     {
         private string path = "test-files/data.sqlite3";
-        const int MaxSample = 40;
-        const double MaxDrawLimit = 5;
-        const double MaxPlayLimit = 2;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -42,8 +39,8 @@ namespace BetAITestProject.Genetics
              should correct itself to 100.*/
             Node n = new Node(1, 1, 1, 1, 0);
             Assert.AreEqual(n.SimulationSampleSize, 1);
-            Node n2 = new Node(1, 1, 1, 1, 101);
-            Assert.AreEqual(n2.SimulationSampleSize, MaxSample);
+            Node n2 = new Node(1, 1, 1, 1, n.GetMaxSimulationSampleSize() + 1);
+            Assert.AreEqual(n2.SimulationSampleSize, n2.GetMaxSimulationSampleSize());
         }
 
         [Test]
@@ -53,8 +50,8 @@ namespace BetAITestProject.Genetics
              should correct itself to 10.*/
             Node n = new Node(1, -0.1, 1, 1, 1);
             Assert.AreEqual(n.DrawLimit, 0);
-            Node n2 = new Node(1, 10.1, 1, 1, 1);
-            Assert.AreEqual(n2.DrawLimit, MaxDrawLimit);
+            Node n2 = new Node(1, n.GetMaxDrawLimit() + 1, 1, 1, 1);
+            Assert.AreEqual(n2.DrawLimit, n2.GetMaxDrawLimit());
         }
 
         [Test]
@@ -62,10 +59,10 @@ namespace BetAITestProject.Genetics
         {
             /*playLimit less than 0 should correct itself to 0, and over 5
              should correct itself to 5.*/
-            Node n = new Node(-0.1, 1, 1, 1, 1);
-            Assert.AreEqual(n.PlayLimit, 0);
-            Node n2 = new Node(5.1, 1, 1, 1, 1);
-            Assert.AreEqual(n2.PlayLimit, MaxPlayLimit);
+            Node n = new Node(0, 1, 1, 1, 1);
+            Assert.AreEqual(n.PlayLimit, n.GetMinPlayLimit());
+            Node n2 = new Node(n.GetMaxPlayLimit() + 1, 1, 1, 1, 1);
+            Assert.AreEqual(n2.PlayLimit, n2.GetMaxPlayLimit());
         }
 
         [Test]
@@ -75,7 +72,7 @@ namespace BetAITestProject.Genetics
             for (int i = 0; i < 100; i++)
             {
                 Node n = new Node(rand, 1);
-                n.SimulationSampleSize.Should().BeInRange(1, MaxSample);
+                n.SimulationSampleSize.Should().BeInRange(1, n.GetMaxSimulationSampleSize());
             }
 
         }
@@ -87,7 +84,7 @@ namespace BetAITestProject.Genetics
             for (int i = 0; i < 100; i++)
             {
                 Node n = new Node(rand, 1);
-                n.PlayLimit.Should().BeInRange(0.0, MaxPlayLimit);
+                n.PlayLimit.Should().BeInRange(0.0, n.GetMaxPlayLimit());
             }
         }
 
@@ -98,7 +95,7 @@ namespace BetAITestProject.Genetics
             for (int i = 0; i < 100; i++)
             {
                 Node n = new Node(rand, 1);
-                n.DrawLimit.Should().BeInRange(0.0, MaxDrawLimit);
+                n.DrawLimit.Should().BeInRange(0.0, n.GetMaxDrawLimit());
             }
         }
 
@@ -130,7 +127,7 @@ namespace BetAITestProject.Genetics
             List<long> runtimes = new List<long>();
             string path = "test-files/data.sqlite3";
             Matches.SetMatches(path);
-            List<Match> sample = Sample.CreateSample(13);
+            List<Match> sample = Sample.CreateSample(100);
 
             for (var i = 0; i < 100; i++)
             {
@@ -158,7 +155,7 @@ namespace BetAITestProject.Genetics
             List<long> runtimes = new List<long>();
             string path = "test-files/data.sqlite3";
             Matches.SetMatches(path);
-            List<Match> sample = Sample.CreateSample(13);
+            List<Match> sample = Sample.CreateSample(100);
 
             for (var i = 0; i < 100; i++)
             {

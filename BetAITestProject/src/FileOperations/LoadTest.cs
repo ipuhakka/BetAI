@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using BetAI.FileOperations;
 using BetAI.Genetics;
+using BetAI.Genetics.Crossover;
 using BetAI.Utils;
 
 namespace BetAITestProject.FileOperations
@@ -79,8 +80,8 @@ namespace BetAITestProject.FileOperations
             Save.WriteGeneration(save, nodes, 0);
             for (int j = 0; j < 10; j++)
             {
-                Crossover co = new Crossover();
-                nodes = co.Reproduce(nodes, 0.2);
+                BLXAlpha co = new BLXAlpha(0.2);
+                nodes = co.Crossover(nodes[0], nodes[1]);
                 Save.WriteGeneration(save, nodes, nodes[0].Generation);
             }
             List<Node> loadedGen = Load.LoadLatestGeneration(save);
@@ -117,7 +118,7 @@ namespace BetAITestProject.FileOperations
             Values values = Load.LoadValues(save);
             Assert.AreEqual(0.2, values.Alpha);
             Assert.AreEqual(5, values.MinimumStake);
-            Assert.AreEqual(2000, values.NumberOfNodes);
+            Assert.AreEqual(200, values.NumberOfNodes);
             Assert.AreEqual(200, values.SampleSize);
             Assert.AreEqual("../../../Database/db/data.sqlite3", values.Database);
         } 

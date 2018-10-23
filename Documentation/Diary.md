@@ -145,3 +145,25 @@ Implemented writing generation data to Files\savefile\gen_data\gen{i}.
  **14.10.2018**: Fixed child generation loss. This was because for every generation generation.Count
  / 2 nodes where created instead of equal to generation count.
  
+ **15.10.2018**: Double values with '.' decimal point given as program argument caused a crash.
+ Fixed this with using InvariantCulture in converting double values. Created tests and runs OK.
+ 
+Program argument values should be checked that they match boundaries before starting.
+
+NaN-bug found: If PlayLimit is 0 and bet is played, Bet.PlayBet()-will return NaN. To fix this,
+Node's minimum value for PlayLimit should be upped to 0.01. Tests created,everything OK.
+
+Changed Selection.ProbabilityRandomise() - to generate values from 
+minimum crossovervalue to maximum.
+
+Refactoring: CrossoverFactor -> CrossoverValue.
+
+**20.10.2018**: Changed Selection of nodes to WeightedSelection, which implements an interface Selection-this allows
+us to create a design based on using different selection methods to select nodes for crossover.
+
+**22.10.2018**: Crossover and selection of parents should be merged into a component provided by an interface. 
+These were done and first implementations, WeightedSelection and BLX-alpha were done. WeightedSelection was fixed. However
+it doesn't work too well as it focuses too heavily on top nodes and immediately it loses all diversity.
+
+Static random class was created wj´hic can be used throughout the program.
+Values format was changes to take parameters for parentSelectionMethod and crossoverMethod.

@@ -56,31 +56,6 @@ awayOdd=columnName
 Optional parameters should be given if the file that is trying to be downloaded does not 
 follow default naming conventions defined in http://www.football-data.co.uk/notes.txt.
 
-In the batch script these
-
-## Requirements
-
-**RQ1**. All data described in *Data*-section has to be collected for each match.
-
-**RQ2**. Address from which the file is downloaded is given as a parameter for the program.
-
-**RQ3**. Database file is given as a parameter.
-
-**RQ4**. Columns parsed by the program can be given as parameters for the program. 
-
-**RQ5**. Program is used from a batch script.
-
-## Progress
-
-**RQ1**. Described data is collected for each match.
-
-**RQ2**. Done
-
-**RQ3**. Done.
-
-**RQ4**. Done.
-
-**RQ5**. Done. 
 
 ## Bugs discovered
 
