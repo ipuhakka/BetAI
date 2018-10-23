@@ -6,6 +6,7 @@ using BetAI.FileOperations;
 using BetAI.Genetics;
 using BetAI.Exceptions;
 using Newtonsoft.Json;
+using Database;
 
 namespace BetAITestProject.FileOperations
 {
@@ -97,6 +98,19 @@ namespace BetAITestProject.FileOperations
         {
             Save.InitializeSave(testFile);
             Assert.DoesNotThrow(() => Save.WriteGeneration(testFile, new List<Node>(), 0));
+        }
+
+        [Test]
+        public void test_WriteSample_DirectoryNotFoundException()
+        {
+            Assert.Throws<DirectoryNotFoundException>(() => Save.WriteSample(testFile, new List<Match>(), 0));
+        }
+
+        [Test]
+        public void test_WriteSample_runs()
+        {
+            Save.InitializeSave(testFile);
+            Assert.DoesNotThrow(() => Save.WriteSample(testFile, new List<Match>(), 0));
         }
 
         [Test]

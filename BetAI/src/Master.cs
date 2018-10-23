@@ -116,10 +116,11 @@ namespace BetAI
             }
 
             values.LogValues();
-
+            
             while (!cancelToken.IsCancellationRequested)
             {
                 List<Match> sample = Sample.CreateSample(values.SampleSize);
+                Save.WriteSample(savefile, sample, nodes[0].Generation);
                 int maxSampleSize = nodes.Max(n => n.SimulationSampleSize);
                 Matches.CreateMatchDataStructs(sample, maxSampleSize);
                 EvaluateNodes(sample);

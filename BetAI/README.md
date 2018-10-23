@@ -54,6 +54,7 @@ is loaded into memory. Values from values.json are loaded.
 2. Running the simulation
 - n-sized sample list of matches is created.
 - MatchData structures are set based on sample list.
+- Matches-sample is logged to sample{i}.json.
 - Generation of nodes is evaluated
 - Generation data is written into file gen{i}.json and fitness statistics logged.
 - Creating new generation

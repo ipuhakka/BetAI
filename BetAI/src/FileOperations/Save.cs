@@ -5,6 +5,7 @@ using System.Globalization;
 using BetAI.Exceptions;
 using BetAI.Genetics;
 using Newtonsoft.Json;
+using Database;
 
 namespace BetAI.FileOperations
 {
@@ -30,6 +31,7 @@ namespace BetAI.FileOperations
 
             Directory.CreateDirectory(relativePath);
             Directory.CreateDirectory(Path.Combine(relativePath, "gen_data"));
+            Directory.CreateDirectory(Path.Combine(relativePath, "sample_data"));
 
             if (args == null || args.Length == 0)
             {
@@ -79,6 +81,21 @@ namespace BetAI.FileOperations
             string directory = Path.Combine(@"Files\", filename, "gen_data");
             string json = JsonConvert.SerializeObject(nodes);
             File.WriteAllText(Path.Combine(directory, String.Format("gen{0}.json", generation)), json);
+        }
+
+        /// <summary>
+        /// Function writes matches sample to a file in Files\{filename}\sample_data\sample{i},
+        /// where i is generation number.
+        /// </summary>
+        /// <param name="filename">Name of the save file.</param>
+        /// <param name="sample">List of matches which are simulated in generation</param>
+        /// <param name="generation">Number of the generation to which sample list belongs to.</param>
+        /// <exception cref="DirectoryNotFoundException"></exception>
+        public static void WriteSample(string filename, List<Match> sample, int generation)
+        {
+            string directory = Path.Combine(@"Files\", filename, "sample_data");
+            string json = JsonConvert.SerializeObject(sample);
+            File.WriteAllText(Path.Combine(directory, String.Format("sample{0}.json", generation)), json);
         }
 
         /// <summary>
