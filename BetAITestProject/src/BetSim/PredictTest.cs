@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Database;
 using BetAI.BetSim;
 using BetAI.Exceptions;
+using Newtonsoft.Json.Linq;
 using BetAI.Data;
 
 namespace BetAITestProject.BetSim
@@ -14,6 +15,9 @@ namespace BetAITestProject.BetSim
     {
         private DB db;
         private string path = "testi.db";
+        private string largeDatabase = "data.sqlite3";
+        private List<Match> matches;
+
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
@@ -22,9 +26,7 @@ namespace BetAITestProject.BetSim
             db.CreateDatabase(path);
             db.ExecuteScript("db_schema_dump.sql");
             db.ExecuteScript("db_testdata_dump.sql");
-            Matches.SetMatches(path);
-            List<Match> matches = db.SelectAllMatchesFromDatabase();
-            Matches.CreateMatchDataStructs(matches, 7);
+            matches = db.SelectAllMatchesFromDatabase();
         }
 
         [OneTimeTearDown]
@@ -53,7 +55,8 @@ namespace BetAITestProject.BetSim
 
             0.620578 - 1.16666
              */
-
+            Matches.SetMatches(path);
+            Matches.CreateMatchDataStructs(matches, 7);
             Match toPredict = Matches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
             Predict betSim = new Predict();
             double result = betSim.PredictResult(toPredict, 3);
@@ -61,9 +64,44 @@ namespace BetAITestProject.BetSim
             Assert.AreEqual(-0.54, Math.Round(result, 2));
         }
 
+        /// <summary>
+        /// This test involves a situation, where a game has been played that season
+        /// but no goals were scored. As league goal averages are then 0, this would produce
+        /// a NaN strength value, so NotSimulatedException is thrown so that bet is not played
+        /// in such a situation.
+        /// </summary>
+        [Test]
+        public void test_Predict_LaCoruna_Sociedad_15_16_throws_NotSimulatedException()
+        {
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"test-files"));
+            Matches.SetMatches(largeDatabase);
+            JArray matches = JArray.Parse(File.ReadAllText("NaNSample.json"));
+            List<Match> sample = new List<Match>();
+            foreach (JObject obj in matches)
+            {
+                string homeT = obj["Hometeam"].ToString();
+                string awayT = obj["Awayteam"].ToString();
+                string league = obj["League"].ToString();
+                string season = obj["Season"].ToString();
+                DateTime d = Convert.ToDateTime(obj["Date"].ToString());
+                int homeS = Convert.ToInt32(obj["Homescore"].ToString());
+                int awayS = Convert.ToInt32(obj["Awayscore"].ToString());
+                double homeO = Convert.ToDouble(obj["HomeOdd"].ToString());
+                double drawO = Convert.ToDouble(obj["DrawOdd"].ToString());
+                double awayO = Convert.ToDouble(obj["AwayOdd"].ToString());
+                sample.Add(new Match(homeT, awayT, league, season, d, homeS, awayS, homeO, drawO, awayO));
+            }
+            Matches.CreateMatchDataStructs(sample, 18);
+            Predict betSim = new Predict();
+            Assert.Throws<NotSimulatedException>(() => betSim.PredictResult(sample[4], 18));
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
+        }
+
         [Test]
         public void test_PredictResult_Throws_NotSimulatedException()
         {
+            Matches.SetMatches(path);
+            Matches.CreateMatchDataStructs(matches, 7);
             Match toPredict = Matches.SelectMatchesWithRowIndex(new List<int>() { 6 })[0];
             Predict betSim = new Predict();
             Assert.Throws<NotSimulatedException>(() => betSim.PredictResult(toPredict, 3));

@@ -165,5 +165,12 @@ us to create a design based on using different selection methods to select nodes
 These were done and first implementations, WeightedSelection and BLX-alpha were done. WeightedSelection was fixed. However
 it doesn't work too well as it focuses too heavily on top nodes and immediately it loses all diversity.
 
-Static random class was created wj´hic can be used throughout the program.
+Static random class was created which can be used throughout the program.
 Values format was changes to take parameters for parentSelectionMethod and crossoverMethod.
+
+**23.10.2018**: 
+	- Display all parameters in values.json to console
+	- Sample logging
+	- Fixed sampling bug. This was caused by incorrect range used in randomising sample indexes.
+	- Fixed NaN predicted result bug. This was a bug that was caused by dividing by 0 in calculating
+	strengths for teams.

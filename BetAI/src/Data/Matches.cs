@@ -125,6 +125,7 @@ namespace BetAI.Data
         private static double SeasonHomeGoalAvgBeforeDate(Match m)
         {
             List<Match> seasonMatchesBeforeDate = matches.Where(x => x.Season == m.Season && x.Date < m.Date && x.League == m.League).ToList();
+
             if (seasonMatchesBeforeDate.Count == 0)
                 return -1;
             return seasonMatchesBeforeDate.Average(match => match.Homescore);

@@ -9,6 +9,7 @@ using BetAI.Utils;
 using BetAI.Data;
 using Database;
 using FluentAssertions;
+using Newtonsoft.Json.Linq;
 
 namespace BetAITestProject.Genetics
 {
@@ -118,6 +119,32 @@ namespace BetAITestProject.Genetics
             Node node = new Node(2.8, 3.14, 5, 0, 5);
             Matches.CreateMatchDataStructs(sample, node.SimulationSampleSize);
             Assert.DoesNotThrow(() => node.EvaluateFitness(sample));
+        }
+
+        [Test]
+        public void test_EvaluateFitness_NaNSample()
+        {
+            Node node = new Node(0.28787729157185865, 2.3340972415031671, 5.0, 66, 18);
+            Matches.SetMatches(path);
+            JArray matches = JArray.Parse(File.ReadAllText(@"test-files\NaNSample.json"));
+            List<Match> sample = new List<Match>();
+            foreach (JObject obj in matches)
+            {
+                string homeT = obj["Hometeam"].ToString();
+                string awayT = obj["Awayteam"].ToString();
+                string league = obj["League"].ToString();
+                string season = obj["Season"].ToString();
+                DateTime d = Convert.ToDateTime(obj["Date"].ToString());
+                int homeS = Convert.ToInt32(obj["Homescore"].ToString());
+                int awayS = Convert.ToInt32(obj["Awayscore"].ToString());
+                double homeO = Convert.ToDouble(obj["HomeOdd"].ToString());
+                double drawO = Convert.ToDouble(obj["DrawOdd"].ToString());
+                double awayO = Convert.ToDouble(obj["AwayOdd"].ToString());
+                sample.Add(new Match(homeT, awayT, league, season, d, homeS, awayS, homeO, drawO, awayO));
+            }
+            Matches.CreateMatchDataStructs(sample, 18);
+
+            Assert.IsFalse(Double.IsNaN(node.EvaluateFitness(sample)));
         }
 
         [Test]

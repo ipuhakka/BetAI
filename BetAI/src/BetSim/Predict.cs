@@ -15,7 +15,8 @@ namespace BetAI.BetSim
         /// Calculates predicted result for a match. 
         /// </summary>
         /// <exception cref="NotSimulatedException">Thrown when NotEnoughDataException
-        /// is thrown by a call to database layer.</exception>
+        /// is thrown by a call to database layer, or when league average goals 
+        /// are zero, as it would result to NaN strengths.</exception>
         public double PredictResult(Match toPredict, int sampleSize)
         {
             Match[] hometeamPreviousMatches;
@@ -35,6 +36,9 @@ namespace BetAI.BetSim
                 throw new NotSimulatedException();
             }
 
+            if (homeScoredLeagueAvg == 0 || awayScoredLeagueAvg == 0)
+                throw new NotSimulatedException();
+
             double homeScoredAvg = CountMeanScoredGoals(hometeamPreviousMatches.ToArray(), toPredict.Hometeam);
             double awayScoredAvg = CountMeanScoredGoals(awayteamPreviousMatches.ToArray(), toPredict.Awayteam);
             double homeConcededAvg = CountMeanConcededGoals(hometeamPreviousMatches.ToArray(), toPredict.Hometeam);
@@ -47,7 +51,7 @@ namespace BetAI.BetSim
 
             double homeGoalEstimate = CountGoalEstimate(homeAttStrength, awayDefStrength, homeScoredLeagueAvg);
             double awayGoalEstimate = CountGoalEstimate(awayAttStrength, homeDefStrength, awayScoredLeagueAvg);
-
+            
             return homeGoalEstimate - awayGoalEstimate;
         }
 
