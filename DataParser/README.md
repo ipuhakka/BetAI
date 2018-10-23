@@ -63,7 +63,7 @@ drawOdd="columnName"
 awayOdd="columnName"
 ```
 
-This allows also changing the used odds.
+This allows also changing the used odds to those of some other betting company.
 
 ## Errors
 DataParser.exe errors:
@@ -88,4 +88,4 @@ given is invalid.
 "Connection to the database X failed"
 ```
 
-Database doesn't exist or does not contain the schema. 
+Database has not been created, it does not exist or path given to it was invalid. 

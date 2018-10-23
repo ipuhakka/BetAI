@@ -174,3 +174,5 @@ Values format was changes to take parameters for parentSelectionMethod and cross
 	- Fixed sampling bug. This was caused by incorrect range used in randomising sample indexes.
 	- Fixed NaN predicted result bug. This was a bug that was caused by dividing by 0 in calculating
 	strengths for teams.
+	
+ Next up -> Implement tournament selection. This should make massive improvement to diversity compared to weighted selection.
