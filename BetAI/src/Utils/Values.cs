@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Newtonsoft.Json;
 
 namespace BetAI.Utils
@@ -25,6 +26,19 @@ namespace BetAI.Utils
         public Values()
         {
 
+        }
+
+        public void LogValues()
+        {
+            Console.WriteLine("Starting with arguments:");
+            FileInfo file = new FileInfo(Database);
+            Console.WriteLine("Database: " + file.FullName);
+            Console.WriteLine("Number of nodes: " + NumberOfNodes);
+            Console.WriteLine("Alpha: " + Alpha);
+            Console.WriteLine("Sample size: " + SampleSize);
+            Console.WriteLine("Minimum stake: " + MinimumStake);
+            Console.WriteLine("Crossover method: " + CrossoverMethod);
+            Console.WriteLine("Parent selection method: " + ParentSelectionMethod);
         }
     }
 }

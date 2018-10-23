@@ -115,7 +115,7 @@ namespace BetAI
                 throw new InitializationException();
             }
 
-            LogArguments();
+            values.LogValues();
 
             while (!cancelToken.IsCancellationRequested)
             {
@@ -138,17 +138,6 @@ namespace BetAI
             {
                 nodes[i].EvaluateFitness(sample);
             }
-        }
-
-        private void LogArguments()
-        {
-            Console.WriteLine("Starting with arguments:");
-            FileInfo file = new FileInfo(values.Database);
-            Console.WriteLine("Database: " + file.FullName);
-            Console.WriteLine("Number of nodes: " + values.NumberOfNodes);
-            Console.WriteLine("Alpha: " + values.Alpha);
-            Console.WriteLine("Sample size: " + values.SampleSize);
-            Console.WriteLine("Minimum stake: " + values.MinimumStake);
         }
 
         private void Log()

@@ -75,5 +75,16 @@ namespace BetAITestProject.Genetics.Selection
                 Assert.AreEqual(2, selectedParents.Count);
             }
         }
+
+        [Test]
+        public void test_Selection_returns_2_different_nodes()
+        {
+            WeightedSelection sel = new WeightedSelection();
+            for (int j = 0; j < 100; j++)
+            {
+                List<Node> selectedParents = sel.SelectForCrossover(nodes);
+                Assert.AreNotEqual(selectedParents[0], selectedParents[1]);
+            }
+        }
     }
 }
