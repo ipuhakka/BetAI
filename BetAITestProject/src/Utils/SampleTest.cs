@@ -18,6 +18,7 @@ namespace BetAITestProject.Utils
     {
         private DB db;
         private string file = "testi.db";
+        private string largeFile = @"test-files\data.sqlite3";
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -51,17 +52,19 @@ namespace BetAITestProject.Utils
         [Test]
         public void test_NoDuplicatesInSample()
         {
-            Matches.SetMatches(file);
+            Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+            Matches.SetMatches(largeFile);
             Stopwatch sw = new Stopwatch();
             for (int i = 0; i < 100; i++)
             {
                 sw.Start();
-                List<Match> sample = Sample.CreateSample(13);
+                List<Match> sample = Sample.CreateSample(10);
                 sw.Stop();
                 Console.WriteLine("Took " + sw.ElapsedMilliseconds);
                 sw.Reset();
                 sample.Should().OnlyHaveUniqueItems();
             }
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
         }
 
         /// <summary>

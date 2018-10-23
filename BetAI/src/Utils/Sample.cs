@@ -27,7 +27,7 @@ namespace BetAI.Utils
             if (sampleSize > matchCount)
                 throw new NotEnoughDataException();
 
-            List<int> possibleIndexes = Enumerable.Range(0, sampleSize).ToList();
+            List<int> possibleIndexes = Enumerable.Range(0, matchCount).ToList();
             Random rand = new Random();
             for (int i = 0; i < sampleSize; i++)
             {

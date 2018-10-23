@@ -6,5 +6,8 @@
 	- Reorganize and clean documentation
 	- Display all parameters in values.json to console
 	- Find better place to hold Match-class. 
+	- Match sampling has to be fixed - Matches in rows 0 - sampleSize are only used. This should be fixed to 0 - matchCount.
 - Implemented
 	- Display all parameters in values.json to console
+	- Sample logging
+	- Fixed sampling bug
