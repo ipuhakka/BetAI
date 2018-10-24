@@ -6,7 +6,6 @@ using Database;
 using BetAI.BetSim;
 using BetAI.Exceptions;
 using Newtonsoft.Json.Linq;
-using BetAI.Data;
 
 namespace BetAITestProject.BetSim
 {

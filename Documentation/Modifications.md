@@ -1,8 +1,7 @@
-# v.1.1
+# v.0.2
 - Planned and ongoing:
 	- Replan project structure
-	- Reorganize and clean documentation
-	- Find better place to hold Match-class. 
+	- Reorganize and clean documentation 
 - Implemented
 	- Display only valid parameters from values.json to console (all are not used)
 	- Sample logging

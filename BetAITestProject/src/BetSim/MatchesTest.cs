@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using NUnit.Framework;
 using Database;
-using BetAI.Data;
+using BetAI.BetSim;
 using BetAI.Exceptions;
-using System.Data.SQLite;
 
 namespace BetAITestProject.Data
 {

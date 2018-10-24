@@ -5,7 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using BetAI.Utils;
-using BetAI.Data;
+using BetAI.BetSim;
 using BetAI.Exceptions;
 using NUnit.Framework;
 using Database;

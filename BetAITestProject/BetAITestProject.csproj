@@ -76,7 +76,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\BetSim\BetTest.cs" />
     <Compile Include="src\BetSim\PredictTest.cs" />
-    <Compile Include="src\Data\MatchesTest.cs" />
+    <Compile Include="src\BetSim\MatchesTest.cs" />
     <Compile Include="src\FileOperations\LoadTest.cs" />
     <Compile Include="src\FileOperations\SaveTest.cs" />
     <Compile Include="src\Genetics\Crossover\BLXAlphaTest.cs" />

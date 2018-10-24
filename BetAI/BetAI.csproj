@@ -66,7 +66,7 @@
   <ItemGroup>
     <Compile Include="src\BetSim\Bet.cs" />
     <Compile Include="src\BetSim\Predict.cs" />
-    <Compile Include="src\Data\Matches.cs" />
+    <Compile Include="src\BetSim\Matches.cs" />
     <Compile Include="src\Exceptions\DirectoryExistsException.cs" />
     <Compile Include="src\Exceptions\InitializationException.cs" />
     <Compile Include="src\Exceptions\NotEnoughDataException.cs" />

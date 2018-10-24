@@ -6,7 +6,7 @@ using System.Linq;
 using NUnit.Framework;
 using BetAI.Genetics;
 using BetAI.Utils;
-using BetAI.Data;
+using BetAI.BetSim;
 using Database;
 using FluentAssertions;
 using Newtonsoft.Json.Linq;

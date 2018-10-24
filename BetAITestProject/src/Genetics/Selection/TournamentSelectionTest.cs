@@ -6,7 +6,7 @@ using NUnit.Framework;
 using BetAI.Genetics;
 using BetAI.Genetics.Selection;
 using BetAI.Utils;
-using BetAI.Data;
+using BetAI.BetSim;
 using Database;
 
 namespace BetAITestProject.Genetics.Selection

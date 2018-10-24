@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Database;
 using BetAI.Exceptions;
-using BetAI.Data;
 
 namespace BetAI.BetSim
 {

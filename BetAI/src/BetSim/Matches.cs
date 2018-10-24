@@ -5,7 +5,7 @@ using Database;
 using System.Data.SQLite;
 using BetAI.Exceptions;
 
-namespace BetAI.Data
+namespace BetAI.BetSim
 {
     public class Matches
     {

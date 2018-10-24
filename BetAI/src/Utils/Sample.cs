@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Database;
-using BetAI.Data;
-using BetAI.Exceptions;
 using System.Data.SQLite;
+using Database;
+using BetAI.BetSim;
+using BetAI.Exceptions;
 
 namespace BetAI.Utils
 {

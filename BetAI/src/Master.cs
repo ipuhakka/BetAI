@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.IO;
 using System.Linq;
 using Database;
+using BetAI.BetSim;
 using BetAI.Genetics;
 using BetAI.Genetics.Crossover;
 using BetAI.Genetics.Selection;
 using BetAI.FileOperations;
 using BetAI.Utils;
-using BetAI.Data;
 using BetAI.Exceptions;
 
 namespace BetAI
