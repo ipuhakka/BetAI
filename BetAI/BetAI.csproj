@@ -79,6 +79,7 @@
     <Compile Include="src\Genetics\Node.cs" />
     <Compile Include="src\Genetics\Reproduce.cs" />
     <Compile Include="src\Genetics\Selection\ISelection.cs" />
+    <Compile Include="src\Genetics\Selection\TournamentSelection.cs" />
     <Compile Include="src\Genetics\Selection\WeightedSelection.cs" />
     <Compile Include="src\Master.cs" />
     <Compile Include="src\Utils\Randomise.cs" />

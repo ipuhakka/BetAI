@@ -12,7 +12,8 @@ namespace BetAI.Utils
 
         public static void InitRandom()
         {
-            random = new Random();
+            if (random == null)
+                random = new Random();
         }
     }
 }

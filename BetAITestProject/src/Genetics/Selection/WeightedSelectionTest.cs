@@ -24,13 +24,13 @@ namespace BetAITestProject.Genetics.Selection
             nodes = new List<Node>();
             Random rand = new Random();
             Randomise.InitRandom();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 50; i++)
             {
                 nodes.Add(new Node(rand, 5));
             }
             string path = "test-files/data.sqlite3";
             Matches.SetMatches(path);
-            List<Match> sample = Sample.CreateSample(200);
+            List<Match> sample = Sample.CreateSample(20);
             int maxSampleSize = nodes.OrderBy(node => node.SimulationSampleSize).ToList()[0].SimulationSampleSize;
             Matches.CreateMatchDataStructs(sample, maxSampleSize);
 

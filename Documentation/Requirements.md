@@ -189,3 +189,7 @@ This file is overwritten once generation has been evaluated.
 **RQ41**. After a generation has been evaluated, results are logged to console:
 Fitness sum of generation, worst fitness, average fitness, and maximum fitness are logged to screen.
 These are also logged to file *BetAI\Files\savefile\log.txt*.
+
+## Parent selection
+
+**RQ42**: Parent selection must return a list of two unique nodes. 

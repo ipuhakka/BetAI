@@ -4,6 +4,7 @@
 	- Replan project structure
 	- Reorganize and clean documentation
 	- Find better place to hold Match-class. 
+	- Change returning a list of nodes to returning parent-object in selection.
 - Implemented
 	- Display all parameters in values.json to console
 	- Sample logging
