@@ -176,3 +176,7 @@ Values format was changes to take parameters for parentSelectionMethod and cross
 	strengths for teams.
 	
  Next up -> Implement tournament selection. This should make massive improvement to diversity compared to weighted selection.
+ 
+ **24.10.2018**::
+ Implemented tournament selection. Changed values.json parameter logging so that only used arguments are logged. Fixed 
+ bug in BLXAlpha.BlendDoubles which caused blended double values to be created from the wrong interval.

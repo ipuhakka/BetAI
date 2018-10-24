@@ -32,17 +32,15 @@ namespace BetAI.Genetics.Selection
         /// </summary>
         /// <param name="generation"></param>
         /// <returns></returns>
-        public List<Node> SelectForCrossover(List<Node> generation)
+        public Parents SelectForCrossover(List<Node> generation)
         {
-            List<Node> parents = new List<Node>();
             Node[] gen = generation.ToArray();
             List<Node> tournament = CreateTournament(gen);
             Node parent1 = MaxNode(tournament);
-            parents.Add(parent1);
             gen = gen.ToList().Where(n => !n.Equals(parent1)).ToArray();
             tournament = CreateTournament(gen);
-            parents.Add(MaxNode(tournament));
-            return parents;
+            Node parent2 = MaxNode(tournament);
+            return new Parents(parent1, parent2);
         }   
 
         /// <summary>

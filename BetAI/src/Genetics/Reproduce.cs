@@ -31,12 +31,8 @@ namespace BetAI.Genetics
 
             for (int i = 0; i < numberOfCrossovers; i++)
             {
-                List<Node> parents = parentSelection.SelectForCrossover(generation);
-
-                if (parents.Count != 2)
-                    throw new SelectionException("Parent selection returned incorrect amount of parents");
-
-                 newGeneration.AddRange(crossover.Crossover(parents[0], parents[1]));
+                Parents parents = parentSelection.SelectForCrossover(generation);
+                newGeneration.AddRange(crossover.Crossover(parents.Parent1, parents.Parent2));
             }
 
             return newGeneration;

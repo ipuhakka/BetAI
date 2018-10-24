@@ -9,6 +9,6 @@ namespace BetAI.Genetics.Selection
         /// </summary>
         /// <param name="generation"></param>
         /// <returns>Two nodes, selected for crossover.</returns>
-        List<Node> SelectForCrossover(List<Node> generation);
+        Parents SelectForCrossover(List<Node> generation);
     }
 }

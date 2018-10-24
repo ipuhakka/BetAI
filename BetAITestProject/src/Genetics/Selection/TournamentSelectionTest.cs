@@ -72,22 +72,10 @@ namespace BetAITestProject.Genetics.Selection
             TournamentSelection ts = new TournamentSelection(16, nodes.Count);
             for (int i = 0; i < 50; i++)
             {
-                List<Node> parents = ts.SelectForCrossover(nodes);
-                Assert.AreNotEqual(parents[0], parents[1]);
+                Parents parents = ts.SelectForCrossover(nodes);
+                Assert.AreNotEqual(parents.Parent1, parents.Parent2);
             }
         }
-
-        [Test]
-        public void test_SelectForCrossover_returns_two_nodes()
-        {
-            TournamentSelection ts = new TournamentSelection(16, nodes.Count);
-            for (int i = 0; i < 50; i++)
-            {
-                List<Node> parents = ts.SelectForCrossover(nodes);
-                Assert.AreEqual(2, parents.Count);
-            }
-        }
-
 
     }
 }

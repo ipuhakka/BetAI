@@ -77,6 +77,7 @@
     <Compile Include="src\Genetics\Crossover\BLXAlpha.cs" />
     <Compile Include="src\Genetics\Crossover\ICrossover.cs" />
     <Compile Include="src\Genetics\Node.cs" />
+    <Compile Include="src\Genetics\Parents.cs" />
     <Compile Include="src\Genetics\Reproduce.cs" />
     <Compile Include="src\Genetics\Selection\ISelection.cs" />
     <Compile Include="src\Genetics\Selection\TournamentSelection.cs" />

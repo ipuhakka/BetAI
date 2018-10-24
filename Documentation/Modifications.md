@@ -3,7 +3,6 @@
 	- Replan project structure
 	- Reorganize and clean documentation
 	- Find better place to hold Match-class. 
-	- Change returning a list of nodes to returning parent-object in selection.
 - Implemented
 	- Display only valid parameters from values.json to console (all are not used)
 	- Sample logging
@@ -11,3 +10,4 @@
 	- Fixed sampling bug
 	- Fixed NaN predicted result bug
 	- Fixed bracket bug in BLXAlpha
+	- Change returning a list of nodes to returning parent-object in selection.

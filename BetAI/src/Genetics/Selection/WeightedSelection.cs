@@ -16,7 +16,7 @@ namespace BetAI.Genetics.Selection
         /// </summary>
         /// <param name="generation">Set of nodes from which nodes for crossover
         /// are selected.</param>
-        public List<Node> SelectForCrossover(List<Node> generation)
+        public Parents SelectForCrossover(List<Node> generation)
         {
             generation = SetWeights(generation.ToArray());
             return ProbabilityRandomise(generation);
@@ -32,7 +32,7 @@ namespace BetAI.Genetics.Selection
         /// This is then removed from original list and added to the list of nodes
         /// that go to crossover process.
         /// </summary>
-        private List<Node> ProbabilityRandomise(List<Node> generation)
+        private Parents ProbabilityRandomise(List<Node> generation)
         {
             generation = generation.OrderBy(n => n.CrossoverValue).ToList();
             List<Node> toReproduce = new List<Node>();
@@ -52,7 +52,7 @@ namespace BetAI.Genetics.Selection
                 generation.Remove(selected);
             }
 
-            return toReproduce;
+            return new Parents(toReproduce[0], toReproduce[1]);
         }
 
         /// <summary>
