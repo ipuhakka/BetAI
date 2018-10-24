@@ -3,7 +3,6 @@ using System.IO;
 using System.Diagnostics;
 using System.Linq;
 using System.Collections.Generic;
-using System.Data.SQLite;
 using BetAI.Utils;
 using BetAI.BetSim;
 using BetAI.Exceptions;
