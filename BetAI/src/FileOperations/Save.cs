@@ -3,7 +3,6 @@ using System.IO;
 using System.Collections.Generic;
 using BetAI.Exceptions;
 using BetAI.Genetics;
-using BetAI.Utils;
 using Newtonsoft.Json;
 using Database;
 

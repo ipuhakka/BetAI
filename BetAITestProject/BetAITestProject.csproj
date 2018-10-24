@@ -85,7 +85,7 @@
     <Compile Include="src\Genetics\Selection\TournamentSelectionTest.cs" />
     <Compile Include="src\Genetics\Selection\WeightedSelectionTest.cs" />
     <Compile Include="src\Utils\SampleTest.cs" />
-    <Compile Include="src\Utils\ValuesTest.cs" />
+    <Compile Include="src\Genetics\ValuesTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

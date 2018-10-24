@@ -3,7 +3,7 @@ using System.IO;
 using System.Globalization;
 using Newtonsoft.Json;
 
-namespace BetAI.Utils
+namespace BetAI.Genetics
 {
     public class Values
     {

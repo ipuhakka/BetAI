@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using BetAI.FileOperations;
-using BetAI.Utils;
+using BetAI.Genetics;
 using NUnit.Framework;
 
-namespace BetAITestProject.Utils
+namespace BetAITestProject.Genetics
 {
     [TestFixture]
     public class ValuesTest

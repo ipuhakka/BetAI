@@ -2,7 +2,6 @@
 using System.IO;
 using System.Collections.Generic;
 using BetAI.Genetics;
-using BetAI.Utils;
 using Newtonsoft.Json;
 
 namespace BetAI.FileOperations

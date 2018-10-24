@@ -50,8 +50,11 @@ parameter is a string type, it is placed in quotations.
 ### BetSim
 Contains classes needed for predicting and playing (or not playing) bets.
 
-### Data
-Contains class that deals with outside data (matches received from the database).
+### Exceptions
+Contains project specific exception classes.
+
+### FileOperations
+Contains file-I/O actions.
 
 
 ## Use cases
