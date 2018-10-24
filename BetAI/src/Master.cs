@@ -74,6 +74,9 @@ namespace BetAI
                 case "weighted":
                     selection = new WeightedSelection();
                     break;
+                case "tournament":
+                    selection = new TournamentSelection(values.TournamentSize, nodes.Count);
+                    break;
                 default:
                     throw new InitializationException("Parent selection method not identified");
             }

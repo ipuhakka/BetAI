@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using BetAI.FileOperations;
 using BetAI.Utils;
 using NUnit.Framework;

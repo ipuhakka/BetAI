@@ -12,6 +12,7 @@ parameters or values from *BetAI\Files\default.json*.
 ```
 {
 	"alpha": "0.5",
+	"tournamentSize": "8",
 	"minimumStake": "3.0",
 	"numberOfNodes": "200",
 	"sampleSize": "200",

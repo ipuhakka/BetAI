@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Globalization;
 using BetAI.Exceptions;
 using BetAI.Genetics;
+using BetAI.Utils;
 using Newtonsoft.Json;
 using Database;
 
@@ -40,31 +40,8 @@ namespace BetAI.FileOperations
             }
 
             dynamic json = JsonConvert.DeserializeObject(File.ReadAllText(@"Files\defaults.json"));
-
-            foreach (string arg in args)
-            {
-                string[] argument = arg.Split('=');
-                switch (argument[0].Trim().ToLower())
-                {
-                    case "alpha":
-                        json["alpha"] = Convert.ToDouble(argument[1], CultureInfo.InvariantCulture);
-                        break;
-                    case "minimumstake":
-                        json["minimumStake"] = Convert.ToDouble(argument[1], CultureInfo.InvariantCulture);
-                        break;
-                    case "numberofnodes":
-                        json["numberOfNodes"] = Convert.ToInt32(argument[1]);
-                        break;
-                    case "samplesize":
-                        json["sampleSize"] = Convert.ToInt32(argument[1]);
-                        break;
-                    case "database":
-                        json["database"] = argument[1].Replace(@"\", @"\\");
-                        break;
-                    default:
-                        break;
-                }
-            }
+            json = Values.ParseArguments(json, args);
+                        
             File.WriteAllText(Path.Combine(relativePath, "values.json"), JsonConvert.SerializeObject(json));
         }
 

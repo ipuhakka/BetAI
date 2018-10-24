@@ -1,6 +1,5 @@
 # v.1.1
 - Planned and ongoing:
-	- Add tournament selection method
 	- Replan project structure
 	- Reorganize and clean documentation
 	- Find better place to hold Match-class. 
@@ -9,4 +8,5 @@
 	- Display all parameters in values.json to console
 	- Sample logging
 	- Fixed sampling bug
-	- Fixed NaN predicted result bug.
+	- Fixed NaN predicted result bug
+	- Add tournament selection method
