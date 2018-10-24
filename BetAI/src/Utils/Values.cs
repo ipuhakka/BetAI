@@ -37,12 +37,20 @@ namespace BetAI.Utils
             FileInfo file = new FileInfo(Database);
             Console.WriteLine("Database: " + file.FullName);
             Console.WriteLine("Number of nodes: " + NumberOfNodes);
-            Console.WriteLine("Alpha: " + Alpha);
-            Console.WriteLine("Tournament size: " + TournamentSize);
             Console.WriteLine("Sample size: " + SampleSize);
             Console.WriteLine("Minimum stake: " + MinimumStake);
-            Console.WriteLine("Crossover method: " + CrossoverMethod);
             Console.WriteLine("Parent selection method: " + ParentSelectionMethod);
+
+            if (ParentSelectionMethod.Trim().ToLower().Equals("tournament"))
+            {
+                Console.WriteLine("Tournament size: " + TournamentSize);
+            }
+            Console.WriteLine("Crossover method: " + CrossoverMethod);
+
+            if (CrossoverMethod.Trim().ToLower().Equals("weighted"))
+            {
+                Console.WriteLine("Alpha: " + Alpha);
+            }
         }
 
         /// <summary>
