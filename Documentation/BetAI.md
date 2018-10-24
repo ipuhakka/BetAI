@@ -1,4 +1,13 @@
 # BetAI
+BetAI is a genetic algorithm that samples football match data from an sqlite3-database
+and bets the results of these. Aim is to improve amount of money won/lost by the bets.
+It is designed to support different parent selection and crossover methods. Supported methods 
+in version 0.1 are:
+- Crossover
+	- Blend crossover alpha (BLX)
+- Parent selection
+	- Weighted selection (Weighted)
+	- Tournament selection (Tournament)
 
 ## Use
 
@@ -15,7 +24,7 @@ in this folder, program needs to be built before changed are in effect.
 ### Program arguments
 
 If user does not want to use default arguments, it is possible to set these by giving them
-as parameters when starting the program. 
+as parameters when starting the program. These parameters need to be given after *filename*.
 
 All parameters are given in format *argumentName=argumentValue*. If
 parameter is a string type, it is placed in quotations.
@@ -45,7 +54,7 @@ parameter is a string type, it is placed in quotations.
 	- Size of tournaments if tournament selection is used as parent selection method.
 	Otherwise this value does not have any effect.
 
-## Code
+## Code structure
 
 ### BetSim
 Contains classes needed for predicting and playing (or not playing) bets.
@@ -56,16 +65,10 @@ Contains project specific exception classes.
 ### FileOperations
 Contains file-I/O actions.
 
+### Genetics
+Contains all classes that make up the genetic algorithm.
 
-## Use cases
-User starts the command prompt to run the program with filename argument.
-File doesn't exist, so it is created.
-Value for mutation probability and percentage of population to go the 
-reproduction process are asked to be inputted along with minimumStake. These values can later be 
-changed from *file\values.json*. Initial population is created, and algorithm 
-starts.
+### Utils
+Utility classes. 
 
-User starts the command prompt to run program with filename argument.
-File does exist, so program loads the data containing current 
-population of nodes, and carries on the algorithm.
 
