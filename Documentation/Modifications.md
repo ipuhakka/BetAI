@@ -4,9 +4,11 @@
 	- Reorganize and clean documentation
 	- Find better place to hold Match-class. 
 	- Change returning a list of nodes to returning parent-object in selection.
+	- Display only valid parameters from values.json to console (all are not used depending on selection method)
 - Implemented
 	- Display all parameters in values.json to console
 	- Sample logging
 	- Fixed sampling bug
 	- Fixed NaN predicted result bug
 	- Add tournament selection method
+	- Fixed bracket bug in BLXAlpha

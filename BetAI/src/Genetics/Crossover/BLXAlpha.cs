@@ -73,8 +73,8 @@ namespace BetAI.Genetics.Crossover
             double d = Math.Abs(val1 - val2);
             double min = Math.Min(val1, val2);
             double max = Math.Max(val1, val2);
-            newValues[0] = rand.NextDouble() * (max + alpha * d - min - alpha * d) + min - alpha * d;
-            newValues[1] = rand.NextDouble() * (max + alpha * d - min - alpha * d) + min - alpha * d;
+            newValues[0] = rand.NextDouble() * ((max + alpha * d) - (min - alpha * d)) + min - alpha * d;
+            newValues[1] = rand.NextDouble() * ((max + alpha * d) - (min - alpha * d)) + min - alpha * d;
             return newValues;
         }
 

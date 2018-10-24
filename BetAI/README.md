@@ -26,7 +26,7 @@ These arguments can be given as program arguments when starting simulation
 with a new file, if user doesn't want to use default values. 
 
 ```
-BetAI.exe mynewfilename alpha=0.4 minimumStake=4 numberOfNodes=1000 sampleSize=100 database="path\to\used\database\file" parentSelectionMethod="Weighted" crossoverMethod="BLX"
+BetAI.exe mynewfilename alpha=0.4 tournamentSize=16 minimumStake=4 numberOfNodes=1000 sampleSize=100 database="path\to\used\database\file" parentSelectionMethod="Weighted" crossoverMethod="BLX" 
 ```
 
 ## Parent selection methods
