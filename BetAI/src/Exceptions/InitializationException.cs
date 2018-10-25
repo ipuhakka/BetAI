@@ -2,6 +2,7 @@
 
 namespace BetAI.Exceptions
 {
+    [Serializable]
     public class InitializationException: Exception
     {
         public string Error { get; private set; }

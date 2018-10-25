@@ -2,13 +2,14 @@
 
 namespace BetAI.Exceptions
 {
+    [Serializable]
     class SelectionException: Exception
     {
-        public string error { get; }
+        public string Error { get; }
 
         public SelectionException(string message)
         {
-            error = message;
+            Error = message;
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace DataParser
 {
+    [Serializable]
     public class LoadException: Exception
     {
 
