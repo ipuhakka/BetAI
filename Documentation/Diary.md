@@ -179,4 +179,8 @@ Values format was changes to take parameters for parentSelectionMethod and cross
  
  **24.10.2018**::
  Implemented tournament selection. Changed values.json parameter logging so that only used arguments are logged. Fixed 
- bug in BLXAlpha.BlendDoubles which caused blended double values to be created from the wrong interval.
+ bug in BLXAlpha.BlendDoubles() which caused blended double values to be created from the wrong interval. Changed
+ Selection to return Parents-object instead of a list of nodes.
+ 
+ **25.10.2018**:
+ Changed documentation, made changes suggested by VS code analysis tool.

@@ -1,64 +1,51 @@
-This document describes how the simulation works.
-Simulation is run by Master.cs. 
+## Build
+Project does not contain any scripts to build, so the project needs to be built
+by opening it in Visual Studio and building it there.
 
-## Start
+## Test
+Once the program has been built, tests can also be run using Visual Studio.
 
-Master.cs is the driver of simulation. When program is started witha argument file,
-new Master is created with parameter filename. It checks whether *BetAI\Files* contains a
-folder named filename. If not, this folder is created, and *values.json*-file is created inside.
-This is filled with a json-object containing simulation data, either with user given
-parameters or values from *BetAI\Files\default.json*. 
+## Use
 
+BetAI can be run after building the program, by opening build directory and running
+command:
 ```
-{
-	"alpha": "0.5",
-	"tournamentSize": "8",
-	"minimumStake": "3.0",
-	"numberOfNodes": "200",
-	"sampleSize": "200",
-	"database": "path\to\db\file",
-	"parentSelectionMethod": "Weighted",
-	"crossoverMethod": "BLX"
-}
+BetAI.exe {filename}
 ```
 
-These arguments can be given as program arguments when starting simulation
-with a new file, if user doesn't want to use default values. 
+This creates a new save named *filename* and starts the simulation with default values.
+These are displayed in BetAI\BetAI\Files\defaults.json. If default values are to be changed,
+in this folder, program needs to be built before changed are in effect. 
 
-```
-BetAI.exe mynewfilename alpha=0.4 tournamentSize=16 minimumStake=4 numberOfNodes=1000 sampleSize=100 database="path\to\used\database\file" parentSelectionMethod="Weighted" crossoverMethod="BLX" 
-```
+### Program arguments
 
-## Parent selection methods
-This chapter describes parent selection methods that are available in the system. 
-1. Weighted probability selection (parameter name = Weighted)
-- Weighted parent selection gives each node a weight based on its fitness. 
-Then, a randomising process takes part: The better the fitness, the better is the chance
-of an individual to be selected for crossover.
+If user does not want to use default arguments, it is possible to set these by giving them
+as parameters when starting the program. These parameters need to be given after *filename*.
 
-## Crossover methods
-This chapter describes crossover methods available in the system.
-1. BLX-alpha (parameter name = BLX)
-- BLX-alpha uses blend-crossover method to produce two child nodes. 
+All parameters are given in format *argumentName=argumentValue*. If
+parameter is a string type, it is placed in quotations.
 
-# Flow
-This chapter describes how simulation is run.
-
-1. Initialization
-- If save is new, filestructure is created and values.json fileld accordingly. First
-generation of nodes is created using random-constructor of Node.
-- If Save already exists, json data from gen_data folder is loaded into memory. Newest generation 
-is loaded into memory. Values from values.json are loaded.
-- All matches in the used database are fetched into memory.
-- Randomise.InitRandom() is called. This can be used throughout the program to handle creating of random numbers.
-
-2. Running the simulation
-- n-sized sample list of matches is created.
-- MatchData structures are set based on sample list.
-- Matches-sample is logged to sample{i}.json.
-- Generation of nodes is evaluated
-- Generation data is written into file gen{i}.json and fitness statistics logged.
-- Creating new generation
-	- Parents are selected from the generation to produce offspring.
-	- Offspring is created. New generation is written to file gen{i}.
-- Process is repeated until user interrupts it with esc-button.
+- minimumStake: double
+	- Amount of money that is played as a minimum, when a bet is decided to be placed.
+- numberOfNodes: int
+	- Generation size.
+- sampleSize: int
+	- Match sample size. Sample is a list of matches that is randomised for each
+	generation of nodes for fitness evaluation.
+- database: string
+	- Path to database file used. 
+- parentSelectionMethod: string
+	- Indicates what method is used to select nodes for crossover.
+	Supported methods:
+		- Weighted
+		- Tournament
+- crossoverMethod: string
+	- Indicates the used crossover method.
+	Supported:
+		- BLX (Blend crossover alpha)
+- alpha: double
+	- Alpha value for BLX-crossover method. If some other
+	crossover method is used, this value does not have any effect.
+- tournamentSize: int
+	- Size of tournaments if tournament selection is used as parent selection method.
+	Otherwise this value does not have any effect.

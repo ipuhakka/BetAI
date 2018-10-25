@@ -4,7 +4,13 @@ This tool adds football match csv-file data from http://www.football-data.co.uk/
 into a database. Tool is run with the use of Run.bat -file, which runs the DataParser.exe 
 with different parameters.
 
-## Using Run.bat
+## Build
+Project does not have any build scripts, so it can to be build using Visual Studio.
+
+## Test
+Tests can be run with Visual Studio.
+
+## Use
 
 Run.bat is a script file which can execute DataParser multiple times
 with different parameters. 
@@ -14,7 +20,7 @@ with different parameters.
 @cd /d "%~dp0"
 cd bin\debug
 
-PUT YOUR DATAPARSER CALLS HERE, LIKE THIS
+//PUT YOUR DATAPARSER CALLS HERE, LIKE THIS
 call DataParser.exe database="..\..\..\Database\db\data.sqlite3" address="http://www.football-data.co.uk/mmz4281/1718/I1.csv" season="2017-2018" league="Italy"
 call DataParser.exe database="..\..\..\Database\db\data.sqlite3" address="http://www.football-data.co.uk/mmz4281/1617/I1.csv" season="2016-2017" league="Italy"
 
@@ -30,7 +36,7 @@ call DataParser.exe database="..\..\..\Database\db\data.sqlite3" address="http:/
 ```
 
 This calls DataParser.exe with database defined to be in "..\..\..\Database\db\data.sqlite3", relative
-to Run.bat. Address defines where the csv-file is downloaded. *season* and *league* describe
+to Run.bat-location. Address defines where the csv-file is downloaded. *season* and *league* describe
 what season and league the data downloaded belongs to. These are used in the database.
 
 ## Optional parameters
