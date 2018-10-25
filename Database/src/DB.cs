@@ -7,7 +7,7 @@ namespace Database
 {
     public class DB
     {
-        string connectionString = "";
+        string ConnectionString { get; }
 
         /// <summary>
         /// Constructor for DB. Creates a connection string based on filePath.
@@ -15,7 +15,7 @@ namespace Database
         /// <param name="filePath"></param>
         public DB(string filePath)
         {
-            connectionString = String.Format("Data Source = {0}; Version = 3; foreign keys=true; FailIfMissing=True;", filePath);
+            ConnectionString = String.Format("Data Source = {0}; Version = 3; foreign keys=true; FailIfMissing=True;", filePath);
         }
 
         public void CreateDatabase(string filepath)
@@ -32,7 +32,7 @@ namespace Database
         public int ExecuteScript(string path)
         {
             string sql = File.ReadAllText(path);
-            SQLiteConnection con = new SQLiteConnection(connectionString);
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
             try
             {
                 con.Open();
@@ -52,7 +52,7 @@ namespace Database
         public void ClearDatabase()
         {
             string query = "DELETE FROM matches;";
-            SQLiteConnection con = new SQLiteConnection(connectionString);
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
             SQLiteCommand command = new SQLiteCommand(query, con);
             command.ExecuteNonQuery();
@@ -87,7 +87,7 @@ namespace Database
         public int AddMatches(List<Match> matches)
         {
             int addedMatches = 0;
-            SQLiteConnection con = new SQLiteConnection(connectionString);
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
 
             using (var cmd = new SQLiteCommand(con))
@@ -134,7 +134,7 @@ namespace Database
         {
 
             string query = "SELECT * FROM matches;";
-            SQLiteConnection con = new SQLiteConnection(connectionString);
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
             SQLiteCommand command = new SQLiteCommand(query, con);
             SQLiteDataReader reader = command.ExecuteReader();
