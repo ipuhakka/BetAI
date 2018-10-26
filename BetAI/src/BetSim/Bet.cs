@@ -72,16 +72,7 @@ namespace BetAI.BetSim
         /// </summary>
         private int GetBetResult(Match m, double predictedResult, double drawLimit)
         {
-            int predictedBetResult = 0;
-            if (Math.Abs(predictedResult) < drawLimit)
-                predictedBetResult = 0;
-            else if (predictedResult > 0)
-                predictedBetResult =  1;
-            else if (predictedResult < 0)
-                predictedBetResult = -1;
-            else // predictedResult is exactly 0
-                predictedBetResult = 0;
-
+            int predictedBetResult = GetPredictedBetResult(m, predictedResult, drawLimit);
             if (predictedBetResult == m.Homescore - m.Awayscore)
                 return 1;
             if (predictedBetResult == 1 && m.Homescore > m.Awayscore)
@@ -89,6 +80,23 @@ namespace BetAI.BetSim
             if (predictedBetResult == -1 && m.Homescore < m.Awayscore)
                 return 1;
             else
+                return 0;
+        }
+
+        /// <summary>
+        /// Returns 1 if predicted a home win, 0 if draw, and -1
+        /// if predicted away win.
+        /// </summary>
+        /// <returns></returns>
+        private int GetPredictedBetResult(Match m, double predictedResult, double drawLimit)
+        {
+            if (Math.Abs(predictedResult) < drawLimit)
+                return 0;
+            else if (predictedResult > 0)
+                return 1;
+            else if (predictedResult < 0)
+                return -1;
+            else // predictedResult is exactly 0
                 return 0;
         }
 
