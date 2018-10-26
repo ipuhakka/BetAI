@@ -17,7 +17,7 @@ namespace DataParserTestProject
         }
 
         [Test]
-        public void test_Parse_default_values_return_380_matches()
+        public void Test_Parse_default_values_return_380_matches()
         {
             CSVParser csv = new CSVParser();
             List<Match> matches = csv.Parse(@"test-files\England17-18.csv", "England", "2016-2017");
@@ -32,7 +32,7 @@ namespace DataParserTestProject
         /// for homescore, awayscore and HomeOdd, DrawOdd and AwayOdd.
         /// </summary>
         [Test]
-        public void test_Parse_modified_column_names()
+        public void Test_Parse_modified_column_names()
         {
             CSVParser csv = new CSVParser();
             string[] args = new string[] {"homescore=HomeGoals", "awayscore=AwayGoals", "homeOdd=HomeOdd", "drawOdd=DrawOdd", "awayOdd=AwayOdd"};
@@ -48,7 +48,7 @@ namespace DataParserTestProject
         /// in .csv-file), Parse operation throws ArgumentException.
         /// </summary>
         [Test]
-        public void test_Parse_incorrect_column_names_throws_ArgumentException()
+        public void Test_Parse_incorrect_column_names_throws_ArgumentException()
         {
             CSVParser csv = new CSVParser();
             string[] args = new string[] { "HomeScore=Homescore" };
@@ -63,7 +63,7 @@ namespace DataParserTestProject
         /// this call should throw ArgumentException to indicate that Arguments were invalid.
         /// </summary>
         [Test]
-        public void test_Parse_invalid_column_params_throws_ArgumentException()
+        public void Test_Parse_invalid_column_params_throws_ArgumentException()
         {
             CSVParser csv = new CSVParser();
             string[] args = new string[] { "HomeScore", "AwayScore", "HomeOdd", "DrawOdd", "awayOdd=AwayOdd" };

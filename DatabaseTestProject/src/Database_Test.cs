@@ -11,7 +11,7 @@ namespace DatabaseTestProject
     [TestFixture]
     public class Database_Test
     {
-        string path = "Database_testi.db";
+        readonly string path = "Database_testi.db";
         DB db;
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -22,14 +22,12 @@ namespace DatabaseTestProject
             db.ExecuteScript("db_schema_dump.sql");
         }
 
-        [Category("use_testdatabase")]
         [SetUp]
         public void SetUp()
         {
             db.ExecuteScript("db_testdata_dump.sql");
         }
 
-        [Category("use_testdatabase")]
         [TearDown]
         public void TearDown()
         {
@@ -43,7 +41,7 @@ namespace DatabaseTestProject
         }
 
         [Test]
-        public void test_ExecuteScript_return_1()
+        public void Test_ExecuteScript_return_1()
         {
             DB database = new DB("testDB.db");
             database.CreateDatabase("testDB.db");
@@ -56,7 +54,7 @@ namespace DatabaseTestProject
         /// Trying to get schema from file with incorrect SQLite syntax throws an SQLiteException.
         /// </summary>
         [Test]
-        public void test_ExecuteScript_throw_SQLiteException()
+        public void Test_ExecuteScript_throw_SQLiteException()
         {
             DB database = new DB("testDB.db");
             database.CreateDatabase("testDB.db");
@@ -65,33 +63,39 @@ namespace DatabaseTestProject
         }
 
         [Test]
-        public void test_ExecuteScript_Unexisting_File_throws_SQLiteException()
+        public void Test_ExecuteScript_Unexisting_File_throws_SQLiteException()
         {
             DB database = new DB("unusedDatabase.db");
             Assert.Throws<SQLiteException>(() => database.ExecuteScript(@"..\..\DatabaseTestProject\test-files\db_schema_throws_SQLiteE_dump.sql"));
         }
 
         [Test]
-        public void test_AddMatches_Invalid_format_throws_ArgumentException()
+        public void Test_AddMatches_Invalid_format_throws_ArgumentException()
         {
-            List<Match> matches = new List<Match>();
-            matches.Add(new Match("ManU", "Nor", "England", "2016/2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2));
+            List<Match> matches = new List<Match>
+            {
+                new Match("ManU", "Nor", "England", "2016/2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2)
+            };
             Assert.Throws<ArgumentException>(() => db.AddMatches(matches));
         }
 
         [Test]
-        public void test_AddMatches_Season_TooLong_throws_ArgumentException()
+        public void Test_AddMatches_Season_TooLong_throws_ArgumentException()
         {
-            List<Match> matches = new List<Match>();
-            matches.Add(new Match("ManU", "Nor", "England", "20162-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2));
+            List<Match> matches = new List<Match>
+            {
+                new Match("ManU", "Nor", "England", "20162-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2)
+            };
             Assert.Throws<ArgumentException>(() => db.AddMatches(matches));
         }
 
         [Test]
-        public void test_AddMatches_Season_TooShort_throws_ArgumentException()
+        public void Test_AddMatches_Season_TooShort_throws_ArgumentException()
         {
-            List<Match> matches = new List<Match>();
-            matches.Add(new Match("ManU", "Nor", "England", "201-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2));
+            List<Match> matches = new List<Match>
+            {
+                new Match("ManU", "Nor", "England", "201-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2)
+            };
             Assert.Throws<ArgumentException>(() => db.AddMatches(matches));
         }
 
@@ -100,7 +104,7 @@ namespace DatabaseTestProject
         /// more than once should produce only one added row.
         /// </summary>
         [Test]
-        public void test_AddMatches_return1()
+        public void Test_AddMatches_return1()
         {
             List<Match> matches = new List<Match>();
             for (int i = 0; i < 3; i++)
@@ -115,7 +119,7 @@ namespace DatabaseTestProject
         /// Adding matches to file which doesn't exist should throw SQLiteException
         /// </summary>
         [Test]
-        public void test_AddMatches_throws_SQLiteException()
+        public void Test_AddMatches_throws_SQLiteException()
         {
             DB database = new DB("noExist.db");
             List<Match> matches = new List<Match>();
@@ -131,7 +135,7 @@ namespace DatabaseTestProject
         /// it is used to test performance. Ideally, transaction takes no more than 2 seconds.
         /// </summary>
         [Test]
-        public void test_AddMatches_380()
+        public void Test_AddMatches_380()
         {
             List<Match> matches = new List<Match>();
             for (int i = 0; i < 380; i++)
@@ -148,13 +152,13 @@ namespace DatabaseTestProject
         }
 
         [Test]
-        public void test_SelectAllFromDatabase()
+        public void Test_SelectAllFromDatabase()
         {
             Assert.AreEqual(13, db.SelectAllMatchesFromDatabase().Count);
         }
 
         [Test]
-        public void test_SelectAllFromDatabase_throws_SQLiteException()
+        public void Test_SelectAllFromDatabase_throws_SQLiteException()
         {
             DB test = new DB("unexistingfile");
             Assert.Throws<SQLiteException>(() => test.SelectAllMatchesFromDatabase());

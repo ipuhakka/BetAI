@@ -16,8 +16,8 @@ namespace Utils
     public class SampleTest
     {
         private DB db;
-        private string file = "testi.db";
-        private string largeFile = @"test-files\data.sqlite3";
+        private readonly string file = "testi.db";
+        private readonly string largeFile = @"test-files\data.sqlite3";
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -36,20 +36,20 @@ namespace Utils
         }
 
         [Test]
-        public void test_Sample_sampleSizeLargerThanMatchCount()
+        public void Test_Sample_sampleSizeLargerThanMatchCount()
         {
             Assert.Throws<NotEnoughDataException>(() => Sample.CreateSample(14));
         }
 
         [Test]
-        public void test_Sample_sampleSizeEqualToMatchCount()
+        public void Test_Sample_sampleSizeEqualToMatchCount()
         {
             Matches.SetMatches(file);
             Assert.DoesNotThrow(() => Sample.CreateSample(13));
         }
 
         [Test]
-        public void test_NoDuplicatesInSample()
+        public void Test_NoDuplicatesInSample()
         {
             Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
             Matches.SetMatches(largeFile);
@@ -72,7 +72,7 @@ namespace Utils
         /// of 2000 matches in less than 2 seconds is a minimum goal.
         /// </summary>
         [Test]
-        public void test_Sample_Performance()
+        public void Test_Sample_Performance()
         {
             List<long> runTimes = new List<long>();
             string pathToTestFile = Path.Combine(TestContext.CurrentContext.TestDirectory, @"test-files\data.sqlite3");

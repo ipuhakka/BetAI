@@ -16,7 +16,7 @@ namespace DataParserTestProject
         /// to object with arguments which don't contain '=' characters.
         /// </summary>
         [Test]
-        public void testSearchParams_NotSplittedStrings()
+        public void TestSearchParams_NotSplittedStrings()
         {
             string[] args = new string[8];
             args[0] = "NotSplitted";
@@ -34,7 +34,7 @@ namespace DataParserTestProject
         }
 
         [Test]
-        public void testSearchParams_SetHomeOddAndDate()
+        public void Test_SearchParams_SetHomeOddAndDate()
         {
             string[] args = new string[2];
             args[0] = "homeodd=someColumnName";
@@ -49,7 +49,7 @@ namespace DataParserTestProject
         }
 
         [Test]
-        public void test_SearchParams_Trims_setColumn()
+        public void Test_SearchParams_Trims_setColumn()
         {
             string[] args = new string[2];
             args[0] = "homeodd= someColumnName";
@@ -61,7 +61,7 @@ namespace DataParserTestProject
         }
 
         [Test]
-        public void test_SearchParams_Argument_name_CaseInsensitive()
+        public void Test_SearchParams_Argument_name_CaseInsensitive()
         {
             string[] args = new string[2];
             args[0] = "homeOdd=someColumnName";
@@ -73,7 +73,7 @@ namespace DataParserTestProject
         }
 
         [Test]
-        public void test_SearchParams_runs_with_larger_than_2_splittedArrays()
+        public void Test_SearchParams_runs_with_larger_than_2_splittedArrays()
         {
             string[] args = new string[4];
             args[0] = "this=has=many=splits";
@@ -85,7 +85,7 @@ namespace DataParserTestProject
         }
 
         [Test]
-        public void test_SearchParams_runs_with_null_values()
+        public void Test_SearchParams_runs_with_null_values()
         {
             string[] args = new string[8];
             Assert.DoesNotThrow(() => new SearchParams(args));

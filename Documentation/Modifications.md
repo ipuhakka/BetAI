@@ -2,12 +2,12 @@
 - Planned
 	- Implement a mutation strategy
 	- Possible changes to bet result algorithm
-	- Refactor test namespaces for easier identification
 	- Set minimumstake in default.json to 1
 	- Check code for intelligence hints on structure
 - Implemented
 	- Implement uniform alpha crossover
-
+	- Refactor test namespaces for easier identification
+	
 # v0.2
 - Implemented
 	- Display only valid parameters from values.json to console (all are not used)
