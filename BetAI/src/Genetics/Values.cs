@@ -135,6 +135,8 @@ namespace BetAI.Genetics
             {
                 case "blx":
                     return new BLXAlpha(values.Alpha);
+                case "uni-alpha":
+                    return new UniformAlpha(values.Alpha);
                 default:
                     throw new InitializationException("Crossover method not identified");
             }

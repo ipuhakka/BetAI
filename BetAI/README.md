@@ -40,11 +40,10 @@ parameter is a string type, it is placed in quotations.
 		- Weighted
 		- Tournament
 - crossoverMethod: string
-	- Indicates the used crossover method.
-	Supported:
-		- BLX (Blend crossover alpha)
+	- Indicates the used crossover method. These are explained in *Documentation\BetAI.md*.
+
 - alpha: double
-	- Alpha value for BLX-crossover method. If some other
+	- Alpha value for some crossover methods. If another kind of
 	crossover method is used, this value does not have any effect.
 - tournamentSize: int
 	- Size of tournaments if tournament selection is used as parent selection method.

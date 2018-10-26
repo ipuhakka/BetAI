@@ -80,6 +80,7 @@
     <Compile Include="src\FileOperations\LoadTest.cs" />
     <Compile Include="src\FileOperations\SaveTest.cs" />
     <Compile Include="src\Genetics\Crossover\BLXAlphaTest.cs" />
+    <Compile Include="src\Genetics\Crossover\UniformAlphaTest.cs" />
     <Compile Include="src\Genetics\NodeTest.cs" />
     <Compile Include="src\Genetics\ReproduceTest.cs" />
     <Compile Include="src\Genetics\Selection\TournamentSelectionTest.cs" />

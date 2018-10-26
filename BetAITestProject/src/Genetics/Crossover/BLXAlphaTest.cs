@@ -22,7 +22,7 @@ namespace BetAITestProject.Genetics.Crossover
     public class BLXAplhaTest
     {
         [Test]
-        public void test_Crossover_alpha_less_than_0_throws_ArgumentException()
+        public void Test_Crossover_alpha_less_than_0_throws_ArgumentException()
         {
             List<Node> nodes = new List<Node>();
 
@@ -34,27 +34,31 @@ namespace BetAITestProject.Genetics.Crossover
         }
 
         [Test]
-        public void test_Crossover_alpha_0_runs()
+        public void Test_Crossover_alpha_0_runs()
         {
-            List<Node> nodes = new List<Node>();
-            nodes.Add(new Node(1, 0.3, 5, 0, 5));
-            nodes.Add(new Node(1, 0.3, 5, 0, 5));
+            List<Node> nodes = new List<Node>
+            {
+                new Node(1, 0.3, 5, 0, 5),
+                new Node(1, 0.3, 5, 0, 5)
+            };
             Assert.DoesNotThrow(() => new BLXAlpha(0));
         }
 
         [Test]
-        public void test_Crossover_throws_ArgumentNullExcpetion()
+        public void Test_Crossover_throws_ArgumentNullExcpetion()
         {
             BLXAlpha co = new BLXAlpha(1);
             Assert.Throws<ArgumentNullException>(() => co.Crossover(null, new Node()));
         }
 
         [Test]
-        public void test_Crossover_Generation_Is_Incremented_by_1()
+        public void Test_Crossover_Generation_Is_Incremented_by_1()
         {
-            List<Node> nodes = new List<Node>();
-            nodes.Add(new Node(1, 0.3, 5, 0, 5));
-            nodes.Add(new Node(1, 0.3, 5, 0, 5));
+            List<Node> nodes = new List<Node>
+            {
+                new Node(1, 0.3, 5, 0, 5),
+                new Node(1, 0.3, 5, 0, 5)
+            };
 
             BLXAlpha co = new BLXAlpha(1);
             List<Node> gen1 = co.Crossover(nodes[0], nodes[1]);
@@ -67,22 +71,26 @@ namespace BetAITestProject.Genetics.Crossover
         /// 2 children should be returned by Crossover().
         /// </summary>
         [Test]
-        public void test_Crossover_returns_2_children()
+        public void Test_Crossover_returns_2_children()
         {
-            List<Node> nodes = new List<Node>();
-            nodes.Add(new Node(1, 0.3, 5, 0, 5));
-            nodes.Add(new Node(1, 0.3, 5, 0, 5));
+            List<Node> nodes = new List<Node>
+            {
+                new Node(1, 0.3, 5, 0, 5),
+                new Node(1, 0.3, 5, 0, 5)
+            };
 
             BLXAlpha co = new BLXAlpha(0.5);
             Assert.AreEqual(2, co.Crossover(nodes[0], nodes[1]).Count);
         }
 
         [Test]
-        public void test_Crossover_MinimumStake_does_not_change()
+        public void Test_Crossover_MinimumStake_does_not_change()
         {
-            List<Node> nodes = new List<Node>();
-            nodes.Add(new Node(1, 0.3, 5, 0, 5));
-            nodes.Add(new Node(1, 0.3, 5, 0, 5));
+            List<Node> nodes = new List<Node>
+            {
+                new Node(1, 0.3, 5, 0, 5),
+                new Node(1, 0.3, 5, 0, 5)
+            };
 
             BLXAlpha co = new BLXAlpha(1);
             List<Node> children = co.Crossover(nodes[0], nodes[1]);
@@ -90,7 +98,7 @@ namespace BetAITestProject.Genetics.Crossover
         }
 
         [Test]
-        public void test_Crossover_PlayLimit_InRange()
+        public void Test_Crossover_PlayLimit_InRange()
         {
             // PlayLimit should always with these arguments be
             //in range 0.5 - 2.5 with PlayLimits of 1 and 2 and an alpha value of 0.5.
@@ -99,9 +107,11 @@ namespace BetAITestProject.Genetics.Crossover
             BLXAlpha co = new BLXAlpha(0.5);
             for (int i = 0; i < 100; i++)
             {
-                nodes = new List<Node>();
-                nodes.Add(new Node(1, 0.3, 5, 0, 5));
-                nodes.Add(new Node(2, 0.3, 5, 0, 5));
+                nodes = new List<Node>
+                {
+                    new Node(1, 0.3, 5, 0, 5),
+                    new Node(2, 0.3, 5, 0, 5)
+                };
                 Console.WriteLine(nodes.Count);
                 List<Node> children = co.Crossover(nodes[0], nodes[1]);
                 children[0].PlayLimit.Should().BeInRange(0.5, 2.5);
@@ -109,7 +119,7 @@ namespace BetAITestProject.Genetics.Crossover
         }
 
         [Test]
-        public void test_Crossover_DrawLimit_InRange()
+        public void Test_Crossover_DrawLimit_InRange()
         {
             /* DrawLimit should always with these arguments be
             in range 0.27 - 0.63 with alpha value of 0.1 and 
@@ -119,9 +129,11 @@ namespace BetAITestProject.Genetics.Crossover
             BLXAlpha co = new BLXAlpha(0.1);
             for (int i = 0; i < 100; i++)
             {
-                nodes = new List<Node>();
-                nodes.Add(new Node(1, 0.3, 5, 0, 5));
-                nodes.Add(new Node(2, 0.6, 5, 0, 5));
+                nodes = new List<Node>
+                {
+                    new Node(1, 0.3, 5, 0, 5),
+                    new Node(2, 0.6, 5, 0, 5)
+                };
                 Console.WriteLine(nodes.Count);
                 List<Node> children = co.Crossover(nodes[0], nodes[1]);
                 children[0].DrawLimit.Should().BeInRange(0.27, 0.63);
@@ -129,7 +141,7 @@ namespace BetAITestProject.Genetics.Crossover
         }
 
         [Test]
-        public void test_Crossover_SimulationSampleSize_InRange()
+        public void Test_Crossover_SimulationSampleSize_InRange()
         {
             // SimulationSampleSize should always with these arguments be
             //in range 4 - 9 with alpha value of 0.2.
@@ -138,16 +150,18 @@ namespace BetAITestProject.Genetics.Crossover
             BLXAlpha co = new BLXAlpha(0.2);
             for (int i = 0; i < 100; i++)
             {
-                nodes = new List<Node>();
-                nodes.Add(new Node(1, 0.3, 5, 0, 5));
-                nodes.Add(new Node(2, 0.6, 5, 0, 8));
+                nodes = new List<Node>
+                {
+                    new Node(1, 0.3, 5, 0, 5),
+                    new Node(2, 0.6, 5, 0, 8)
+                };
                 List<Node> children = co.Crossover(nodes[0], nodes[1]);
                 children[0].SimulationSampleSize.Should().BeInRange(4, 9);
             }
         }
 
         [Test]
-        public void test_Crossover_SimulationSampleSize_1_does_not_throw_ArgumentException()
+        public void Test_Crossover_SimulationSampleSize_1_does_not_throw_ArgumentException()
         {
             /* SimulationSampleSize can never be less than 1 or larger than 100. This tests that
                 child node will never have a SimulationSampleSize less than limit, by checking
@@ -158,11 +172,12 @@ namespace BetAITestProject.Genetics.Crossover
             BLXAlpha co = new BLXAlpha(5);
             for (int i = 0; i < 100; i++)
             {
-                nodes = new List<Node>();
-                nodes.Add(new Node(1, 0.3, 5, 0, 1));
-                nodes.Add(new Node(2, 0.6, 5, 0, 2));
-                Assert.DoesNotThrow(() => co.Crossover(nodes[0], nodes[1]));
-               
+                nodes = new List<Node>
+                {
+                    new Node(1, 0.3, 5, 0, 1),
+                    new Node(2, 0.6, 5, 0, 2)
+                };
+                Assert.DoesNotThrow(() => co.Crossover(nodes[0], nodes[1]));              
             }
         }
     }

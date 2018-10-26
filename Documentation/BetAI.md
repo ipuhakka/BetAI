@@ -5,6 +5,7 @@ It is designed to support different parent selection and crossover methods. Supp
 in version 0.2 are:
 - Crossover
 	- Blend crossover alpha (BLX)
+	- Uniform alpha crossover (Uni-alpha)
 - Parent selection
 	- Weighted selection (Weighted)
 	- Tournament selection (Tournament)
@@ -23,7 +24,7 @@ This chapter describes parent selection methods that are available in the progra
 This chapter describes crossover methods available in the program.
 1. BLX-alpha (parameter name = BLX)
 - BLX-alpha uses blend-crossover method to produce two child nodes.
-
+2. 
 ## Use
 
 BetAI can be run after building the program, by opening build directory and running

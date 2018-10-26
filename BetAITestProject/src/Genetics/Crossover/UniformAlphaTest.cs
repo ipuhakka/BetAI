@@ -27,9 +27,11 @@ namespace BetAITestProject.Genetics.Crossover
         [Test]
         public void Test_Crossover_generation_inceremented_by1()
         {
-            List<Node> nodes = new List<Node>();
-            nodes.Add(new Node(1, 0.3, 5, 0, 5));
-            nodes.Add(new Node(1, 0.3, 5, 0, 5));
+            List<Node> nodes = new List<Node>
+            {
+                new Node(1, 0.3, 5, 0, 5),
+                new Node(1, 0.3, 5, 0, 5)
+            };
 
             UniformAlpha co = new UniformAlpha(1);
             List<Node> gen1 = co.Crossover(nodes[0], nodes[1]);
@@ -41,9 +43,11 @@ namespace BetAITestProject.Genetics.Crossover
         [Test]
         public void Test_Crossover_MinimumStake_does_not_change()
         {
-            List<Node> nodes = new List<Node>();
-            nodes.Add(new Node(1, 0.3, 5, 0, 5));
-            nodes.Add(new Node(1, 0.3, 5, 0, 5));
+            List<Node> nodes = new List<Node>
+            {
+                new Node(1, 0.3, 5, 0, 5),
+                new Node(1, 0.3, 5, 0, 5)
+            };
 
             BLXAlpha co = new BLXAlpha(1);
             List<Node> children = co.Crossover(nodes[0], nodes[1]);
