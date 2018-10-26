@@ -1,4 +1,12 @@
-# v.0.2
+# v0.3
+- Planned
+	- Implement uniform alpha crossover
+	- Implement a mutation strategy
+	- Possible changes to bet result algorithm
+	- Refactor test namespaces for easier identification
+	- Set minimumstake in default.json to 1
+
+# v0.2
 - Implemented
 	- Display only valid parameters from values.json to console (all are not used)
 	- Sample logging
