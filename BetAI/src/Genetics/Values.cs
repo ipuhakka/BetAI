@@ -2,6 +2,9 @@
 using System.IO;
 using System.Globalization;
 using Newtonsoft.Json;
+using BetAI.Exceptions;
+using BetAI.Genetics.Crossover;
+using BetAI.Genetics.Selection;
 
 namespace BetAI.Genetics
 {
@@ -97,6 +100,44 @@ namespace BetAI.Genetics
                 }
             }
             return json;
+        }
+
+        /// <summary>
+        ///  Creates a new instance of ISelection interface, based on the parameter 
+        /// parentSelectionMethod in values.json.
+        /// </summary>
+        /// <exception cref="InitializationException">Parent selection method is not identified.</exception>
+        public static ISelection InitializeSelectionMethod(Values values, int nodeCount)
+        {
+            string method = values.ParentSelectionMethod;
+
+            switch (method.Trim().ToLower())
+            {
+                case "weighted":
+                    return new WeightedSelection();
+                case "tournament":
+                    return new TournamentSelection(values.TournamentSize, nodeCount);
+                default:
+                    throw new InitializationException("Parent selection method not identified");
+            }
+        }
+
+        /// <summary>
+        /// Creates a new instance of ICrossover interface, based on the parameter 
+        /// crossoverMethod in values.json.
+        /// </summary>
+        /// <exception cref="InitializationException">Crossover method is not identified.</exception>
+        public static ICrossover InitializeCrossoverMethod(Values values)
+        {
+            string method = values.CrossoverMethod;
+
+            switch (method.Trim().ToLower())
+            {
+                case "blx":
+                    return new BLXAlpha(values.Alpha);
+                default:
+                    throw new InitializationException("Crossover method not identified");
+            }
         }
     }
 }

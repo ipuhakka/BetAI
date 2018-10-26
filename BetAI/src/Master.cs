@@ -52,52 +52,11 @@ namespace BetAI
                 values = Load.LoadValues(filename);
                 nodes = RandomiseNodes();
             }
-            InitializeSelectionMethod();
-            InitializeCrossoverMethod();
+            selection = Values.InitializeSelectionMethod(values, nodes.Count);
+            crossover = Values.InitializeCrossoverMethod(values);
             Randomise.InitRandom();
             Matches.SetMatches(values.Database);
             Console.WriteLine("Found " + Matches.GetMatchCount() + " matches in database");
-        }
-
-        /// <summary>
-        ///  Creates a new instance of ISelection interface, based on the parameter 
-        /// parentSelectionMethod in values.json.
-        /// </summary>
-        /// <exception cref="InitializationException">Parent selection method is not identified.</exception>
-        private void InitializeSelectionMethod()
-        {
-            string method = values.ParentSelectionMethod;
-
-            switch (method.Trim().ToLower())
-            {
-                case "weighted":
-                    selection = new WeightedSelection();
-                    break;
-                case "tournament":
-                    selection = new TournamentSelection(values.TournamentSize, nodes.Count);
-                    break;
-                default:
-                    throw new InitializationException("Parent selection method not identified");
-            }
-        }
-
-        /// <summary>
-        /// Creates a new instance of ICrossover interface, based on the parameter 
-        /// crossoverMethod in values.json.
-        /// </summary>
-        /// <exception cref="InitializationException">Crossover method is not identified.</exception>
-        private void InitializeCrossoverMethod()
-        {
-            string method = values.CrossoverMethod;
-
-            switch (method.Trim().ToLower())
-            {
-                case "blx":
-                    crossover = new BLXAlpha(values.Alpha);
-                    break;
-                default:
-                    throw new InitializationException("Crossover method not identified");
-            }
         }
 
         /// <summary>
