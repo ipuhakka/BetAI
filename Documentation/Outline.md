@@ -5,27 +5,6 @@ algorithm for 1X2-betting. Its purpose is to take a challenging problem
 and split it to comprehensible parts. Document presents solutions for 
 tasks identified.
 
-## Problem overview
--------------------
-For making a working algorithm which improves its accuracy overtime,
-system needs to have lots of training data, clear objectives, that are 
-measurable. There also needs to be a clear idea of what the algorithm is trying
-to optimize. 
-
-## Objectives
---------------
-Since the goal is to make a system that can bet on its own, the main
-objective, which is trying to be learned by the machine, should be to
-maximise profits made by bets. This means that improving betting accuracy
-is not the main objective, but rather to play a reasonable bet for a given
-situation.
-
-1. Maximize profit from betting
-
-2. Improve betting accuracy
-
-3. Improve risk analysis
-
 ## Data
 ---------
 
@@ -52,20 +31,24 @@ so that all data is easily accessible in one place for running the engine that
 calulcates values for individual matches.
 
 ```
-Match:
-	TEXT playedDate,
-	TEXT hometeam,
-	TEXT awayteam,
-	INTEGER homescore,
-	INTEGER awayscore,
-	REAL homeOdd,
-	REAL drawOdd,
-	REAL awayOdd
+CREATE TABLE IF NOT EXISTS matches(
+	playedDate TEXT,
+	hometeam TEXT,
+	awayteam TEXT,
+	league TEXT,
+	season CHAR(9),
+	homescore INTEGER,
+	awayscore INTEGER,
+	homeOdd REAL,
+	drawOdd REAL,
+	awayOdd REAL,
+	CONSTRAINT PK_matches PRIMARY KEY(playedDate, hometeam, awayteam)
+);
 ```
 
 Table contains all data needed to calculate the predicted winner, and calculating the risk.
 
-## Algorithm
+## Betting
 -------------
 This section covers how the algorithm makes bets.
 
@@ -99,7 +82,7 @@ For predicting Match A vs. B with sampleSize n, program needs to
 have n last homematches from team A, and n last awaymatches from team B.
 
 Also, predicting the winner requires a set limit on what is considered as 
-a victory. This is because result is a continuous variable. 
+a win. This is because result is a continuous variable. 
 
 Parameters to be controlled by the algorithm in predicting match results would be
 *drawLimit* and *sampleSize*. 
@@ -113,15 +96,15 @@ and a way to analyze the coefficient for the risk/profit value for each bet.
 estimatedWinPercentage = (e^(-absolute(result)) * (absolute(result)) / 1; 
 betCoefficient = estimatedWinPercentage / (1 / odd); 
 bool playBet = (playLimit < betCoefficient);
-stake = baseStake* (riskLimit / betCoefficient);
+stake = baseStake * (riskLimit / betCoefficient);
 ```
 Algorithm controls parameter riskLimit.
 
 ### Fitness function
 -----------------------
-Fitness of each node is defined as
-```
-fitness = moneyWon / moneyPlayed;
-```
-This is so that playing styles such as using large stakes are not in advantage, as they
-would be if fitness was determined by money won only.
+Fitness evaluation is based on how much profit is made by playing the bets.
+With a standardized minimum stake that nodes use, algorithm rewards
+nodes for better evaluation of when to play a bet and how big stake is played.
+
+Challenges of this is that with bad luck it can favour not playing bets at all
+(which always has fitness value of 0).

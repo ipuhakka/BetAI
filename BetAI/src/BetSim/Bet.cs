@@ -99,7 +99,5 @@ namespace BetAI.BetSim
             else // predictedResult is exactly 0
                 return 0;
         }
-
-
     }
 }
