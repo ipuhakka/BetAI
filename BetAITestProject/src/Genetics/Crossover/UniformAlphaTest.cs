@@ -5,7 +5,7 @@ using FluentAssertions;
 using BetAI.Genetics;
 using BetAI.Genetics.Crossover;
 
-namespace BetAITestProject.Genetics.Crossover
+namespace Genetics.Crossover
 {
     [TestFixture]
     public class UniformAlphaTest

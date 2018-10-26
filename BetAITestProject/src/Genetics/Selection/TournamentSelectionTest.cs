@@ -9,7 +9,7 @@ using BetAI.Utils;
 using BetAI.BetSim;
 using Database;
 
-namespace BetAITestProject.Genetics.Selection
+namespace Genetics.Selection
 {
     [TestFixture]
     public class TournamentSelectionTest

@@ -7,7 +7,7 @@ using Database;
 using BetAI.BetSim;
 using BetAI.Exceptions;
 
-namespace BetAITestProject.Data
+namespace Data
 {
     [TestFixture]
     public class MatchesTest

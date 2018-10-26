@@ -11,7 +11,7 @@ using Database;
 using FluentAssertions;
 using Newtonsoft.Json.Linq;
 
-namespace BetAITestProject.Genetics
+namespace Genetics
 {
     [TestFixture]
     public class NodeTest

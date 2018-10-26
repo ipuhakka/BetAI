@@ -8,7 +8,7 @@ using BetAI.Exceptions;
 using Newtonsoft.Json;
 using Database;
 
-namespace BetAITestProject.FileOperations
+namespace FileOperations
 {
     [TestFixture]
     public class SaveTest

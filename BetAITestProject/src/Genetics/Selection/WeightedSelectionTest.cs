@@ -10,7 +10,7 @@ using BetAI.Utils;
 using Database;
 using Newtonsoft.Json;
 
-namespace BetAITestProject.Genetics.Selection
+namespace Genetics.Selection
 {
     [TestFixture]
     public class WeightedSelectionTest

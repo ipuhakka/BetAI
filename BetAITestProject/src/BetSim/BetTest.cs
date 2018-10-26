@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Database;
 using BetAI.BetSim;
 
-namespace BetAITestProject.BetSim
+namespace BetSim
 {
     [TestFixture]
     public class BetTest

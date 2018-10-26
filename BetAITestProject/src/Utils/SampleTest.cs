@@ -10,7 +10,7 @@ using NUnit.Framework;
 using Database;
 using FluentAssertions;
 
-namespace BetAITestProject.Utils
+namespace Utils
 {
     [TestFixture]
     public class SampleTest

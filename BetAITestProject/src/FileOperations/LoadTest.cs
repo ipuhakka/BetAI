@@ -7,7 +7,7 @@ using BetAI.Genetics;
 using BetAI.Genetics.Crossover;
 using BetAI.Utils;
 
-namespace BetAITestProject.FileOperations
+namespace FileOperations
 {
     [TestFixture]
     public class LoadTest

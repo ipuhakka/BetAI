@@ -4,7 +4,7 @@ using BetAI.FileOperations;
 using BetAI.Genetics;
 using NUnit.Framework;
 
-namespace BetAITestProject.Genetics
+namespace Genetics
 {
     [TestFixture]
     public class ValuesTest

@@ -5,7 +5,7 @@ using BetAI.Genetics;
 using BetAI.Genetics.Crossover;
 using FluentAssertions;
 
-namespace BetAITestProject.Genetics.Crossover
+namespace Genetics.Crossover
 {
     /// <summary>
     /// This class contains test cases for BetAI.Genetics.Crossover.cs.

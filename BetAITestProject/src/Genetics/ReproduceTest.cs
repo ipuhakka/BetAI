@@ -6,7 +6,7 @@ using BetAI.Genetics.Selection;
 using BetAI.Genetics;
 using BetAI.Utils;
 
-namespace BetAITestProject.Genetics
+namespace Genetics
 {
     [TestFixture]
     public class ReproduceTest

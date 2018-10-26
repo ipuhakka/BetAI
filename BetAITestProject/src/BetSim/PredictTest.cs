@@ -7,7 +7,7 @@ using BetAI.BetSim;
 using BetAI.Exceptions;
 using Newtonsoft.Json.Linq;
 
-namespace BetAITestProject.BetSim
+namespace BetSim
 {
     [TestFixture]
     public class PredictTest
