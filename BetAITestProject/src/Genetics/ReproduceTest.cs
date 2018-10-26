@@ -18,7 +18,7 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
-        public void test_Reproduce_WeightedSelection_BLXAlpha_returns_100_nodes()
+        public void Test_Reproduce_WeightedSelection_BLXAlpha_returns_100_nodes()
         {
             ICrossover co = new BLXAlpha(0.5);
             ISelection selection = new WeightedSelection();
@@ -35,7 +35,7 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
-        public void test_Reproduce_WeightedSelection_BLXAlpha_returns_98_nodes()
+        public void Test_Reproduce_WeightedSelection_BLXAlpha_returns_98_nodes()
         {
             ICrossover co = new BLXAlpha(0.5);
             ISelection selection = new WeightedSelection();

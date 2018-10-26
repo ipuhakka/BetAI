@@ -13,7 +13,7 @@ namespace BetAITestProject.FileOperations
     [TestFixture]
     public class SaveTest
     {
-        string testFile = "test";
+        readonly string testFile = "test";
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -30,20 +30,20 @@ namespace BetAITestProject.FileOperations
         }
 
         [Test]
-        public void test_InitializeSave_runs()
+        public void Test_InitializeSave_runs()
         {
             Assert.DoesNotThrow(() => Save.InitializeSave(testFile));
         }
 
         [Test]
-        public void test_InitializeSave_throws_DirectoryExistsException()
+        public void Test_InitializeSave_throws_DirectoryExistsException()
         {
             Directory.CreateDirectory(Path.Combine(@"Files\", testFile));
             Assert.Throws<DirectoryExistsException>(() => Save.InitializeSave(testFile));
         }
 
         [Test]
-        public void test_InitializeSave_sets_defined_minimumStake()
+        public void Test_InitializeSave_sets_defined_minimumStake()
         {
             Save.InitializeSave(testFile, String.Format("minimumStake={0}", 2));
             dynamic data = JsonConvert.DeserializeObject(File.ReadAllText(Path.Combine(@"Files\", testFile, "values.json")));
@@ -51,35 +51,35 @@ namespace BetAITestProject.FileOperations
         }
 
         [Test]
-        public void test_InitializeSave_throw_ArgumentOutOfRangeException()
+        public void Test_InitializeSave_throw_ArgumentOutOfRangeException()
         {
             string[] args = { "minimumStake" };
             Assert.Throws<IndexOutOfRangeException>(() => Save.InitializeSave(testFile, args));
         }
 
         [Test]
-        public void test_InitializeSave_throw_FormatException()
+        public void Test_InitializeSave_throw_FormatException()
         {
             string[] args = { "minimumStake=not_a_double" };
             Assert.Throws<FormatException>(() => Save.InitializeSave(testFile, args));
         }
 
         [Test]
-        public void test_InitializeSave_double_with_point_runs()
+        public void Test_InitializeSave_double_with_point_runs()
         {
             string[] args = { "minimumStake=0.5" };
             Assert.DoesNotThrow(() => Save.InitializeSave(testFile, args));
         }
 
         [Test]
-        public void test_InitializeSave_double_with_comma_runs()
+        public void Test_InitializeSave_double_with_comma_runs()
         {
             string[] args = { "minimumStake=0,5" };
             Assert.DoesNotThrow(() => Save.InitializeSave(testFile, args));
         }
 
         [Test]
-        public void test_InitializeSave_fixes_database_path()
+        public void Test_InitializeSave_fixes_database_path()
         {
             string[] args = { @"database=backslashes\need\to\be\escaped"};
             Save.InitializeSave(testFile, args);
@@ -88,33 +88,33 @@ namespace BetAITestProject.FileOperations
         }
 
         [Test]
-        public void test_WriteGeneration_DirectoryNotFoundException()
+        public void Test_WriteGeneration_DirectoryNotFoundException()
         {
             Assert.Throws<DirectoryNotFoundException>(() => Save.WriteGeneration(testFile, new List<Node>(), 0));
         }
 
         [Test]
-        public void test_WriteGeneration_runs()
+        public void Test_WriteGeneration_runs()
         {
             Save.InitializeSave(testFile);
             Assert.DoesNotThrow(() => Save.WriteGeneration(testFile, new List<Node>(), 0));
         }
 
         [Test]
-        public void test_WriteSample_DirectoryNotFoundException()
+        public void Test_WriteSample_DirectoryNotFoundException()
         {
             Assert.Throws<DirectoryNotFoundException>(() => Save.WriteSample(testFile, new List<Match>(), 0));
         }
 
         [Test]
-        public void test_WriteSample_runs()
+        public void Test_WriteSample_runs()
         {
             Save.InitializeSave(testFile);
             Assert.DoesNotThrow(() => Save.WriteSample(testFile, new List<Match>(), 0));
         }
 
         [Test]
-        public void test_Log_DoesNotOverWriteData()
+        public void Test_Log_DoesNotOverWriteData()
         {
             Save.InitializeSave(testFile);
             string[] lines = { "Line 1", "Line 2", "Line 3"};
@@ -128,7 +128,7 @@ namespace BetAITestProject.FileOperations
         }
 
         [Test]
-        public void test_Log_throws_DirectoryNotFoundException()
+        public void Test_Log_throws_DirectoryNotFoundException()
         {
             string[] lines = { "Line 1", "Line 2", "Line 3" };
             Assert.Throws<DirectoryNotFoundException>(() => Save.Log(testFile, lines));

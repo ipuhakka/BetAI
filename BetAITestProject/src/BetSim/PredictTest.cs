@@ -13,8 +13,8 @@ namespace BetAITestProject.BetSim
     public class PredictTest
     {
         private DB db;
-        private string path = "testi.db";
-        private string largeDatabase = "data.sqlite3";
+        private readonly string path = "testi.db";
+        private readonly string largeDatabase = "data.sqlite3";
         private List<Match> matches;
 
         [OneTimeSetUp]
@@ -35,7 +35,7 @@ namespace BetAITestProject.BetSim
         }
 
         [Test]
-        public void test_PredictResult()
+        public void Test_PredictResult()
         {
             /*hometeam avg goals= 1.33
               hometeam conceded avg = 2/3
@@ -70,7 +70,7 @@ namespace BetAITestProject.BetSim
         /// in such a situation.
         /// </summary>
         [Test]
-        public void test_Predict_LaCoruna_Sociedad_15_16_throws_NotSimulatedException()
+        public void Test_Predict_LaCoruna_Sociedad_15_16_throws_NotSimulatedException()
         {
             Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"test-files"));
             Matches.SetMatches(largeDatabase);
@@ -97,7 +97,7 @@ namespace BetAITestProject.BetSim
         }
 
         [Test]
-        public void test_PredictResult_Throws_NotSimulatedException()
+        public void Test_PredictResult_Throws_NotSimulatedException()
         {
             Matches.SetMatches(path);
             Matches.CreateMatchDataStructs(matches, 7);

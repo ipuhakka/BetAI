@@ -11,7 +11,7 @@ namespace BetAITestProject.BetSim
     public class BetTest
     {
         private DB db;
-        private string path = "testi.db";
+        private readonly string path = "testi.db";
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -37,7 +37,7 @@ namespace BetAITestProject.BetSim
         /// than playLimit, bet shouldn't be played, and 0 is returned.
         /// </summary>
         [Test]
-        public void test_PlayBet_return0()
+        public void Test_PlayBet_return0()
         {
             /* Match result = -0.54.
              Estimated result percentage = 0.3147
@@ -52,7 +52,7 @@ namespace BetAITestProject.BetSim
         }
 
         [Test]
-        public void test_PlayBet()
+        public void Test_PlayBet()
         {
             /* Match result = -0.54.
              * Predicted result odd = 3.15
@@ -69,7 +69,7 @@ namespace BetAITestProject.BetSim
         }
 
         [Test]
-        public void test_PlayBet_lose_return_minus_stake()
+        public void Test_PlayBet_lose_return_minus_stake()
         {
             /* Here drawLimit is set lower than the predictedResult, so simulated
              * result will be away win. Therefore PlayBet returns 0, as it wins

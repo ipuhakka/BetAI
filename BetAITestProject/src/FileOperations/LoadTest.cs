@@ -12,7 +12,7 @@ namespace BetAITestProject.FileOperations
     [TestFixture]
     public class LoadTest
     {
-        private string save = "test";
+        private readonly string save = "test";
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -32,7 +32,7 @@ namespace BetAITestProject.FileOperations
         /// If the savefile is not created, DirectoryNotFoundException should be thrown.
         /// </summary>
         [Test]
-        public void test_LoadGeneration_throws_DirectoryNotFoundException()
+        public void Test_LoadGeneration_throws_DirectoryNotFoundException()
         {
             Assert.Throws<DirectoryNotFoundException>(() => Load.LoadLatestGeneration("unexistingsave"));
         }
@@ -41,14 +41,14 @@ namespace BetAITestProject.FileOperations
         /// If savefile is created but it has no gen{i}.json-files in it, 
         /// </summary>
         [Test]
-        public void test_LoadGeneration_return_null()
+        public void Test_LoadGeneration_return_null()
         {
             Save.InitializeSave(save);
             Assert.IsNull(Load.LoadLatestGeneration(save));
         }
 
         [Test]
-        public void test_LoadGeneration()
+        public void Test_LoadGeneration()
         {
             List<Node> nodes = new List<Node>();
             Random rand = new Random();
@@ -68,7 +68,7 @@ namespace BetAITestProject.FileOperations
         /// 1 digits.
         /// </summary>
         [Test]
-        public void test_LoadGeneration_10generations()
+        public void Test_LoadGeneration_10generations()
         {
             List<Node> nodes = new List<Node>();
             Random rand = new Random();
@@ -106,13 +106,13 @@ namespace BetAITestProject.FileOperations
         }
 
         [Test]
-        public void test_LoadValues_throws_DirectoryNotFoundException()
+        public void Test_LoadValues_throws_DirectoryNotFoundException()
         {
             Assert.Throws<DirectoryNotFoundException>(() => Load.LoadValues(save));
         }
 
         [Test]
-        public void test_LoadValues()
+        public void Test_LoadValues()
         {
             Save.InitializeSave(save);
             Values values = Load.LoadValues(save);

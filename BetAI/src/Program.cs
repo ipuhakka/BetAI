@@ -34,7 +34,7 @@ namespace BetAI
 
             CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
             token = cancelTokenSource.Token;
-            Thread thread = new Thread(startSimulation);
+            Thread thread = new Thread(StartSimulation);
             thread.Start();
             Console.WriteLine("Thread started");
             Console.WriteLine("Press esc to stop simulation");
@@ -46,7 +46,7 @@ namespace BetAI
             cancelTokenSource.Cancel();
         }
 
-        static void startSimulation()
+        static void StartSimulation()
         {
             new Master(savefile, token, simArgs).Run();
         }

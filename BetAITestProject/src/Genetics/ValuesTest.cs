@@ -9,7 +9,7 @@ namespace BetAITestProject.Genetics
     [TestFixture]
     public class ValuesTest
     {
-        private string test = "test";
+        private readonly string test = "test";
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
@@ -29,7 +29,7 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
-        public void test_Default_Database_Exists()
+        public void Test_Default_Database_Exists()
         {
             Save.InitializeSave(test);
             Values values = Load.LoadValues(test);

@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Linq;
-using Database;
-using BetAI.BetSim;
+﻿using BetAI.BetSim;
+using BetAI.Exceptions;
+using BetAI.FileOperations;
 using BetAI.Genetics;
 using BetAI.Genetics.Crossover;
 using BetAI.Genetics.Selection;
-using BetAI.FileOperations;
 using BetAI.Utils;
-using BetAI.Exceptions;
+using Database;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace BetAI
 {
@@ -19,11 +19,11 @@ namespace BetAI
     public class Master
     {
         private List<Node> nodes;
-        private string savefile;
+        private string Savefile { get; }
         private Values values;
         private CancellationToken cancelToken;
-        private ISelection selection;
-        private ICrossover crossover;
+        private ISelection Selection { get; }
+        private ICrossover Crossover { get; }
 
         /// <summary>
         /// Constructor for master. Loads latest generation of nodes into memory.
@@ -35,7 +35,7 @@ namespace BetAI
         /// <param name="cancel">CancellationToken used by the main thread to stop simulation.</param>
         public Master(string filename, CancellationToken cancel, params string[] args)
         {
-            savefile = filename;
+            Savefile = filename;
             cancelToken = cancel;
             if (Load.SaveExists(filename))
             {
@@ -52,8 +52,8 @@ namespace BetAI
                 values = Load.LoadValues(filename);
                 nodes = RandomiseNodes();
             }
-            selection = Values.InitializeSelectionMethod(values, nodes.Count);
-            crossover = Values.InitializeCrossoverMethod(values);
+            Selection = Values.InitializeSelectionMethod(values, nodes.Count);
+            Crossover = Values.InitializeCrossoverMethod(values);
             Randomise.InitRandom();
             Matches.SetMatches(values.Database);
             Console.WriteLine("Found " + Matches.GetMatchCount() + " matches in database");
@@ -69,8 +69,8 @@ namespace BetAI
         /// <exception cref="InitializationException"></exception>
         public void Run()
         {
-            Reproduce reproduce = new Reproduce(crossover, selection);
-            if (nodes == null || savefile == null || values == null)
+            Reproduce reproduce = new Reproduce(Crossover, Selection);
+            if (nodes == null || Savefile == null || values == null)
             {
                 Console.WriteLine("Initialization failed");
                 throw new InitializationException();
@@ -81,14 +81,14 @@ namespace BetAI
             while (!cancelToken.IsCancellationRequested)
             {
                 List<Match> sample = Sample.CreateSample(values.SampleSize);
-                Save.WriteSample(savefile, sample, nodes[0].Generation);
+                Save.WriteSample(Savefile, sample, nodes[0].Generation);
                 int maxSampleSize = nodes.Max(n => n.SimulationSampleSize);
                 Matches.CreateMatchDataStructs(sample, maxSampleSize);
                 EvaluateNodes(sample);
                 Log();
                 List<Node> newGeneration = reproduce.CreateNewGeneration(nodes);
-                Save.WriteGeneration(savefile, nodes, nodes[0].Generation);
-                Save.WriteGeneration(savefile, newGeneration, newGeneration[0].Generation);
+                Save.WriteGeneration(Savefile, nodes, nodes[0].Generation);
+                Save.WriteGeneration(Savefile, newGeneration, newGeneration[0].Generation);
                 nodes = newGeneration;
             }
             Console.WriteLine("Stopping simulation");
@@ -119,7 +119,7 @@ namespace BetAI
                 Console.WriteLine(line);
             }
 
-            Save.Log(savefile, lines);
+            Save.Log(Savefile, lines);
         }
 
         /// <summary>

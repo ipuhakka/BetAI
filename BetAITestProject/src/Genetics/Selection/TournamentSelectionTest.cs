@@ -43,7 +43,7 @@ namespace BetAITestProject.Genetics.Selection
         /// If tournament size is less than 1, ArgumentException is thrown.
         /// </summary>
         [Test]
-        public void test_constructor_size_0_throws_ArgumentException()
+        public void Test_constructor_size_0_throws_ArgumentException()
         {
             Assert.Throws<ArgumentException>(() => new TournamentSelection(0, nodes.Count));
         }
@@ -53,21 +53,21 @@ namespace BetAITestProject.Genetics.Selection
         /// tournament size.
         /// </summary>
         [Test]
-        public void test_constructor_tSize_50_gSize_49()
+        public void Test_constructor_tSize_50_gSize_49()
         {
             TournamentSelection ts = new TournamentSelection(50, 49);
             Assert.AreEqual(49, ts.TournamentSize);
         }
 
         [Test]
-        public void test_constructor_tSize_50_gSize_75()
+        public void Test_constructor_tSize_50_gSize_75()
         {
             TournamentSelection ts = new TournamentSelection(50, 75);
             Assert.AreEqual(50, ts.TournamentSize);
         }
 
         [Test]
-        public void test_SelectForCrossover_returns_unique_nodes()
+        public void Test_SelectForCrossover_returns_unique_nodes()
         {
             TournamentSelection ts = new TournamentSelection(16, nodes.Count);
             for (int i = 0; i < 50; i++)

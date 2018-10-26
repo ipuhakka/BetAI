@@ -16,7 +16,7 @@ namespace BetAITestProject.Genetics
     [TestFixture]
     public class NodeTest
     {
-        private string path = "test-files/data.sqlite3";
+        private readonly string path = "test-files/data.sqlite3";
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -27,14 +27,14 @@ namespace BetAITestProject.Genetics
         // If minimumstake less than or equal to 0 or generation less than 0
         //is inputted, argumentexception will be thrown.
         [Test]
-        public void test_Node_constructor_throws_ArgumentException()
+        public void Test_Node_constructor_throws_ArgumentException()
         {
             Assert.Throws<ArgumentException>(() => new Node(1, 1, 0, 1, 1));
             Assert.Throws<ArgumentException>(() => new Node(1, 1, 1, -1, 1));
         }
 
         [Test]
-        public void test_Node_constructor_corrects_sampleSizes()
+        public void Test_Node_constructor_corrects_sampleSizes()
         {
             /*sampleSize less than 1 should correct itself to 1, and over 100
              should correct itself to 100.*/
@@ -45,7 +45,7 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
-        public void test_Node_constructor_corrects_DrawLimit()
+        public void Test_Node_constructor_corrects_DrawLimit()
         {
             /*drawLimit less than 0 should correct itself to 0, and over 10
              should correct itself to 10.*/
@@ -56,7 +56,7 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
-        public void test_Node_constructor_corrects_PlayLimit()
+        public void Test_Node_constructor_corrects_PlayLimit()
         {
             /*playLimit less than 0 should correct itself to 0, and over 5
              should correct itself to 5.*/
@@ -67,7 +67,7 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
-        public void test_Node_random_constructor_produces_valid_samplesizes()
+        public void Test_Node_random_constructor_produces_valid_samplesizes()
         {
             Random rand = new Random();
             for (int i = 0; i < 100; i++)
@@ -79,7 +79,7 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
-        public void test_Node_random_constructor_produces_valid_PlayLimits()
+        public void Test_Node_random_constructor_produces_valid_PlayLimits()
         {
             Random rand = new Random();
             for (int i = 0; i < 100; i++)
@@ -90,7 +90,7 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
-        public void test_Node_random_constructor_produces_valid_DrawLimits()
+        public void Test_Node_random_constructor_produces_valid_DrawLimits()
         {
             Random rand = new Random();
             for (int i = 0; i < 100; i++)
@@ -101,7 +101,7 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
-        public void test_Node_random_constructor_produces_Generation_is_0()
+        public void Test_Node_random_constructor_produces_Generation_is_0()
         {
             Random rand = new Random();
             for (int i = 0; i < 100; i++)
@@ -112,7 +112,7 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
-        public void test_EvaluateFitness_runs()
+        public void Test_EvaluateFitness_runs()
         {
             Matches.SetMatches(path);
             List<Match> sample = Sample.CreateSample(13);
@@ -122,7 +122,7 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
-        public void test_EvaluateFitness_NaNSample()
+        public void Test_EvaluateFitness_NaNSample()
         {
             Node node = new Node(0.28787729157185865, 2.3340972415031671, 5.0, 66, 18);
             Matches.SetMatches(path);
@@ -148,7 +148,7 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
-        public void test_EvaluateFitness_performance_Average_LessThan1000ms()
+        public void Test_EvaluateFitness_performance_Average_LessThan1000ms()
         {
             List<Node> nodes = new List<Node>();
             List<long> runtimes = new List<long>();
@@ -176,7 +176,7 @@ namespace BetAITestProject.Genetics
         }
 
         [Test]
-        public void test_EvaluateFitness_performance_Average_LessThan50ms()
+        public void Test_EvaluateFitness_performance_Average_LessThan50ms()
         {
             List<Node> nodes = new List<Node>();
             List<long> runtimes = new List<long>();
