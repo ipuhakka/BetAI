@@ -77,6 +77,8 @@
     <Compile Include="src\Genetics\Crossover\BLXAlpha.cs" />
     <Compile Include="src\Genetics\Crossover\ICrossover.cs" />
     <Compile Include="src\Genetics\Crossover\UniformAlpha.cs" />
+    <Compile Include="src\Genetics\Mutation\IMutation.cs" />
+    <Compile Include="src\Genetics\Mutation\UniformMutation.cs" />
     <Compile Include="src\Genetics\Node.cs" />
     <Compile Include="src\Genetics\Parents.cs" />
     <Compile Include="src\Genetics\Reproduce.cs" />
@@ -103,9 +105,7 @@
       <Name>Database</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\Genetics\Mutation\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
