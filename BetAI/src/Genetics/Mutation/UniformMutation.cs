@@ -22,8 +22,18 @@ namespace BetAI.Genetics.Mutation
         {
             if (probability < 0 || probability > 1)
                 throw new ArgumentException("probability is not in valid range: 0-1");
+            Random rand = new Random();
+            List<Node> mutated = new List<Node>();
+            foreach(Node n in generation)
+            {
+                if (rand.NextDouble() < probability)
+                    mutated.Add(new Node(rand, n.MinimumStake));
+                else
+                    mutated.Add(n);
+      
+            }
 
-            return generation;
+            return mutated;
         }
     }
 }
