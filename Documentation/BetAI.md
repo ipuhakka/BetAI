@@ -1,14 +1,18 @@
 # BetAI
 BetAI is a genetic algorithm that samples football match data from an sqlite3-database
 and bets the results of these. Aim is to improve amount of money won/lost by the bets.
-It is designed to support different parent selection and crossover methods. Supported methods 
-in version 0.2 are:
+It is designed to support different parent selection, crossover, and mutation methods. 
+Supported methods in version 0.3 are:
 - Crossover
 	- Blend crossover alpha (BLX)
 	- Uniform alpha crossover (Uni-alpha)
 - Parent selection
 	- Weighted selection (Weighted)
 	- Tournament selection (Tournament)
+	
+- Mutation method
+	- Uniform mutation (Uniform)
+	
 	
 ## Parent selection methods
 This chapter describes parent selection methods that are available in the program. 
@@ -25,6 +29,12 @@ This chapter describes crossover methods available in the program.
 1. BLX-alpha (parameter name = BLX)
 - BLX-alpha uses blend-crossover method to produce two child nodes.
 2. 
+
+## Mutation methods
+1. Uniform Mutation (parameter name = Mutation)
+- Uniform mutation randomly mutates a node by using Nodes random constructor. This
+creates a new node to replace the old one. So it "mutates" all genes.
+
 ## Use
 
 BetAI can be run after building the program, by opening build directory and running
@@ -67,6 +77,13 @@ parameter is a string type, it is placed in quotations.
 	- Indicates the used crossover method.
 	Supported:
 		- BLX (Blend crossover alpha)
+- mutationMethod: string
+	- Indicates which mutation method is used.
+	Supported: 
+		- Uniform mutation (Uniform)
+-mutationProbability: double
+	- Mutation porabiblity used, describes probability of
+	mutation for each node.
 - alpha: double
 	- Alpha value for BLX-crossover method. If some other
 	crossover method is used, this value does not have any effect.
@@ -113,6 +130,7 @@ is loaded into memory. Values from values.json are loaded.
 - Creating new generation
 	- Parents are selected from the generation to produce offspring.
 	- Offspring is created. New generation is written to file gen{i}.
+	- Mutation method is applied to new generation.
 - Process is repeated until user interrupts it with esc-button.
 
 

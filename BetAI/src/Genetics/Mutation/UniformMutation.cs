@@ -27,7 +27,7 @@ namespace BetAI.Genetics.Mutation
             foreach(Node n in generation)
             {
                 if (rand.NextDouble() < probability)
-                    mutated.Add(new Node(rand, n.MinimumStake));
+                    mutated.Add(new Node(rand, n.MinimumStake, n.Generation));
                 else
                     mutated.Add(n);
       

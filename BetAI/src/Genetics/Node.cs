@@ -91,9 +91,10 @@ namespace BetAI.Genetics
         /// </summary>
         /// <param name="rand">Random-object used to provide randomized values.</param>
         /// <param name="minimumStake">Minimum stake for a bet, set by user.</param>
-        public Node(Random rand, double minimumStake)
+        /// <param name="generation">Optional paremeter, generation number.</param>
+        public Node(Random rand, double minimumStake, int generation = 0)
         {
-            Generation = 0;
+            Generation = generation;
             MinimumStake = minimumStake;
             SimulationSampleSize = rand.Next(1, MaxSimulationSampleSize);
             PlayLimit = rand.NextDouble() * (MaxPlayLimit - MinPlayLimit) + MinPlayLimit;

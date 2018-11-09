@@ -2,6 +2,7 @@
 using System.IO;
 using BetAI.FileOperations;
 using BetAI.Genetics;
+using BetAI.Genetics.Mutation;
 using NUnit.Framework;
 
 namespace Genetics
@@ -34,9 +35,24 @@ namespace Genetics
             Save.InitializeSave(test);
             Values values = Load.LoadValues(test);
             FileInfo file = new FileInfo(values.Database);
-            Console.WriteLine(file.FullName);
-            Console.WriteLine(values.Database);
             Assert.True(File.Exists(values.Database));
+        }
+
+        [Test]
+        public void Test_InitializeMutationMethod_defaults_return_UniformMutation()
+        {
+            Save.InitializeSave(test);
+            Values values = Load.LoadValues(test);
+            IMutation mutate = Values.InitializeMutationMethod(values);
+            Assert.IsInstanceOf(typeof(UniformMutation), mutate);
+        }
+
+        [Test]
+        public void Test_InitializeMutationMethod_runs()
+        {
+            Save.InitializeSave(test);
+            Values values = Load.LoadValues(test);
+            Assert.DoesNotThrow(() => Values.InitializeMutationMethod(values));
         }
     }
 }

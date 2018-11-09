@@ -1,12 +1,10 @@
 # v0.3
-- Planned
-	- Implement a mutation strategy
-	- Possible changes to bet result algorithm
 - Implemented
 	- Implement uniform alpha crossover
 	- Refactor test namespaces for easier identification
 	- Set minimumstake in default.json to 1
-		- Check code for intelliSense hints on structure
+	- Check code for intelliSense hints on structure
+	- Implement a mutation strategy
 	
 # v0.2
 - Implemented

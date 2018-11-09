@@ -6,5 +6,7 @@
   "sampleSize": "200",
   "database": "../../../Database/db/data.sqlite3",
   "parentSelectionMethod": "Tournament",
-  "crossoverMethod": "BLX"
+  "crossoverMethod": "BLX",
+  "mutationMethod": "Uniform",
+  "mutationProbability": "0.01"
 }

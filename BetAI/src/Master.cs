@@ -4,6 +4,7 @@ using BetAI.FileOperations;
 using BetAI.Genetics;
 using BetAI.Genetics.Crossover;
 using BetAI.Genetics.Selection;
+using BetAI.Genetics.Mutation;
 using BetAI.Utils;
 using Database;
 using System;
@@ -24,6 +25,7 @@ namespace BetAI
         private CancellationToken cancelToken;
         private ISelection Selection { get; }
         private ICrossover Crossover { get; }
+        private IMutation Mutation { get; }
 
         /// <summary>
         /// Constructor for master. Loads latest generation of nodes into memory.
@@ -54,6 +56,7 @@ namespace BetAI
             }
             Selection = Values.InitializeSelectionMethod(values, nodes.Count);
             Crossover = Values.InitializeCrossoverMethod(values);
+            Mutation = Values.InitializeMutationMethod(values);
             Randomise.InitRandom();
             Matches.SetMatches(values.Database);
             Console.WriteLine("Found " + Matches.GetMatchCount() + " matches in database");
@@ -87,6 +90,7 @@ namespace BetAI
                 EvaluateNodes(sample);
                 Log();
                 List<Node> newGeneration = reproduce.CreateNewGeneration(nodes);
+                newGeneration = Mutation.Mutate(newGeneration, values.MutationProbability);
                 Save.WriteGeneration(Savefile, nodes, nodes[0].Generation);
                 Save.WriteGeneration(Savefile, newGeneration, newGeneration[0].Generation);
                 nodes = newGeneration;

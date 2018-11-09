@@ -17,7 +17,7 @@ namespace BetAI
         /// Starting point for the program. First parameter in args is the savefile name.
         /// It is created if it does not yet exist. Rest are optional parameters for simulation.
         /// They are alpha (double), minimumStake (double), numberOfNodes(int), sampleSize(int),
-        /// and database(string). Optional paremeters are given in format
+        /// database(string), mutationProbability(double) and mutationMethod(string). Optional paremeters are given in format
         /// argumentName=argumentValue.
         /// </summary>
         /// <param name="args"></param>

@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using BetAI.Exceptions;
 using BetAI.Genetics.Crossover;
 using BetAI.Genetics.Selection;
+using BetAI.Genetics.Mutation;
 
 namespace BetAI.Genetics
 {
@@ -26,6 +27,10 @@ namespace BetAI.Genetics
         public string CrossoverMethod { get; private set; }
         [JsonProperty]
         public string ParentSelectionMethod { get; private set; }
+        [JsonProperty]
+        public string MutationMethod { get; private set; }
+        [JsonProperty]
+        public double MutationProbability { get; private set; }
 
 
         [JsonConstructor]
@@ -43,6 +48,8 @@ namespace BetAI.Genetics
             Console.WriteLine("Sample size: " + SampleSize);
             Console.WriteLine("Minimum stake: " + MinimumStake);
             Console.WriteLine("Parent selection method: " + ParentSelectionMethod);
+            Console.WriteLine("Mutation method: " + MutationMethod);
+            Console.WriteLine("Mutation probability: " + MutationProbability);
 
             if (ParentSelectionMethod.Trim().ToLower().Equals("tournament"))
             {
@@ -95,6 +102,12 @@ namespace BetAI.Genetics
                     case "crossovermethod":
                         json["crossoverMethod"] = argument[1];
                         break;
+                    case "mutationmethod":
+                        json["mutationMethod"] = argument[1];
+                        break;
+                    case "mutationprobability":
+                        json["mutationProbability"] = Convert.ToDouble(argument[1], CultureInfo.InvariantCulture);
+                        break;
                     default:
                         break;
                 }
@@ -139,6 +152,24 @@ namespace BetAI.Genetics
                     return new UniformAlpha(values.Alpha);
                 default:
                     throw new InitializationException("Crossover method not identified");
+            }
+        }
+
+        /// <summary>
+        /// Creates a new instance of IMutation interface based on the parameter 
+        /// mutationMethod in values.json.
+        /// </summary>
+        /// <param name="values"></param>
+        public static IMutation InitializeMutationMethod(Values values)
+        {
+            string method = values.MutationMethod;
+
+            switch (method.Trim().ToLower())
+            {
+                case "uniform":
+                    return new UniformMutation();
+                default:
+                    throw new InitializationException("Mutation method not identified");
             }
         }
     }
