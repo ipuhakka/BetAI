@@ -15,7 +15,7 @@ to project.
 
 # DataParser
 
-**RQ5**. Foreach match, DataParser needs to collect following data:
+**RQ5**. For each match, DataParser needs to collect following data:
 date played, home- and awayteam name, home- and awayteam goals scored, and odds
 for homewin, draw, and awaywin. 
 
