@@ -1,6 +1,4 @@
-﻿using System;
-using BetAI.Genetics;
-
+﻿
 namespace BetAI.Genetics
 {
     public class Parents

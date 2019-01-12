@@ -76,6 +76,7 @@
     <Compile Include="src\FileOperations\Save.cs" />
     <Compile Include="src\Genetics\Crossover\BLXAlpha.cs" />
     <Compile Include="src\Genetics\Crossover\ICrossover.cs" />
+    <Compile Include="src\Genetics\Crossover\Uniform.cs" />
     <Compile Include="src\Genetics\Crossover\UniformAlpha.cs" />
     <Compile Include="src\Genetics\Mutation\IMutation.cs" />
     <Compile Include="src\Genetics\Mutation\UniformMutation.cs" />
