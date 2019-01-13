@@ -57,7 +57,7 @@ namespace BetAI.Genetics
             }
             Console.WriteLine("Crossover method: " + CrossoverMethod);
 
-            if (CrossoverMethod.Trim().ToLower().Equals("weighted"))
+            if (CrossoverMethod.Trim().ToLower().Equals("uni-alpha") || CrossoverMethod.Trim().ToLower().Equals("blx"))
             {
                 Console.WriteLine("Alpha: " + Alpha);
             }
@@ -150,6 +150,8 @@ namespace BetAI.Genetics
                     return new BLXAlpha(values.Alpha);
                 case "uni-alpha":
                     return new UniformAlpha(values.Alpha);
+                case "uniform":
+                    return new Uniform();
                 default:
                     throw new InitializationException("Crossover method not identified");
             }
