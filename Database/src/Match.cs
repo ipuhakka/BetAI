@@ -14,6 +14,7 @@ namespace Database
         public double HomeOdd { get; }
         public double DrawOdd { get; }
         public double AwayOdd { get; }
+        public char SimulatedResult { get; set; }
 
         public Match(string homeT, string awayT, string league, string season, DateTime d, int homeS, int awayS, double homeO, double drawO, double awayO)
         {
@@ -24,6 +25,18 @@ namespace Database
             Date = Convert.ToDateTime(d.ToString("yyyy-MM-dd"));
             Homescore = homeS;
             Awayscore = awayS;
+            HomeOdd = homeO;
+            DrawOdd = drawO;
+            AwayOdd = awayO;
+        }
+
+        /// <summary>
+        /// Constructor for a Match which is to be predicted (Non-simulation).
+        /// </summary>
+        public Match(string homeT, string awayT, double homeO, double drawO, double awayO)
+        {
+            Hometeam = homeT;
+            Awayteam = awayT;
             HomeOdd = homeO;
             DrawOdd = drawO;
             AwayOdd = awayO;
