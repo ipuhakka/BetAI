@@ -55,16 +55,12 @@ namespace BetAI.BetSim
         public static void CreateMatchDataStructs(List<Match> sample, int maxSampleSize)
         {
             MatchesData = new MatchData[sample.Count];
-            Console.WriteLine("Database contains " + GetMatchCount());
             for (int i = 0; i < sample.Count; i++)
             {
                 double homeAvg = SeasonHomeGoalAvgBeforeDate(sample[i]);
                 double awayAvg = SeasonAwayGoalAvgBeforeDate(sample[i]);
                 Match[] hometeamPrevious = SelectNLastFromTeam(true, maxSampleSize, sample[i].Date, sample[i].Hometeam).ToArray();
                 Match[] awayteamPrevious = SelectNLastFromTeam(false, maxSampleSize, sample[i].Date, sample[i].Awayteam).ToArray();
-                Console.WriteLine("homeAvg: " + homeAvg);
-                Console.WriteLine("awayAvg: " + awayAvg);
-                Console.WriteLine("Counts: " + hometeamPrevious.Count() + " " + awayteamPrevious.Count());
                 MatchesData[i] = new MatchData(homeAvg, awayAvg, hometeamPrevious, awayteamPrevious, sample[i]);
             }
         }
