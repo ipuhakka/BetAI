@@ -15,7 +15,7 @@ using System.Threading;
 namespace BetAI
 {
     /// <summary>
-    /// Master is responsible for running the evolution.
+    /// Master is responsible for running the simulation.
     /// </summary>
     public class Master
     {
