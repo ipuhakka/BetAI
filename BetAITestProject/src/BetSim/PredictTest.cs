@@ -105,5 +105,25 @@ namespace BetSim
             Predict betSim = new Predict();
             Assert.Throws<NotSimulatedException>(() => betSim.PredictResult(toPredict, 3));
         }
+
+        /// <summary>
+        /// Testing that with minimum set PlayLimit and SimulationSampleSize of 3, 
+        /// PredictBets predicts both test matches.
+        /// </summary>
+        [Test]
+        public void Test_PredictBets()
+        {
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"../../test-files/"));
+
+            List<Match> matches = new List<Match>
+            {
+                new Match("Everton", "Liverpool", 3.4, 3.3, 2.5),
+                new Match("Real Madrid", "Valencia", 1.89, 3.14, 4.2)
+            };
+
+            Predict predict = new Predict();
+            Assert.AreEqual(2, predict.PredictBets(matches, @"test", "2018-2019").Count);
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
+        }
     }
 }

@@ -28,19 +28,33 @@ namespace BetAI.BetSim
         /// if bet is won = (stake * predictedResultOdd) - stake</returns>
         public double PlayBet(Match m, double predictedResult, double playLimit, double baseStake, double drawLimit)
         {
-            double expectedResultPercentage = CalculateExpectedResultPercentage(predictedResult);
             double predictedResultOdd = GetOddForPredictedResult(m, predictedResult, drawLimit);
-            double betCoefficient = expectedResultPercentage / (1 / predictedResultOdd);
-
+            double betCoefficient = CalculateBetRisk(m, predictedResult, predictedResultOdd, drawLimit, playLimit);
             if (playLimit > betCoefficient)
                 return 0;
 
-            double stake = baseStake * (betCoefficient / playLimit);
+            double stake = CalculateStake(baseStake, betCoefficient, playLimit);
 
             if (GetBetResult(m, predictedResult, drawLimit) == 1)
                 return (stake * predictedResultOdd) - stake;
             else
                 return -stake;
+        }
+
+        public double CalculateStake(double baseStake, double risk, double playLimit)
+        {
+            return baseStake * (risk / playLimit);
+        }
+
+        /// <summary>
+        /// Calculates a risk for bet, based on its
+        /// estimated result, margin for a tie game, and
+        /// set limit for when bet is playable.
+        /// </summary>
+        public double CalculateBetRisk(Match m, double predictedResult, double predictedOdd, double drawLimit, double playLimit)
+        {
+            double expectedResultPercentage = CalculateExpectedResultPercentage(predictedResult);
+            return expectedResultPercentage / (1 / predictedOdd);
         }
 
         /// <summary>
@@ -55,7 +69,7 @@ namespace BetAI.BetSim
             return Math.Pow(Math.E, -Math.Abs(expectedResult)) * Math.Abs(expectedResult) / 1;
         }
 
-        private double GetOddForPredictedResult(Match m, double predictedResult, double drawLimit)
+        public double GetOddForPredictedResult(Match m, double predictedResult, double drawLimit)
         {
             if (Math.Abs(predictedResult) < drawLimit)
                 return m.DrawOdd;

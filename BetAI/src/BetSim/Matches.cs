@@ -55,13 +55,16 @@ namespace BetAI.BetSim
         public static void CreateMatchDataStructs(List<Match> sample, int maxSampleSize)
         {
             MatchesData = new MatchData[sample.Count];
-
+            Console.WriteLine("Database contains " + GetMatchCount());
             for (int i = 0; i < sample.Count; i++)
             {
                 double homeAvg = SeasonHomeGoalAvgBeforeDate(sample[i]);
                 double awayAvg = SeasonAwayGoalAvgBeforeDate(sample[i]);
                 Match[] hometeamPrevious = SelectNLastFromTeam(true, maxSampleSize, sample[i].Date, sample[i].Hometeam).ToArray();
                 Match[] awayteamPrevious = SelectNLastFromTeam(false, maxSampleSize, sample[i].Date, sample[i].Awayteam).ToArray();
+                Console.WriteLine("homeAvg: " + homeAvg);
+                Console.WriteLine("awayAvg: " + awayAvg);
+                Console.WriteLine("Counts: " + hometeamPrevious.Count() + " " + awayteamPrevious.Count());
                 MatchesData[i] = new MatchData(homeAvg, awayAvg, hometeamPrevious, awayteamPrevious, sample[i]);
             }
         }
@@ -114,10 +117,22 @@ namespace BetAI.BetSim
         }
 
         /// <summary>
+        /// Returns league for a team, null if team name is not found.
+        /// </summary>
+        public static string GetLeagueForTeam(string team)
+        {
+            Match first = Match.FirstOrDefault(m => m.Hometeam == team || m.Awayteam == team);
+            if (first != null)
+            {
+                return first.League;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Returns an average number of goals 
         /// scored by hometeam,in selected league and season before date d.
         /// </summary>
-        /// <param name="d"></param>
         /// <exception cref="ArgumentNullException">Thrown if MatchData structures
         /// have not been created using CreateMatchDataStructs-function.</exception>
         /// <returns>Average goals scored by hometeam up to Match m, -1 if

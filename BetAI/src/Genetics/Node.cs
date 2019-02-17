@@ -102,6 +102,36 @@ namespace BetAI.Genetics
         }
 
         /// <summary>
+        /// Function estimates results for each match, and returns a list of 
+        /// playable wagers. 
+        /// </summary>
+        public List<Wager> PlayBets(List<Match> matches)
+        {
+            List<Wager> wagers = new List<Wager>();
+            Predict predict = new Predict();
+            Bet bet = new Bet();
+            foreach(Match m in matches)
+            {
+                try
+                {
+                    double predictedResult = predict.PredictResult(m, SimulationSampleSize);
+                    double predictedOdd = bet.GetOddForPredictedResult(m, predictedResult, DrawLimit);
+                    double betRisk = bet.CalculateBetRisk(m, predictedResult, predictedOdd, DrawLimit, PlayLimit);
+                    double stake = bet.CalculateStake(MinimumStake, betRisk, PlayLimit);
+
+                    if (PlayLimit <= betRisk)
+                    {
+                        wagers.Add(new Wager(new List<Match> { m}, stake));
+                    }
+                } catch (NotSimulatedException)
+                {
+                    continue;
+                }
+            }
+            return wagers;
+        } 
+
+        /// <summary>
         /// Evaluates the fitness (money won/lost) for the node.
         /// </summary>
         /// <param name="sample">List of matches simulated.</param>

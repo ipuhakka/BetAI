@@ -49,7 +49,38 @@ namespace BetAI.FileOperations
             if (latestGeneration == -1)
                 return null;
 
-            string latestFile = Path.Combine(directory, String.Format("gen{0}.json", latestGeneration));
+            return LoadGeneration(savefile, latestGeneration);
+        }
+
+        /// <summary>
+        /// Returns second newest generation from savefile. Since newest generation
+        /// has not already been evaluated, this function can be used to return latest
+        /// evaluated set of nodes.
+        /// </summary>
+        public static List<Node> LoadSecondNewestGeneration(string savefile)
+        {
+            string directory = Path.Combine(@"Files\", savefile, "gen_data");
+            int latestGeneration = LatestGeneration(directory);
+            if (latestGeneration < 1)
+                return null;
+
+            return LoadGeneration(savefile, latestGeneration - 1);
+        }
+
+        /// <summary>
+        /// Loads specified generation of nodes from savefile.
+        /// </summary>
+        /// <param name="savefile"></param>
+        /// <param name="generation"></param>
+        /// <returns></returns>
+        private static List<Node> LoadGeneration(string savefile, int generation)
+        {
+            string directory = Path.Combine(@"Files\", savefile, "gen_data");
+            int latestGeneration = LatestGeneration(directory);
+            if (latestGeneration == -1)
+                return null;
+
+            string latestFile = Path.Combine(directory, String.Format("gen{0}.json", generation));
             string json = File.ReadAllText(latestFile);
             List<Node> nodes = JsonConvert.DeserializeObject<List<Node>>(json);
             return nodes;

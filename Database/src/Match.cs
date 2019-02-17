@@ -6,8 +6,8 @@ namespace Database
     {
         public string Hometeam { get; }
         public string Awayteam { get; }
-        public string Season { get; }
-        public string League { get; }
+        public string Season { get; set; }
+        public string League { get; set; }
         public DateTime Date { get; }
         public int Homescore { get; }
         public int Awayscore { get; }
@@ -40,6 +40,7 @@ namespace Database
             HomeOdd = homeO;
             DrawOdd = drawO;
             AwayOdd = awayO;
+            Date = DateTime.Now;
         }
 
         /// <summary>

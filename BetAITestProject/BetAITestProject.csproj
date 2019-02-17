@@ -93,12 +93,21 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+    <Content Include="test-files\Files\test\log.txt" />
     <Content Include="test-files\NaNSample.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="test-files\data.sqlite3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="test-files\Files\test\gen_data\gen0.json" />
+    <None Include="test-files\Files\test\gen_data\gen1.json" />
+    <None Include="test-files\Files\test\gen_data\gen3.json" />
+    <None Include="test-files\Files\test\gen_data\gen2.json" />
+    <None Include="test-files\Files\test\sample_data\sample0.json" />
+    <None Include="test-files\Files\test\sample_data\sample1.json" />
+    <None Include="test-files\Files\test\sample_data\sample2.json" />
+    <None Include="test-files\Files\test\values.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BetAI\BetAI.csproj">

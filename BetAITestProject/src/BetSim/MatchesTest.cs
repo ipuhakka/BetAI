@@ -7,7 +7,7 @@ using Database;
 using BetAI.BetSim;
 using BetAI.Exceptions;
 
-namespace Data
+namespace BetSim
 {
     [TestFixture]
     public class MatchesTest
@@ -32,6 +32,18 @@ namespace Data
         public void OneTimeTearDown()
         {
             db.DeleteDatabase(database);
+        }
+
+        [Test]
+        public void Test_GetLeagueForTeam_Everton()
+        {
+            Assert.AreEqual("England", Matches.GetLeagueForTeam("Everton"));
+        }
+
+        [Test]
+        public void Test_GetLeagueForTeam_unexisting_team_return_null()
+        {
+            Assert.AreEqual(null, Matches.GetLeagueForTeam("unexisting name"));
         }
 
         [Test]

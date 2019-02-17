@@ -1,0 +1,15 @@
+Generation: 0
+Minimum fitness: 0
+Average fitness: 0,638180624131752
+Maximum fitness: 1,79033074205927
+
+Generation: 1
+Minimum fitness: -2,94848137186052
+Average fitness: -2,7547656440961
+Maximum fitness: -2,56104991633168
+
+Generation: 2
+Minimum fitness: -3,51690027765859
+Average fitness: -3,50966556397681
+Maximum fitness: -3,50243085029503
+

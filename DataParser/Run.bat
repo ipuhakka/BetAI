@@ -2,6 +2,12 @@
 @cd /d "%~dp0"
 cd bin\debug
 
+call DataParser.exe database="..\..\..\Database\db\data.sqlite3" address="http://www.football-data.co.uk/mmz4281/1819/I1.csv" season="2018-2019" league="Italy"
+call DataParser.exe database="..\..\..\Database\db\data.sqlite3" address="http://www.football-data.co.uk/mmz4281/1819/SP1.csv" season="2018-2019" league="Spain"
+call DataParser.exe database="..\..\..\Database\db\data.sqlite3" address="http://www.football-data.co.uk/mmz4281/1819/E0.csv" season="2018-2019" league="England"
+call DataParser.exe database="..\..\..\Database\db\data.sqlite3" address="http://www.football-data.co.uk/mmz4281/1819/SC0.csv" season="2018-2019" league="Scotland"
+call DataParser.exe database="..\..\..\Database\db\data.sqlite3" address="http://www.football-data.co.uk/mmz4281/1819/D1.csv" season="2018-2019" league="Germany"
+
 cd..\..
 PAUSE
 EXIT /B 0

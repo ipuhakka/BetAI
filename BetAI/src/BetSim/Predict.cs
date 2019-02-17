@@ -1,15 +1,42 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Database;
 using BetAI.Exceptions;
+using BetAI.FileOperations;
+using BetAI.Genetics;
 
 namespace BetAI.BetSim
 {
     public class Predict
     {
+        /// <summary>
+        /// Predicts all bets and returns a list of Wager-objects which
+        /// the algorithm in savefile deems to be playable.
+        /// </summary>
+        /// <exception cref="FileNotFoundException"></exception>
+        public List<Wager> PredictBets(List<Match> matches, string savefile, string season)
+        {
+            if (Load.SaveExists(savefile))
+            {
+                Values values = Load.LoadValues(savefile);
+                Matches.SetMatches(values.Database);
+                matches.ForEach(m =>  //Set league and season so averages can be counted.
+                {
+                    m.League = Matches.GetLeagueForTeam(m.Hometeam);
+                    m.Season = season;
+                });
+                Node maxFitness = Load.LoadSecondNewestGeneration(savefile).Aggregate((curMax, newNode) 
+                    =>  curMax.Fitness < newNode.Fitness ? newNode : curMax );
+                Matches.CreateMatchDataStructs(matches, maxFitness.SimulationSampleSize);
+                return maxFitness.PlayBets(matches);
+            } else
+            {
+                throw new FileNotFoundException();
+            }
+        }
+
         /// <summary>
         /// Calculates predicted result for a match. 
         /// </summary>
