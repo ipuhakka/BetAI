@@ -13,9 +13,17 @@ namespace BetAI.FileOperations
         /// </summary>
         /// <param name="savefile">Name of the save.</param>
         /// <returns></returns>
-        public static bool SaveExists(string savefile)
+        public static bool SaveExists(string savefile, bool isFullPath = false)
         {
-            string directory = Path.Combine(@"Files\", savefile);
+            if (isFullPath)
+            {
+                if (Directory.Exists(savefile))
+                    return true;
+                else
+                    return false;             
+            }
+
+            var directory = Path.Combine(@"Files\", savefile);
 
             if (Directory.Exists(directory))
                 return true;
@@ -23,14 +31,14 @@ namespace BetAI.FileOperations
         }
 
         /// <summary>
-        /// returns values from BetAI\Files\{savefile}\values.json.
+        /// returns values from values.json.
         /// </summary>
         /// <param name="savefile">Name of the save.</param>
         /// <returns>Values object - values that are used in the simulation.</returns>
         /// <exception cref="DirectoryNotFoundException"></exception>
-        public static Values LoadValues(string savefile)
+        public static Values LoadValues(string savefile, bool isFullPath = false)
         {
-            string path = Path.Combine(@"Files\", savefile, "values.json");
+            string path = isFullPath ? Path.Combine(savefile, "values.json") : Path.Combine(@"Files\", savefile, "values.json");
             string json = File.ReadAllText(path);
             return JsonConvert.DeserializeObject<Values>(json);
         }

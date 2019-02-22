@@ -18,9 +18,9 @@ namespace BetAI.BetSim
         /// <exception cref="FileNotFoundException"></exception>
         public List<Wager> PredictBets(List<Match> matches, string savefile, string season)
         {
-            if (Load.SaveExists(savefile))
+            if (Load.SaveExists(savefile, true))
             {
-                Values values = Load.LoadValues(savefile);
+                Values values = Load.LoadValues(savefile, true);
                 Matches.SetMatches(values.Database);
                 matches.ForEach(m =>  //Set league and season so averages can be counted.
                 {
@@ -33,7 +33,7 @@ namespace BetAI.BetSim
                 return maxFitness.PlayBets(matches);
             } else
             {
-                throw new FileNotFoundException();
+                throw new FileNotFoundException(savefile);
             }
         }
 

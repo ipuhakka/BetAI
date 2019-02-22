@@ -122,7 +122,7 @@ namespace BetSim
             };
 
             Predict predict = new Predict();
-            Assert.AreEqual(2, predict.PredictBets(matches, @"test", "2018-2019").Count);
+            Assert.AreEqual(2, predict.PredictBets(matches, Path.GetFullPath(@"Files\test"), "2018-2019").Count);
             Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
         }
     }
