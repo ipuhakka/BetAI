@@ -131,6 +131,20 @@ namespace FileOperations
         }
 
         [Test]
+        public void Test_SaveExists_full_path_return_true()
+        {
+            Save.InitializeSave(save);
+            Console.WriteLine(Path.GetFullPath(save));
+            Assert.IsTrue(Load.SaveExists(Path.GetFullPath("Files/" + save), true));
+        }
+
+        [Test]
+        public void Test_SaveExists_full_path_return_false()
+        {
+            Assert.IsFalse(Load.SaveExists(Path.GetFullPath("Files/" + save), true));
+        }
+
+        [Test]
         public void Test_LoadValues_throws_DirectoryNotFoundException()
         {
             Assert.Throws<DirectoryNotFoundException>(() => Load.LoadValues(save));
