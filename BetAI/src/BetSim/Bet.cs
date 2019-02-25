@@ -58,15 +58,20 @@ namespace BetAI.BetSim
         }
 
         /// <summary>
-        /// Calculates the percentage which the simulation sets as 
-        /// probability of the result.
-        /// e^(-absolute(result)) * (absolute(result)) / 1
+        /// Returns 1 if predicted a home win, 0 if draw, and -1
+        /// if predicted away win.
         /// </summary>
-        /// <param name="expectedResult">Result simulated.</param>
-        /// <returns>Calculated probability of the expectedResult</returns>
-        private double CalculateExpectedResultPercentage(double expectedResult)
+        /// <returns></returns>
+        public int GetPredictedBetResult(double predictedResult, double drawLimit)
         {
-            return Math.Pow(Math.E, -Math.Abs(expectedResult)) * Math.Abs(expectedResult) / 1;
+            if (Math.Abs(predictedResult) < drawLimit)
+                return 0;
+            else if (predictedResult > 0)
+                return 1;
+            else if (predictedResult < 0)
+                return -1;
+            else // predictedResult is exactly 0
+                return 0;
         }
 
         public double GetOddForPredictedResult(Match m, double predictedResult, double drawLimit)
@@ -86,7 +91,7 @@ namespace BetAI.BetSim
         /// </summary>
         private int GetBetResult(Match m, double predictedResult, double drawLimit)
         {
-            int predictedBetResult = GetPredictedBetResult(m, predictedResult, drawLimit);
+            int predictedBetResult = GetPredictedBetResult(predictedResult, drawLimit);
             if (predictedBetResult == m.Homescore - m.Awayscore)
                 return 1;
             if (predictedBetResult == 1 && m.Homescore > m.Awayscore)
@@ -98,20 +103,15 @@ namespace BetAI.BetSim
         }
 
         /// <summary>
-        /// Returns 1 if predicted a home win, 0 if draw, and -1
-        /// if predicted away win.
+        /// Calculates the percentage which the simulation sets as 
+        /// probability of the result.
+        /// e^(-absolute(result)) * (absolute(result)) / 1
         /// </summary>
-        /// <returns></returns>
-        private int GetPredictedBetResult(Match m, double predictedResult, double drawLimit)
+        /// <param name="expectedResult">Result simulated.</param>
+        /// <returns>Calculated probability of the expectedResult</returns>
+        private double CalculateExpectedResultPercentage(double expectedResult)
         {
-            if (Math.Abs(predictedResult) < drawLimit)
-                return 0;
-            else if (predictedResult > 0)
-                return 1;
-            else if (predictedResult < 0)
-                return -1;
-            else // predictedResult is exactly 0
-                return 0;
+            return Math.Pow(Math.E, -Math.Abs(expectedResult)) * Math.Abs(expectedResult) / 1;
         }
     }
 }

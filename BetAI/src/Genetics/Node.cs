@@ -119,9 +119,21 @@ namespace BetAI.Genetics
                     double betRisk = bet.CalculateBetRisk(m, predictedResult, predictedOdd, DrawLimit, PlayLimit);
                     double stake = bet.CalculateStake(MinimumStake, betRisk, PlayLimit);
 
+                    int result = bet.GetPredictedBetResult(predictedResult, DrawLimit);
+                    if (result == 1)
+                    {
+                        m.SimulatedResult = '1';
+                    } else if (result == 0)
+                    {
+                        m.SimulatedResult = 'X';
+                    } else
+                    {
+                        m.SimulatedResult = '2';
+                    }
+
                     if (PlayLimit <= betRisk)
                     {
-                        wagers.Add(new Wager(new List<Match> { m}, stake));
+                        wagers.Add(new Wager(new List<Match> {m}, stake));
                     }
                 } catch (NotSimulatedException)
                 {
