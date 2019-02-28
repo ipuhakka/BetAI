@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
+using System.Globalization;
 
 namespace Database
 {
@@ -51,7 +53,8 @@ namespace Database
         /// <returns></returns>
         public void ClearDatabase()
         {
-            string query = "DELETE FROM matches;";
+            string query = "DELETE FROM matches; DELETE FROM LOG_TABLE; DELETE FROM AI_Wager;" +
+                "Delete FROM AI_Bet;";
             SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
             SQLiteCommand command = new SQLiteCommand(query, con);
@@ -144,6 +147,44 @@ namespace Database
         }
 
         /// <summary>
+        /// Updates firstNotUpdatedValue in Log_Table.
+        /// Returns the number of affected rows.
+        /// </summary>
+        public int UpdateFirstNotUpdated(DateTime firstNotUpdated)
+        {
+            
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
+            con.Open();
+            SQLiteCommand command = new SQLiteCommand(con);
+            command.CommandText =  $"UPDATE Log_Table SET firstNotUpdatedDate=@update";
+            command.Parameters.AddWithValue(@"update", firstNotUpdated.ToString("yyyy-MM-dd"));
+            var affectedRows = command.ExecuteNonQuery();
+            con.Close();
+            return affectedRows;
+        }
+
+        /// <summary>
+        /// Returns first firstNotUpdated from Log_Table.
+        /// </summary>
+        /// <returns></returns>
+        public DateTime GetFirstNotUpdated()
+        {
+            string query = "SELECT * FROM Log_Table;";
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
+            con.Open();
+            SQLiteCommand command = new SQLiteCommand(query, con);
+            SQLiteDataReader reader = command.ExecuteReader();
+            List<string> updateList = new List<string>();
+            while (reader.Read())
+            {
+                updateList.Add(reader["firstNotUpdatedDate"].ToString());
+            }
+            con.Close();
+            Console.WriteLine("Trying to parse " + updateList.First());
+            return DateTime.ParseExact(updateList.FirstOrDefault().ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
         /// Returns a list of Match-objects parsed from SQLiteDataReader.
         /// </summary>
         private List<Match> ParseMatches(SQLiteDataReader reader)
@@ -161,5 +202,6 @@ namespace Database
             }
             return matches;
         }
+
     }
 }

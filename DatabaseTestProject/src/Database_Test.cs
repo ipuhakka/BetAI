@@ -163,5 +163,18 @@ namespace DatabaseTestProject
             DB test = new DB("unexistingfile");
             Assert.Throws<SQLiteException>(() => test.SelectAllMatchesFromDatabase());
         }
+
+        /// <summary>
+        /// Tests that firstNotUpdatedDate is updated.
+        /// </summary>
+        [Test]
+        public void Test_UpdateFirstNotUpdated()
+        {
+            DateTime previous = db.GetFirstNotUpdated();
+            int affected = db.UpdateFirstNotUpdated(new DateTime(2019, 12, 12));
+            Assert.AreEqual(1, affected);
+            Assert.AreNotEqual(previous, db.GetFirstNotUpdated());
+        }
+
     }
 }

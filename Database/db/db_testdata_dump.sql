@@ -11,3 +11,14 @@ INSERT INTO matches VALUES ("2017-11-26", "Chelsea", "Tottenham","England", "201
 INSERT INTO matches VALUES ("2017-12-03", "West Ham", "Chelsea", "England","2016-2017",0, 2, 2.2, 3.15, 2.7);
 INSERT INTO matches VALUES ("2017-12-10", "Liverpool", "Arsenal", "England","2016-2017",2, 0, 2.2, 3.15, 2.7);
 INSERT INTO matches VALUES ("2017-12-17", "Liverpool", "Swansea", "England","2016-2017",2, 1, 2.2, 3.15, 2.7);
+
+INSERT INTO Log_Table VALUES(1, "2017-11-05");
+
+/*INSERT INTO AI_Wager VALUES();
+INSERT INTO AI_Wager VALUES();
+INSERT INTO AI_Wager VALUES();
+INSERT INTO AI_Wager VALUES();
+
+INSERT INTO AI_Bet VALUES();
+INSERT INTO AI_Bet VALUES();
+INSERT INTO AI_Bet VALUES();*/
