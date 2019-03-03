@@ -102,8 +102,7 @@ namespace Database
                         throw new ArgumentException("Invalid season format");
 
                     try
-                    {
-                            //Add your query here.
+                    {                          
                         cmd.CommandText = "INSERT INTO matches VALUES (@playedDate, @hometeam, @awayteam, @league, @season, @homescore, @awayscore, @homeOdd, @drawOdd, @awayOdd);";
                         cmd.Parameters.AddWithValue(@"playedDate", m.Date);
                         cmd.Parameters.AddWithValue(@"hometeam", m.Hometeam);
@@ -149,20 +148,73 @@ namespace Database
         /// <summary>
         /// Updates AI_Wagers. Finds all matches from Bet_Wager in which
         /// the bet is not resolved, checks for these matches from matches-table,
-        /// and updates the outcome for matches which it finds. Matches are searched
-        /// from matches-table between firstNotUpdated and current date. If more than one
-        /// matches which have same home and awayteam are found in the 
-        /// search period, oldest one is used.
+        /// and updates the outcome for matches which it finds.
         /// </summary>
+        /// <returns>number of updated wagers.</returns>
         public int UpdateWagers()
         {
-            throw new NotImplementedException();
-        }
+            var affectedRows = 0;
+            List<Tuple<int, int>> wagerTuples = new List<Tuple<int, int>>(); //Item1: wagerId, Item2: wagerResult
+            List<Match> matches = GetUnresolvedBets();
+            UpdateBets(matches);
 
+            //Find wagers where wager has result of 0, but all bets have result of 1 or -1.
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
+            con.Open();
+            using (var cmd = new SQLiteCommand(con))
+            {
+                cmd.CommandText = "SELECT DISTINCT wagerId FROM Bet_Wager" +
+                    " INNER JOIN AI_Wager w on wagerId=w.id " +
+                    "WHERE w.result = 0";
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read()) //get each bet, if all results 1, set result as 1, if even one is -1, set as -1.
+                {
+                    using (var command = new SQLiteCommand(con))
+                    {
+                        var wagerResult = 0;
+                        var wagerId = reader.GetInt32(0);
+                        var betResults = new List<int>();
+                        command.CommandText = "SELECT b.result FROM Bet_Wager bw" +
+                                " INNER JOIN AI_Bet b ON bw.matchDate = b.matchDate" +
+                                " AND bw.hometeam = b.hometeam AND bw.awayteam = b.awayteam " +
+                                " WHERE wagerId=@wagerId";
+                        command.Parameters.AddWithValue("wagerId", wagerId);
+                        var betReader = command.ExecuteReader();
+                        while (betReader.Read())
+                        {
+                            betResults.Add(betReader.GetInt32(0));
+                        }
+
+                        if (betResults.Any(i => i == -1))
+                        {
+                            wagerResult = -1;
+                        }
+                        else if (betResults.All(i => i == 1))
+                        {
+                            wagerResult = 1;
+                        }
+
+                        if (wagerResult != 0)
+                        {
+                            wagerTuples.Add(new Tuple<int, int>(wagerId, wagerResult));
+                        }
+                    }
+                }
+            }
+            con.Close();
+
+            Console.WriteLine("wagerCount " + wagerTuples.Count);
+            wagerTuples.ForEach(wager => 
+            {
+                affectedRows += UpdateWager(wager.Item1, wager.Item2);
+            });
+            return affectedRows;
+        }
         /// <summary>
         /// Adds wagers. Creates bets to database for each match and wager
         /// for each wager, and adds a row to junction table for each
-        /// bet in wager. Updates firstNotUpdatedDate. Returns number
+        /// bet in wager. Returns number
         /// of wagers added to database.
         /// </summary>
         public int AddWagers(List<Wager> wagers)
@@ -192,11 +244,13 @@ namespace Database
                         wager.Matches.ForEach( match => 
                         {
                             cmd.CommandText = "INSERT INTO AI_Bet" +
-                                "(hometeam, awayteam, result, odd)" +
-                                " VALUES (@hometeam, @awayteam, @result, @odd)";
+                                "(matchDate, hometeam, awayteam, result, wagedResult, odd)" +
+                                " VALUES (@matchDate, @hometeam, @awayteam, @result, @wagedResult, @odd)";
+                            cmd.Parameters.AddWithValue(@"matchDate", match.Date);
                             cmd.Parameters.AddWithValue(@"hometeam", match.Hometeam);
                             cmd.Parameters.AddWithValue(@"awayteam", match.Awayteam);
                             cmd.Parameters.AddWithValue(@"result", 0);
+                            cmd.Parameters.AddWithValue(@"wagedResult", match.SimulatedResult);
                             cmd.Parameters.AddWithValue(@"odd", match.GetWagerOdd());
 
                             try
@@ -210,6 +264,8 @@ namespace Database
                             cmd.Parameters.AddWithValue(@"matchDate", match.Date);
                             cmd.Parameters.AddWithValue(@"hometeam", match.Hometeam);
                             cmd.Parameters.AddWithValue(@"awayteam", match.Awayteam);
+
+                            cmd.ExecuteNonQuery();
                         });
                     } 
                 });  
@@ -291,6 +347,123 @@ namespace Database
         }
 
         /// <summary>
+        /// Sets the result value for specific wager.
+        /// Returns number of affected rows.
+        /// </summary>
+        private int UpdateWager(int id, int newResult)
+        {
+            var affectedRows = 0;
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
+            con.Open();
+            using (var cmd = new SQLiteCommand(con))
+            {
+                cmd.CommandText = "UPDATE AI_Wager SET result=@result " +
+                                    " WHERE id=@id";
+                cmd.Parameters.AddWithValue("result", newResult);
+                cmd.Parameters.AddWithValue("id", id);
+                affectedRows = cmd.ExecuteNonQuery();
+            }
+            con.Close();
+            Console.WriteLine("returning " + affectedRows);
+            return affectedRows;
+        }
+
+        /// <summary>
+        /// Finds all matches from list which have a result in matches table, and
+        /// updates bet results accordingly.
+        /// </summary>
+        private void UpdateBets(List<Match> matches)
+        {
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
+            con.Open();
+            using (var cmd = new SQLiteCommand(con))
+            {
+                matches.ForEach(match =>
+                {
+                    cmd.CommandText = "SELECT homescore, awayscore FROM matches" +
+                    " WHERE hometeam=@hometeam AND awayteam=@awayteam" +
+                    " AND playedDate=@playedDate";
+
+                    cmd.Parameters.AddWithValue(@"hometeam", match.Hometeam);
+                    cmd.Parameters.AddWithValue(@"awayteam", match.Awayteam);
+                    cmd.Parameters.AddWithValue(@"playedDate", match.Date.Date);
+
+                    var reader = cmd.ExecuteReader();
+                    var scores = new List<Tuple<int, int>>();
+                    while (reader.Read())
+                    {
+                        scores.Add(new Tuple<int, int>(reader.GetInt32(0), reader.GetInt32(1)));
+                    }
+                    reader.Close();
+                    if (scores.Count > 0)
+                    {
+                        UpdateBet(match, scores[0].Item1, scores[0].Item2);
+                    }
+                });
+            }
+            con.Close();
+        }
+
+        /// <summary>
+        /// Updates a row in AI_Bet table. 
+        /// </summary>
+        private void UpdateBet(Match toUpdate, int homescore, int awayscore)
+        {
+            int result = homescore - awayscore;
+            char correctResult = 'X';
+
+            if (result > 0)
+            {
+                correctResult = '1';
+            }
+            else if (result < 0)
+            {
+                correctResult = '2';
+            }
+
+            var updatedResult = -1;
+            if (toUpdate.SimulatedResult == correctResult)
+            {
+                updatedResult = 1;
+            }
+            Console.WriteLine("Updating with " + updatedResult);
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
+            con.Open();
+            using (var cmd = new SQLiteCommand(con))
+            {
+                cmd.CommandText = "UPDATE AI_Bet SET" +
+                " result=@updatedResult" +
+                " WHERE hometeam=@hometeam AND awayteam=@awayteam AND" +
+                " matchDate=@matchDate";
+                cmd.Parameters.AddWithValue(@"updatedResult", updatedResult);
+                cmd.Parameters.AddWithValue(@"hometeam", toUpdate.Hometeam);
+                cmd.Parameters.AddWithValue(@"awayteam", toUpdate.Awayteam);
+                cmd.Parameters.AddWithValue(@"matchDate", toUpdate.Date.Date);
+                cmd.ExecuteNonQuery();
+            }
+            con.Close();
+        }
+
+        /// <summary>
+        /// Returns a list of matches which have not resolved (result == 0).
+        /// </summary>
+        /// <returns></returns>
+        private List<Match> GetUnresolvedBets()
+        {
+            List<Match> matches = new List<Match>();
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
+            con.Open();
+            using (var cmd = new SQLiteCommand(con))
+            {
+                cmd.CommandText = "SELECT * FROM AI_Bet WHERE result=0";
+                var reader = cmd.ExecuteReader();
+                matches = ParseMatchKeys(reader);
+            }
+            con.Close();
+            return matches;
+        }
+
+        /// <summary>
         /// Returns a list of Match-objects parsed from SQLiteDataReader.
         /// </summary>
         private List<Match> ParseMatches(SQLiteDataReader reader)
@@ -303,6 +476,22 @@ namespace Database
                     Convert.ToDateTime(reader["playedDate"]), Convert.ToInt32(reader["homescore"].ToString()), 
                     Convert.ToInt32(reader["awayscore"].ToString()), Convert.ToDouble(reader["homeOdd"].ToString()), 
                     Convert.ToDouble(reader["drawOdd"].ToString()), Convert.ToDouble(reader["awayOdd"].ToString()));
+
+                matches.Add(m);
+            }
+            return matches;
+        }
+
+        /// <summary>
+        /// Parses Match-objects from AI_Bet table.
+        /// </summary>
+        private List<Match> ParseMatchKeys(SQLiteDataReader reader)
+        {
+            List<Match> matches = new List<Match>();
+            while (reader.Read())
+            {
+                Match m = new Match(reader["hometeam"].ToString(), reader["awayteam"].ToString(),
+                    Convert.ToDateTime(reader["matchDate"]), (char)Convert.ToInt32(reader["wagedResult"]));
 
                 matches.Add(m);
             }

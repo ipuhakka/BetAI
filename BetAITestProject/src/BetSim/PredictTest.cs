@@ -117,8 +117,8 @@ namespace BetSim
 
             List<Match> matches = new List<Match>
             {
-                new Match("Everton", "Liverpool", 3.4, 3.3, 2.5),
-                new Match("Real Madrid", "Valencia", 1.89, 3.14, 4.2)
+                new Match("Everton", "Liverpool", 3.4, 3.3, 2.5, DateTime.Now),
+                new Match("Real Madrid", "Valencia", 1.89, 3.14, 4.2, DateTime.Now)
             };
 
             Predict predict = new Predict();

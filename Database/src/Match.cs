@@ -44,6 +44,18 @@ namespace Database
         }
 
         /// <summary>
+        /// Constructor for creating a match object for finding same matches 
+        /// from matches-table.
+        /// </summary>
+        public Match(string homeT, string awayT, DateTime date, char predictedResult)
+        {
+            Hometeam = homeT;
+            Awayteam = awayT;
+            Date = date;
+            SimulatedResult = predictedResult;
+        }
+
+        /// <summary>
         /// Returns HomeOdd, if SimulatedResult is '1',
         /// DrawOdd if SimulatedResult is 'X',
         /// AwayOdd if SimulatedResult is '2'.

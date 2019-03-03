@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS AI_Bet(
 	hometeam TEXT,
 	awayteam TEXT,
 	result INTEGER,
+	wagedResult CHAR,
 	odd REAL,
 	CONSTRAINT PK_AI_Bet PRIMARY KEY(matchDate, hometeam, awayteam)
 );

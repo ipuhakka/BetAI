@@ -218,5 +218,61 @@ namespace DatabaseTestProject
             Assert.AreEqual(2, db.AddWagers(wagers));
             Assert.AreEqual(0, db.AddWagers(new List<Wager> { new Wager(matchList1, 2) }));
         }
+
+        /// <summary>
+        /// Creates three wagers: Puts results to bets of two wagers,
+        /// and updates wagers. This should then return the number of updated wagers.
+        /// TODO: After implementing getting wager info, do a more thorough check, check
+        /// if results are updated appropriately.
+        /// </summary>
+        [Test]
+        public void Test_UpdateWagers()
+        {
+            List<Match> matchList1 = new List<Match>
+            {
+                new Match("team1", "team2", 2, 3, 2, new DateTime(2019, 3, 3)){ SimulatedResult = '1', Season="2018-2019"},
+                new Match("team3", "team4", 2, 4, 1, new DateTime(2019, 3, 3)){ SimulatedResult = '2', Season="2018-2019"}
+            };
+            List<Match> matchList2 = new List<Match>
+            {
+                new Match("team2", "team3", 5, 3, 1, new DateTime(2019, 3, 3)){ SimulatedResult = 'X', Season="2018-2019" },
+                new Match("team1", "team4", 2, 4, 1, new DateTime(2019, 3, 3)){ SimulatedResult = '1', Season="2018-2019" }
+            };
+            List<Match> matchList3 = new List<Match>
+            {
+                new Match("team2", "team6", 5, 3, 1, new DateTime(2019, 3, 3)){ SimulatedResult = 'X', Season="2018-2019" },
+                new Match("team5", "team4", 2, 4, 1, new DateTime(2019, 3, 4)){ SimulatedResult = '1', Season="2018-2019" }
+            };
+
+            List<Wager> wagers = new List<Wager>
+            {
+                new Wager(matchList1, 2),
+                new Wager(matchList2, 2),
+                new Wager(matchList3, 5),
+            };
+
+            Assert.AreEqual(3, db.AddWagers(wagers));
+
+            matchList1[0] = new Match(matchList1[0].Hometeam, matchList1[0].Awayteam,
+                "league", matchList1[0].Season, matchList1[0].Date, 2, 1,
+                matchList1[0].HomeOdd, matchList1[0].DrawOdd, matchList1[0].AwayOdd);
+
+            matchList1[1] = new Match(matchList1[1].Hometeam, matchList1[1].Awayteam,
+               "league", matchList1[1].Season, matchList1[1].Date, 2, 1,
+               matchList1[1].HomeOdd, matchList1[1].DrawOdd, matchList1[1].AwayOdd);
+
+            matchList2[0] = new Match(matchList2[0].Hometeam, matchList2[0].Awayteam,
+               "league", matchList2[0].Season, matchList2[0].Date, 2, 0,
+               matchList2[0].HomeOdd, matchList2[0].DrawOdd, matchList2[0].AwayOdd);
+
+            matchList2[1] = new Match(matchList2[1].Hometeam, matchList2[1].Awayteam,
+               "league", matchList2[1].Season, matchList2[1].Date, 2, 1,
+               matchList2[1].HomeOdd, matchList2[1].DrawOdd, matchList2[1].AwayOdd);
+
+            db.AddMatches(matchList1);
+            db.AddMatches(matchList2);
+
+            Assert.AreEqual(2, db.UpdateWagers());
+        }
     }
 }
