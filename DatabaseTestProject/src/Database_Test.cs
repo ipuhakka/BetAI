@@ -165,16 +165,58 @@ namespace DatabaseTestProject
         }
 
         /// <summary>
-        /// Tests that firstNotUpdatedDate is updated.
+        /// Tests that two wagers with identical bet, odd, and match lists (team names, odd)
+        /// are not added. 
         /// </summary>
         [Test]
-        public void Test_UpdateFirstNotUpdated()
+        public void Test_AddWagers_Identical_Match_Lists_and_Wager_Info_Not_Added()
         {
-            DateTime previous = db.GetFirstNotUpdated();
-            int affected = db.UpdateFirstNotUpdated(new DateTime(2019, 12, 12));
-            Assert.AreEqual(1, affected);
-            Assert.AreNotEqual(previous, db.GetFirstNotUpdated());
+            List<Match> matchList1 = new List<Match>
+            {
+                new Match("team1", "team2", 2, 3, 2, DateTime.Today){ SimulatedResult = '1' },
+                new Match("team3", "team4", 2, 4, 1, DateTime.Today){ SimulatedResult = '2' }
+            };
+            List<Match> matchList2 = new List<Match>
+            {
+                new Match("team2", "team3", 5, 3, 1, DateTime.Today){ SimulatedResult = 'X' },
+                new Match("team3", "team4", 2, 4, 1, DateTime.Today){ SimulatedResult = '1' }
+            };
+
+            List<Wager> wagers = new List<Wager>
+            {
+                new Wager(matchList1, 2),
+                new Wager(matchList2, 2),
+                new Wager(matchList1, 2),
+            };
+
+            Assert.AreEqual(2, db.AddWagers(wagers));
         }
 
+        /// <summary>
+        /// Identical wagers should not be addes to database on different updates.
+        /// </summary>
+        [Test]
+        public void Test_AddWagers_Same_Wager_In_Different_Update_Fails()
+        {
+            List<Match> matchList1 = new List<Match>
+            {
+                new Match("team1", "team2", 2, 3, 2, DateTime.Today){ SimulatedResult = '1' },
+                new Match("team3", "team4", 2, 4, 1, DateTime.Today){ SimulatedResult = '2' }
+            };
+            List<Match> matchList2 = new List<Match>
+            {
+                new Match("team2", "team3", 5, 3, 1, DateTime.Today){ SimulatedResult = 'X' },
+                new Match("team3", "team4", 2, 4, 1, DateTime.Today){ SimulatedResult = '1' }
+            };
+
+            List<Wager> wagers = new List<Wager>
+            {
+                new Wager(matchList1, 2),
+                new Wager(matchList2, 2),
+            };
+
+            Assert.AreEqual(2, db.AddWagers(wagers));
+            Assert.AreEqual(0, db.AddWagers(new List<Wager> { new Wager(matchList1, 2) }));
+        }
     }
 }

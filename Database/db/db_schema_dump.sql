@@ -15,8 +15,9 @@ CREATE TABLE IF NOT EXISTS matches(
 	CONSTRAINT PK_matches PRIMARY KEY(playedDate, hometeam, awayteam)
 );
 
+/*result: 0 = no result yet, -1 = Lost, 1=won*/
 CREATE TABLE IF NOT EXISTS AI_Wager(
-	playedDate TEXT,
+	playedDate DATE,
 	result INTEGER,
 	bet REAL,
 	odd REAL,
@@ -24,25 +25,22 @@ CREATE TABLE IF NOT EXISTS AI_Wager(
 );
 
 CREATE TABLE IF NOT EXISTS AI_Bet(
+	matchDate DATE,
 	hometeam TEXT,
 	awayteam TEXT,
-	betDate TEXT,
-	wagerId INTEGER,
 	result INTEGER,
 	odd REAL,
-	CONSTRAINT PK_matches PRIMARY KEY(betDate, hometeam, awayteam),
-	FOREIGN KEY (wagerID) REFERENCES AI_Wager(id)
+	CONSTRAINT PK_AI_Bet PRIMARY KEY(matchDate, hometeam, awayteam)
 );
 
-/* firstNotUpdatedDate is the date from which up to present
-day, bets should be checked for result updates. This is done
-by checking if matches table contains bets which have not finished
-(starting from firstNotUpdatedDate to present day).
-If it does, check if the result matches and set result accordingly.
-Also once all bets in a single wager are settled, set result for wager.*/
-CREATE TABLE IF NOT EXISTS Log_Table(
-	id INTEGER PRIMARY KEY,
-	firstNotUpdatedDate TEXT
+CREATE TABLE IF NOT EXISTS Bet_Wager(
+	wagerId INTEGER,
+	matchDate DATE,
+	hometeam TEXT,
+	awayteam TEXT,
+	FOREIGN KEY (matchDate, hometeam, awayteam) REFERENCES AI_Bet(matchDate, hometeam, awayteam) ON DELETE CASCADE,
+	FOREIGN KEY (wagerId) REFERENCES AI_Wager(id) ON DELETE CASCADE,
+	CONSTRAINT Bet_Wager_Key PRIMARY KEY (matchDate, hometeam, awayteam, wagerId)
 );
 
 COMMIT;

@@ -33,14 +33,36 @@ namespace Database
         /// <summary>
         /// Constructor for a Match which is to be predicted (Non-simulation).
         /// </summary>
-        public Match(string homeT, string awayT, double homeO, double drawO, double awayO)
+        public Match(string homeT, string awayT, double homeO, double drawO, double awayO, DateTime date)
         {
             Hometeam = homeT;
             Awayteam = awayT;
             HomeOdd = homeO;
             DrawOdd = drawO;
             AwayOdd = awayO;
-            Date = DateTime.Now;
+            Date = date; 
+        }
+
+        /// <summary>
+        /// Returns HomeOdd, if SimulatedResult is '1',
+        /// DrawOdd if SimulatedResult is 'X',
+        /// AwayOdd if SimulatedResult is '2'.
+        /// </summary>
+        /// <param name="match"></param>
+        /// <returns></returns>
+        public double GetWagerOdd()
+        {
+            switch (SimulatedResult)
+            {
+                case '1':
+                    return HomeOdd;
+                case '2':
+                    return AwayOdd;
+                case 'X':
+                    return DrawOdd;
+                default:
+                    throw new ArgumentException("SimulatedResult value was invalid");
+            }
         }
 
         /// <summary>

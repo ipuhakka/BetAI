@@ -53,7 +53,7 @@ namespace Database
         /// <returns></returns>
         public void ClearDatabase()
         {
-            string query = "DELETE FROM matches; DELETE FROM LOG_TABLE; DELETE FROM AI_Wager;" +
+            string query = "DELETE FROM matches; Delete From Bet_Wager; DELETE FROM AI_Wager;" +
                 "Delete FROM AI_Bet;";
             SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
@@ -147,41 +147,147 @@ namespace Database
         }
 
         /// <summary>
-        /// Updates firstNotUpdatedValue in Log_Table.
-        /// Returns the number of affected rows.
+        /// Updates AI_Wagers. Finds all matches from Bet_Wager in which
+        /// the bet is not resolved, checks for these matches from matches-table,
+        /// and updates the outcome for matches which it finds. Matches are searched
+        /// from matches-table between firstNotUpdated and current date. If more than one
+        /// matches which have same home and awayteam are found in the 
+        /// search period, oldest one is used.
         /// </summary>
-        public int UpdateFirstNotUpdated(DateTime firstNotUpdated)
+        public int UpdateWagers()
         {
-            
-            SQLiteConnection con = new SQLiteConnection(ConnectionString);
-            con.Open();
-            SQLiteCommand command = new SQLiteCommand(con);
-            command.CommandText =  $"UPDATE Log_Table SET firstNotUpdatedDate=@update";
-            command.Parameters.AddWithValue(@"update", firstNotUpdated.ToString("yyyy-MM-dd"));
-            var affectedRows = command.ExecuteNonQuery();
-            con.Close();
-            return affectedRows;
+            throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Returns first firstNotUpdated from Log_Table.
+        /// Adds wagers. Creates bets to database for each match and wager
+        /// for each wager, and adds a row to junction table for each
+        /// bet in wager. Updates firstNotUpdatedDate. Returns number
+        /// of wagers added to database.
         /// </summary>
-        /// <returns></returns>
-        public DateTime GetFirstNotUpdated()
+        public int AddWagers(List<Wager> wagers)
         {
-            string query = "SELECT * FROM Log_Table;";
+            int addedRows = 0;
             SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
-            SQLiteCommand command = new SQLiteCommand(query, con);
-            SQLiteDataReader reader = command.ExecuteReader();
-            List<string> updateList = new List<string>();
-            while (reader.Read())
+
+            using (var cmd = new SQLiteCommand(con))
             {
-                updateList.Add(reader["firstNotUpdatedDate"].ToString());
+                wagers.ForEach(wager => 
+                {
+                    if (!WagerExists(wager))
+                    {
+                        cmd.CommandText = "INSERT INTO AI_Wager " +
+                        "(playedDate, result, bet, odd)" +
+                        " VALUES (@playedDate, 0, @bet, @odd)";
+                        cmd.Parameters.AddWithValue(@"playedDate", DateTime.Today);
+                        cmd.Parameters.AddWithValue(@"bet", wager.Stake);
+                        cmd.Parameters.AddWithValue(@"odd", wager.Matches
+                            .Select(match => match.GetWagerOdd())
+                            .Aggregate((x, y) => x * y)
+                            );
+                        addedRows += cmd.ExecuteNonQuery();
+
+                        int wagerId = (int)con.LastInsertRowId;
+                        wager.Matches.ForEach( match => 
+                        {
+                            cmd.CommandText = "INSERT INTO AI_Bet" +
+                                "(hometeam, awayteam, result, odd)" +
+                                " VALUES (@hometeam, @awayteam, @result, @odd)";
+                            cmd.Parameters.AddWithValue(@"hometeam", match.Hometeam);
+                            cmd.Parameters.AddWithValue(@"awayteam", match.Awayteam);
+                            cmd.Parameters.AddWithValue(@"result", 0);
+                            cmd.Parameters.AddWithValue(@"odd", match.GetWagerOdd());
+
+                            try
+                            {
+                                cmd.ExecuteNonQuery();
+                            }
+                            catch (SQLiteException) { } //Row already exists
+                            cmd.CommandText = "INSERT INTO Bet_Wager" +
+                                " VALUES (@wagerId, @matchDate, @hometeam, @awayteam)";
+                            cmd.Parameters.AddWithValue(@"wagerId", wagerId);
+                            cmd.Parameters.AddWithValue(@"matchDate", match.Date);
+                            cmd.Parameters.AddWithValue(@"hometeam", match.Hometeam);
+                            cmd.Parameters.AddWithValue(@"awayteam", match.Awayteam);
+                        });
+                    } 
+                });  
             }
             con.Close();
-            Console.WriteLine("Trying to parse " + updateList.First());
-            return DateTime.ParseExact(updateList.FirstOrDefault().ToString(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            return addedRows;
+        }
+
+        /// <summary>
+        /// Returns true if there is a wager with same bet, odd and identical match list.
+        /// </summary>
+        public bool WagerExists(Wager wager)
+        {
+            bool exists = false;
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
+            con.Open();
+            using (var cmd = new SQLiteCommand(con))
+            {
+                cmd.CommandText = "SELECT id " +
+                     "FROM AI_Wager " +
+                     "WHERE bet=@bet AND odd=@odd";
+                cmd.Parameters.AddWithValue("bet", wager.Stake);
+                cmd.Parameters.AddWithValue(@"odd", wager.Matches
+                    .Select(match => match.GetWagerOdd())
+                    .Aggregate((x, y) => x * y));
+
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (MatchListsIdentical(wager, reader.GetInt32(0)))
+                    {
+                        exists = true;
+                        cmd.Cancel();
+                        reader.Close();
+                        break;
+                    }
+                }
+            }
+            con.Close();
+            return exists;
+        }
+
+        /// <summary>
+        /// Checks if Wager contains all same matches as another wager. By definition,
+        /// Wager should not contain same match more than once,
+        /// so if comparable wagers differ on any match, they are not the same.
+        /// </summary>
+        private bool MatchListsIdentical(Wager wager, int wagerId)
+        {
+            bool isMatch = true;
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
+            con.Open();
+
+            using (var cmd = new SQLiteCommand(con))
+            {
+                cmd.CommandText = "SELECT hometeam, awayteam, matchDate" +
+                     " FROM Bet_Wager" +
+                     " WHERE wagerId=@wagerId";
+                cmd.Parameters.AddWithValue(@"wagerId", wagerId);
+
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (!wager.Matches.Any(match =>
+                      match.Hometeam == reader.GetString(0)
+                      && match.Awayteam == reader.GetString(1)
+                      && match.Date.Date == reader.GetDateTime(2).Date))
+                    {
+                        cmd.Cancel();
+                        reader.Close();
+                        isMatch = false;
+                        break;
+                    }
+                }
+            }
+            con.Close();
+            return isMatch;
         }
 
         /// <summary>
