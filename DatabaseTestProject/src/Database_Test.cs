@@ -189,7 +189,7 @@ namespace DatabaseTestProject
                 new Wager(matchList1, 2),
             };
 
-            Assert.AreEqual(2, db.AddWagers(wagers));
+            Assert.AreEqual(2, db.AddWagers(wagers, "testAuthor"));
         }
 
         /// <summary>
@@ -215,8 +215,8 @@ namespace DatabaseTestProject
                 new Wager(matchList2, 2),
             };
 
-            Assert.AreEqual(2, db.AddWagers(wagers));
-            Assert.AreEqual(0, db.AddWagers(new List<Wager> { new Wager(matchList1, 2) }));
+            Assert.AreEqual(2, db.AddWagers(wagers, "testAuthor"));
+            Assert.AreEqual(0, db.AddWagers(new List<Wager> { new Wager(matchList1, 2) }, "testAuthor"));
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace DatabaseTestProject
                 new Wager(matchList3, 5),
             };
 
-            Assert.AreEqual(3, db.AddWagers(wagers));
+            Assert.AreEqual(3, db.AddWagers(wagers, "testAuthor"));
 
             matchList1[0] = new Match(matchList1[0].Hometeam, matchList1[0].Awayteam,
                 "league", matchList1[0].Season, matchList1[0].Date, 2, 1,

@@ -217,7 +217,7 @@ namespace Database
         /// bet in wager. Returns number
         /// of wagers added to database.
         /// </summary>
-        public int AddWagers(List<Wager> wagers)
+        public int AddWagers(List<Wager> wagers, string author)
         {
             int addedRows = 0;
             SQLiteConnection con = new SQLiteConnection(ConnectionString);
@@ -230,14 +230,15 @@ namespace Database
                     if (!WagerExists(wager))
                     {
                         cmd.CommandText = "INSERT INTO AI_Wager " +
-                        "(playedDate, result, bet, odd)" +
-                        " VALUES (@playedDate, 0, @bet, @odd)";
+                        "(playedDate, result, bet, odd, author)" +
+                        " VALUES (@playedDate, 0, @bet, @odd, @author)";
                         cmd.Parameters.AddWithValue(@"playedDate", DateTime.Today);
                         cmd.Parameters.AddWithValue(@"bet", wager.Stake);
                         cmd.Parameters.AddWithValue(@"odd", wager.Matches
                             .Select(match => match.GetWagerOdd())
                             .Aggregate((x, y) => x * y)
                             );
+                        cmd.Parameters.AddWithValue(@"author", author);
                         addedRows += cmd.ExecuteNonQuery();
 
                         int wagerId = (int)con.LastInsertRowId;

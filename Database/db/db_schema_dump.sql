@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS AI_Wager(
 	result INTEGER,
 	bet REAL,
 	odd REAL,
+	author TEXT,
 	id INTEGER PRIMARY KEY
 );
 
