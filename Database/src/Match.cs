@@ -15,6 +15,7 @@ namespace Database
         public double DrawOdd { get; }
         public double AwayOdd { get; }
         public char SimulatedResult { get; set; }
+        public int ActualResult { get; set; } //0 = not resolved, -1 = lost, 1 = won.
 
         public Match(string homeT, string awayT, string league, string season, DateTime d, int homeS, int awayS, double homeO, double drawO, double awayO)
         {
@@ -53,6 +54,19 @@ namespace Database
             Awayteam = awayT;
             Date = date;
             SimulatedResult = predictedResult;
+        }
+
+        /// <summary>
+        /// Constructor for creating a match object for finding same matches 
+        /// from matches-table.
+        /// </summary>
+        public Match(string homeT, string awayT, DateTime date, char predictedResult, int actualResult)
+        {
+            Hometeam = homeT;
+            Awayteam = awayT;
+            Date = date;
+            SimulatedResult = predictedResult;
+            ActualResult = actualResult;
         }
 
         /// <summary>

@@ -146,6 +146,36 @@ namespace Database
         }
 
         /// <summary>
+        /// Returns a list of all wagers from specific author.
+        /// </summary>
+        public List<Wager> GetWagersFromAuthor(string author)
+        {
+            var wagers = new List<Wager>();
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
+            con.Open();
+            using (var cmd = new SQLiteCommand(con))
+            {
+                cmd.CommandText = "SELECT * FROM AI_Wager " +
+                    "WHERE Author = @author";
+                cmd.Parameters.AddWithValue("author", author);
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    var id = Convert.ToInt32(reader["id"].ToString());
+
+                    List<Match> matches = GetMatchesFromWager(id);
+
+                    wagers.Add(new Wager(Convert.ToDouble(reader["bet"].ToString()),
+                        Convert.ToDouble(reader["odd"].ToString()), 
+                        reader["author"].ToString(), Convert.ToInt32(reader["result"].ToString()), 
+                        Convert.ToDateTime(reader["playedDate"]), matches));
+                }
+            }
+            con.Close();
+            return wagers;
+        }
+
+        /// <summary>
         /// Updates AI_Wagers. Finds all matches from Bet_Wager in which
         /// the bet is not resolved, checks for these matches from matches-table,
         /// and updates the outcome for matches which it finds.
@@ -459,6 +489,39 @@ namespace Database
                 cmd.CommandText = "SELECT * FROM AI_Bet WHERE result=0";
                 var reader = cmd.ExecuteReader();
                 matches = ParseMatchKeys(reader);
+            }
+            con.Close();
+            return matches;
+        }
+
+        /// <summary>
+        /// Returns all matches which are linked to a specific wager.
+        /// </summary>
+        private List<Match> GetMatchesFromWager(int wagerId)
+        {
+            var matches = new List<Match>();
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
+            con.Open();
+
+            using (var cmd = new SQLiteCommand(con))
+            {
+                cmd.CommandText = "SELECT * " +
+                     "FROM AI_Bet b" +
+                     " INNER JOIN Bet_Wager bw ON  b.hometeam=bw.hometeam AND" +
+                     " bw.awayteam=b.awayteam AND b.matchDate=bw.matchDate " +
+                     "WHERE wagerId=@wagerId";
+                cmd.Parameters.AddWithValue(@"wagerId", wagerId);
+
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    matches.Add(new Match(reader["hometeam"].ToString(),
+                        reader["awayteam"].ToString(),
+                        Convert.ToDateTime(reader["matchDate"].ToString()),
+                        (char)Convert.ToInt32(reader["wagedResult"].ToString()),
+                        Convert.ToInt32(reader["result"].ToString())));
+                }
             }
             con.Close();
             return matches;
