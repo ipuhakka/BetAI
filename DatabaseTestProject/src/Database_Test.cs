@@ -5,6 +5,7 @@ using Database;
 using System.IO;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.Linq;
 
 namespace DatabaseTestProject
 {
@@ -269,7 +270,7 @@ namespace DatabaseTestProject
             List<Match> matchList1 = new List<Match>
             {
                 new Match("team1", "team2", 2, 3, 2, new DateTime(2019, 3, 3)){ SimulatedResult = '1', Season="2018-2019"},
-                new Match("team3", "team4", 2, 4, 1, new DateTime(2019, 3, 3)){ SimulatedResult = '2', Season="2018-2019"}
+                new Match("team3", "team4", 2, 4, 1, new DateTime(2019, 3, 3)){ SimulatedResult = '1', Season="2018-2019"}
             };
             List<Match> matchList2 = new List<Match>
             {
@@ -311,6 +312,21 @@ namespace DatabaseTestProject
             db.AddMatches(matchList2);
 
             Assert.AreEqual(2, db.UpdateWagers());
+            var wagersAfterUpdate = db.GetWagersFromAuthor("testAuthor");
+            Assert.AreEqual(1, wagersAfterUpdate //won wager
+                .Where(wager => wager.Result == 1)
+                .ToList()
+                .Count);
+
+            Assert.AreEqual(1, wagersAfterUpdate //unresolved wager
+               .Where(wager => wager.Result == 0)
+               .ToList()
+               .Count);
+
+            Assert.AreEqual(1, wagersAfterUpdate //lost wager
+               .Where(wager => wager.Result == -1)
+               .ToList()
+               .Count);
         }
     }
 }
