@@ -44,6 +44,7 @@ namespace Database
             finally {
                 con.Close();
             }
+
             return 1;
         }
 
@@ -124,6 +125,7 @@ namespace Database
                 transaction.Commit();
             }
             con.Close();
+
             return addedMatches;
         }
 
@@ -134,14 +136,17 @@ namespace Database
         /// <exception cref="SQLiteException">Thrown if connection to database fails.</exception>
         public List<Match> SelectAllMatchesFromDatabase()
         {
-
             string query = "SELECT * FROM matches;";
+
             SQLiteConnection con = new SQLiteConnection(ConnectionString);
-            con.Open();
+            con.Open();     
+            
             SQLiteCommand command = new SQLiteCommand(query, con);
             SQLiteDataReader reader = command.ExecuteReader();
             List<Match> matches = ParseMatches(reader);
+
             con.Close();
+
             return matches;
         }
 
@@ -153,16 +158,18 @@ namespace Database
             var wagers = new List<Wager>();
             SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
+
             using (var cmd = new SQLiteCommand(con))
             {
                 cmd.CommandText = "SELECT * FROM AI_Wager " +
                     "WHERE Author = @author";
                 cmd.Parameters.AddWithValue("author", author);
+
                 var reader = cmd.ExecuteReader();
+
                 while (reader.Read())
                 {
                     var id = Convert.ToInt32(reader["id"].ToString());
-
                     List<Match> matches = GetMatchesFromWager(id);
 
                     wagers.Add(new Wager(Convert.ToDouble(reader["bet"].ToString()),
@@ -172,6 +179,7 @@ namespace Database
                 }
             }
             con.Close();
+
             return wagers;
         }
 
@@ -191,11 +199,13 @@ namespace Database
             //Find wagers where wager has result of 0, but all bets have result of 1 or -1.
             SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
+
             using (var cmd = new SQLiteCommand(con))
             {
                 cmd.CommandText = "SELECT DISTINCT wagerId FROM Bet_Wager" +
                     " INNER JOIN AI_Wager w on wagerId=w.id " +
                     "WHERE w.result = 0";
+
                 var reader = cmd.ExecuteReader();
 
                 while (reader.Read()) //get each bet, if all results 1, set result as 1, if even one is -1, set as -1.
@@ -210,6 +220,7 @@ namespace Database
                                 " AND bw.hometeam = b.hometeam AND bw.awayteam = b.awayteam " +
                                 " WHERE wagerId=@wagerId";
                         command.Parameters.AddWithValue("wagerId", wagerId);
+
                         var betReader = command.ExecuteReader();
                         while (betReader.Read())
                         {
@@ -234,13 +245,14 @@ namespace Database
             }
             con.Close();
 
-            Console.WriteLine("wagerCount " + wagerTuples.Count);
             wagerTuples.ForEach(wager => 
             {
                 affectedRows += UpdateWager(wager.Item1, wager.Item2);
             });
+
             return affectedRows;
         }
+        
         /// <summary>
         /// Adds wagers. Creates bets to database for each match and wager
         /// for each wager, and adds a row to junction table for each
@@ -314,6 +326,7 @@ namespace Database
             bool exists = false;
             SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
+
             using (var cmd = new SQLiteCommand(con))
             {
                 cmd.CommandText = "SELECT id " +
@@ -325,6 +338,7 @@ namespace Database
                     .Aggregate((x, y) => x * y));
 
                 var reader = cmd.ExecuteReader();
+
                 while (reader.Read())
                 {
                     if (MatchListsIdentical(wager, reader.GetInt32(0)))
@@ -337,6 +351,7 @@ namespace Database
                 }
             }
             con.Close();
+
             return exists;
         }
 
@@ -359,6 +374,7 @@ namespace Database
                 cmd.Parameters.AddWithValue(@"wagerId", wagerId);
 
                 var reader = cmd.ExecuteReader();
+
                 while (reader.Read())
                 {
                     if (!wager.Matches.Any(match =>
@@ -386,6 +402,7 @@ namespace Database
             var affectedRows = 0;
             SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
+
             using (var cmd = new SQLiteCommand(con))
             {
                 cmd.CommandText = "UPDATE AI_Wager SET result=@result " +
@@ -395,7 +412,7 @@ namespace Database
                 affectedRows = cmd.ExecuteNonQuery();
             }
             con.Close();
-            Console.WriteLine("returning " + affectedRows);
+
             return affectedRows;
         }
 
@@ -407,6 +424,7 @@ namespace Database
         {
             SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
+
             using (var cmd = new SQLiteCommand(con))
             {
                 matches.ForEach(match =>
@@ -419,13 +437,16 @@ namespace Database
                     cmd.Parameters.AddWithValue(@"awayteam", match.Awayteam);
                     cmd.Parameters.AddWithValue(@"playedDate", match.Date.Date);
 
-                    var reader = cmd.ExecuteReader();
                     var scores = new List<Tuple<int, int>>();
+
+                    var reader = cmd.ExecuteReader();
+
                     while (reader.Read())
                     {
                         scores.Add(new Tuple<int, int>(reader.GetInt32(0), reader.GetInt32(1)));
                     }
                     reader.Close();
+
                     if (scores.Count > 0)
                     {
                         UpdateBet(match, scores[0].Item1, scores[0].Item2);
@@ -457,9 +478,10 @@ namespace Database
             {
                 updatedResult = 1;
             }
-            Console.WriteLine("Updating with " + updatedResult);
+
             SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
+
             using (var cmd = new SQLiteCommand(con))
             {
                 cmd.CommandText = "UPDATE AI_Bet SET" +
@@ -484,6 +506,7 @@ namespace Database
             List<Match> matches = new List<Match>();
             SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
+
             using (var cmd = new SQLiteCommand(con))
             {
                 cmd.CommandText = "SELECT * FROM AI_Bet WHERE result=0";
@@ -491,6 +514,7 @@ namespace Database
                 matches = ParseMatchKeys(reader);
             }
             con.Close();
+
             return matches;
         }
 
@@ -533,6 +557,7 @@ namespace Database
         private List<Match> ParseMatches(SQLiteDataReader reader)
         {
             List<Match> matches = new List<Match>();
+
             while (reader.Read())
             {
                 Match m = new Match(reader["hometeam"].ToString(), reader["awayteam"].ToString(),
@@ -543,6 +568,7 @@ namespace Database
 
                 matches.Add(m);
             }
+
             return matches;
         }
 
@@ -552,6 +578,7 @@ namespace Database
         private List<Match> ParseMatchKeys(SQLiteDataReader reader)
         {
             List<Match> matches = new List<Match>();
+
             while (reader.Read())
             {
                 Match m = new Match(reader["hometeam"].ToString(), reader["awayteam"].ToString(),
@@ -559,8 +586,8 @@ namespace Database
 
                 matches.Add(m);
             }
+
             return matches;
         }
-
     }
 }
