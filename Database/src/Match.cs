@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Database
 {
@@ -60,13 +61,34 @@ namespace Database
         /// Constructor for creating a match object for finding same matches 
         /// from matches-table.
         /// </summary>
-        public Match(string homeT, string awayT, DateTime date, char predictedResult, int actualResult)
+        public Match(string homeT, string awayT, DateTime date, char predictedResult,
+            int actualResult, double hOdd, double dOdd, double aOdd)
         {
             Hometeam = homeT;
             Awayteam = awayT;
             Date = date;
             SimulatedResult = predictedResult;
             ActualResult = actualResult;
+            HomeOdd = hOdd;
+            DrawOdd = dOdd;
+            AwayOdd = aOdd;
+        }
+
+        [JsonConstructor]
+        public Match(string hometeam, string awayteam, string season, string league, DateTime date, 
+            char predictedResult, int actualResult, double homeOdd, 
+            double drawOdd, double awayOdd)
+        {
+            Hometeam = hometeam;
+            Awayteam = awayteam;
+            Season = season;
+            League = league;
+            Date = date;
+            SimulatedResult = predictedResult;
+            ActualResult = actualResult;
+            HomeOdd = homeOdd;
+            DrawOdd = drawOdd;
+            AwayOdd = awayOdd;
         }
 
         /// <summary>

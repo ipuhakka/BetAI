@@ -255,7 +255,15 @@ namespace DatabaseTestProject
 
             List<Wager> receivedWagers = db.GetWagersFromAuthor("testAuthor");
             Assert.AreEqual(3, receivedWagers.Count);
-            receivedWagers.ForEach(wager => Assert.AreEqual("testAuthor", wager.Author));
+            char[] expectedChars = new char[] { '1', 'X', '2' };
+            receivedWagers.ForEach(wager => 
+            {
+                Assert.AreEqual("testAuthor", wager.Author);
+                wager.Matches.ForEach(match => 
+                {
+                    Assert.IsTrue(expectedChars.Contains(match.SimulatedResult));
+                });
+            });
         }
 
         /// <summary>

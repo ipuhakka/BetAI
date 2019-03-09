@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
-using System.Globalization;
 
 namespace Database
 {
@@ -274,7 +273,7 @@ namespace Database
                         cmd.CommandText = "INSERT INTO AI_Wager " +
                         "(playedDate, result, bet, odd, author)" +
                         " VALUES (@playedDate, 0, @bet, @odd, @author)";
-                        cmd.Parameters.AddWithValue(@"playedDate", DateTime.Today);
+                        cmd.Parameters.AddWithValue(@"playedDate", DateTime.Now);
                         cmd.Parameters.AddWithValue(@"bet", wager.Stake);
                         cmd.Parameters.AddWithValue(@"odd", wager.Matches
                             .Select(match => match.GetWagerOdd())
@@ -287,20 +286,26 @@ namespace Database
                         wager.Matches.ForEach( match => 
                         {
                             cmd.CommandText = "INSERT INTO AI_Bet" +
-                                "(matchDate, hometeam, awayteam, result, wagedResult, odd)" +
-                                " VALUES (@matchDate, @hometeam, @awayteam, @result, @wagedResult, @odd)";
+                                "(matchDate, hometeam, awayteam, result, wagedResult, homeOdd, drawOdd, awayOdd)" +
+                                " VALUES (@matchDate, @hometeam, @awayteam, @result, @wagedResult" +
+                                ", @homeOdd, @drawOdd, @awayOdd)";
                             cmd.Parameters.AddWithValue(@"matchDate", match.Date);
                             cmd.Parameters.AddWithValue(@"hometeam", match.Hometeam);
                             cmd.Parameters.AddWithValue(@"awayteam", match.Awayteam);
                             cmd.Parameters.AddWithValue(@"result", 0);
-                            cmd.Parameters.AddWithValue(@"wagedResult", match.SimulatedResult);
-                            cmd.Parameters.AddWithValue(@"odd", match.GetWagerOdd());
+                            cmd.Parameters.AddWithValue(@"wagedResult", match.SimulatedResult.ToString());
+                            cmd.Parameters.AddWithValue(@"homeOdd", match.HomeOdd);
+                            cmd.Parameters.AddWithValue(@"drawOdd", match.DrawOdd);
+                            cmd.Parameters.AddWithValue(@"awayOdd", match.AwayOdd);
 
                             try
                             {
                                 cmd.ExecuteNonQuery();
                             }
-                            catch (SQLiteException) { } //Row already exists
+                            catch (SQLiteException e)
+                            {
+                                System.Diagnostics.Debug.WriteLine($"Exception: {e.Message}");
+                            } //Row already exists
                             cmd.CommandText = "INSERT INTO Bet_Wager" +
                                 " VALUES (@wagerId, @matchDate, @hometeam, @awayteam)";
                             cmd.Parameters.AddWithValue(@"wagerId", wagerId);
@@ -378,9 +383,9 @@ namespace Database
                 while (reader.Read())
                 {
                     if (!wager.Matches.Any(match =>
-                      match.Hometeam == reader.GetString(0)
-                      && match.Awayteam == reader.GetString(1)
-                      && match.Date.Date == reader.GetDateTime(2).Date))
+                      match.Hometeam == reader.GetString(0) &&
+                      match.Awayteam == reader.GetString(1) &&
+                      match.Date.Date == reader.GetDateTime(2).Date))
                     {
                         cmd.Cancel();
                         reader.Close();
@@ -543,8 +548,11 @@ namespace Database
                     matches.Add(new Match(reader["hometeam"].ToString(),
                         reader["awayteam"].ToString(),
                         Convert.ToDateTime(reader["matchDate"].ToString()),
-                        (char)Convert.ToInt32(reader["wagedResult"].ToString()),
-                        Convert.ToInt32(reader["result"].ToString())));
+                        Convert.ToChar(reader["wagedResult"].ToString()),
+                        Convert.ToInt32(reader["result"].ToString()),
+                        Convert.ToDouble(reader["homeOdd"].ToString()),
+                        Convert.ToDouble(reader["drawOdd"].ToString()),
+                        Convert.ToDouble(reader["awayOdd"].ToString())));
                 }
             }
             con.Close();
