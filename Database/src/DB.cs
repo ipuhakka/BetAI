@@ -590,7 +590,7 @@ namespace Database
             while (reader.Read())
             {
                 Match m = new Match(reader["hometeam"].ToString(), reader["awayteam"].ToString(),
-                    Convert.ToDateTime(reader["matchDate"]), (char)Convert.ToInt32(reader["wagedResult"]));
+                    Convert.ToDateTime(reader["matchDate"]), Convert.ToChar(reader["wagedResult"].ToString()));
 
                 matches.Add(m);
             }
