@@ -38,6 +38,7 @@ namespace BetSim
         public void Test_TeamsExist()
         {
             Assert.IsTrue(Matches.TeamsExist("ManU", "Chelsea"));
+            Assert.IsTrue(Matches.TeamsExist("ManU", "Everton"));
             Assert.IsFalse(Matches.TeamsExist("Manchest u", "Chelsea"));
             Assert.IsFalse(Matches.TeamsExist("Chelsea", "Manchester u"));
         }

@@ -54,10 +54,12 @@ namespace BetAI.BetSim
         /// <returns></returns>
         public static bool TeamsExist(string home, string away)
         {
-            return Match.Any(m => (m.Hometeam == home ||
-                                m.Awayteam == home) &&
-                                (m.Hometeam == away ||
-                                m.Awayteam == away));
+            return 
+                Match
+                    .Any(m => m.Hometeam == home ||
+                                m.Awayteam == home) && 
+                Match
+                    .Any(m => m.Hometeam == away || m.Awayteam == away);
         }
 
         /// <summary>

@@ -28,11 +28,12 @@ namespace BetAI.BetSim
                 });
                 Node maxFitness = Load.LoadSecondNewestGeneration(savefile).Aggregate((curMax, newNode) 
                     =>  curMax.Fitness < newNode.Fitness ? newNode : curMax );
-                Matches.CreateMatchDataStructs(matches
+                var prunedMatchList = matches
                     .Where(match => Matches.TeamsExist(match.Hometeam,
                         match.Awayteam))
-                    .ToList(), maxFitness.SimulationSampleSize);
-                return maxFitness.PlayBets(matches);
+                    .ToList();
+                Matches.CreateMatchDataStructs(prunedMatchList, maxFitness.SimulationSampleSize);
+                return maxFitness.PlayBets(prunedMatchList);
             } else
             {
                 throw new FileNotFoundException(savefile);
