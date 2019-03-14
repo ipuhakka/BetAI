@@ -47,6 +47,20 @@ namespace BetAI.BetSim
         }
 
         /// <summary>
+        /// Returns true if Match-list contains both home and away teams.
+        /// </summary>
+        /// <param name="home"></param>
+        /// <param name="away"></param>
+        /// <returns></returns>
+        public static bool TeamsExist(string home, string away)
+        {
+            return Match.Any(m => (m.Hometeam == home ||
+                                m.Awayteam == home) &&
+                                (m.Hometeam == away ||
+                                m.Awayteam == away));
+        }
+
+        /// <summary>
         /// Function creates a MatchData-struct for each match in sample.
         /// </summary>
         /// <param name="sample">List of match objects</param>
