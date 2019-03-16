@@ -148,34 +148,6 @@ namespace Genetics
         }
 
         [Test]
-        public void Test_EvaluateFitness_performance_Average_LessThan1000ms()
-        {
-            List<Node> nodes = new List<Node>();
-            List<long> runtimes = new List<long>();
-            string path = "test-files/data.sqlite3";
-            Matches.SetMatches(path);
-            List<Match> sample = Sample.CreateSample(100);
-
-            for (var i = 0; i < 100; i++)
-            {
-                nodes.Add(new Node(2.8, 3.14, 5, 0, 5));
-            }
-            Stopwatch sw = new Stopwatch();
-            Matches.CreateMatchDataStructs(sample, nodes.OrderBy(node => node.SimulationSampleSize).ToList()[0].SimulationSampleSize);
-            foreach (Node n in nodes)
-            {
-                sw.Start();
-                n.EvaluateFitness(sample);
-                sw.Stop();
-                runtimes.Add(sw.ElapsedMilliseconds);
-                sw.Reset();
-            }
-            
-            Console.WriteLine("Average: " + runtimes.Average());
-            Assert.LessOrEqual(runtimes.Average(), 1000);
-        }
-
-        [Test]
         public void Test_EvaluateFitness_performance_Average_LessThan50ms()
         {
             List<Node> nodes = new List<Node>();

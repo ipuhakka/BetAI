@@ -1,3 +1,8 @@
+# v0.4
+ -Implemented
+	- Playing bets from external sources
+- Performance: Matches uses dictionary instead of linq-queries
+to search correct MatchData struct.
 # v0.3
 - Implemented
 	- Implement uniform alpha crossover
