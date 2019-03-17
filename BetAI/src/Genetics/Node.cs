@@ -108,18 +108,17 @@ namespace BetAI.Genetics
         public List<Wager> PlayBets(List<Match> matches)
         {
             List<Wager> wagers = new List<Wager>();
-            Predict predict = new Predict();
-            Bet bet = new Bet();
+
             foreach(Match m in matches)
             {
                 try
                 {
-                    double predictedResult = predict.PredictResult(m, SimulationSampleSize);
-                    double predictedOdd = bet.GetOddForPredictedResult(m, predictedResult, DrawLimit);
-                    double betRisk = bet.CalculateBetRisk(m, predictedResult, predictedOdd, DrawLimit, PlayLimit);
-                    double stake = bet.CalculateStake(MinimumStake, betRisk, PlayLimit);
+                    double predictedResult = Predict.PredictResult(m, SimulationSampleSize);
+                    double predictedOdd = Bet.GetOddForPredictedResult(m, predictedResult, DrawLimit);
+                    double betRisk = Bet.CalculateBetRisk(m, predictedResult, predictedOdd, DrawLimit, PlayLimit);
+                    double stake = Bet.CalculateStake(MinimumStake, betRisk, PlayLimit);
 
-                    int result = bet.GetPredictedBetResult(predictedResult, DrawLimit);
+                    int result = Bet.GetPredictedBetResult(predictedResult, DrawLimit);
                     if (result == 1)
                     {
                         m.SimulatedResult = '1';
@@ -154,15 +153,14 @@ namespace BetAI.Genetics
         /// <returns>Fitness value for the specific node.</returns>
         public double EvaluateFitness(List<Match> sample)
         {
-            Predict predict = new Predict();
-            Bet bet = new Bet();
             Fitness = 0;
+
             foreach (Match m in sample)
             {
                 try
                 {
-                    double predictedResult = predict.PredictResult(m, SimulationSampleSize);
-                    double betProfit = bet.PlayBet(m, predictedResult, PlayLimit, MinimumStake, DrawLimit);
+                    double predictedResult = Predict.PredictResult(m, SimulationSampleSize);
+                    double betProfit = Bet.PlayBet(m, predictedResult, PlayLimit, MinimumStake, DrawLimit);
                     if (betProfit == 0)
                         BetsNotPlayed++;
                     else if (betProfit > 0)

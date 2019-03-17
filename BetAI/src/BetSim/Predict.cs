@@ -8,14 +8,14 @@ using BetAI.Genetics;
 
 namespace BetAI.BetSim
 {
-    public class Predict
+    public static class Predict
     {
         /// <summary>
         /// Predicts all bets and returns a list of Wager-objects which
         /// the algorithm in savefile deems to be playable.
         /// </summary>
         /// <exception cref="FileNotFoundException"></exception>
-        public List<Wager> PredictBets(List<Match> matches, string savefile, string season)
+        public static List<Wager> PredictBets(List<Match> matches, string savefile, string season)
         {
             if (Load.SaveExists(savefile, true))
             {
@@ -46,7 +46,7 @@ namespace BetAI.BetSim
         /// <exception cref="NotSimulatedException">Thrown when NotEnoughDataException
         /// is thrown by a call to database layer, or when league average goals 
         /// are zero, as it would result to NaN strengths.</exception>
-        public double PredictResult(Match toPredict, int sampleSize)
+        public static double PredictResult(Match toPredict, int sampleSize)
         {
             Match[] hometeamPreviousMatches;
             Match[] awayteamPreviousMatches;
@@ -88,7 +88,7 @@ namespace BetAI.BetSim
         /// Calculates an estimate for how many goals a team scores.
         /// Estimate is attack * def * leagueAvg.
         /// </summary>
-        private double CountGoalEstimate(double attackStrength, double defenseStrength, double leagueAvg) 
+        private static double CountGoalEstimate(double attackStrength, double defenseStrength, double leagueAvg) 
         {
             return attackStrength * defenseStrength * leagueAvg;
         }
@@ -98,7 +98,7 @@ namespace BetAI.BetSim
         /// Strength = team average goals / league average goals. 
         /// </summary>
         /// <returns></returns>
-        private double CountStrength(double teamScoredAvg, double leagueAvg)
+        private static double CountStrength(double teamScoredAvg, double leagueAvg)
         {
             return teamScoredAvg / leagueAvg;
         }
@@ -109,7 +109,7 @@ namespace BetAI.BetSim
         /// <param name="previousMatches">Matches used to calculate average for team</param>
         /// <param name="team">Team from which average goals is calculated</param>
         /// <returns>Average number of goals scored.</returns>
-        private double CountMeanScoredGoals(Match[] previousMatches, string team)
+        private static double CountMeanScoredGoals(Match[] previousMatches, string team)
         {
             double sum = 0;
 
@@ -130,7 +130,7 @@ namespace BetAI.BetSim
         /// <param name="previousMatches">Matches used to calculate average for team</param>
         /// <param name="team">Team from which average goals is calculated</param>
         /// <returns>Average number of goals conceded by team.</returns>
-        private double CountMeanConcededGoals(Match[] previousMatches, string team)
+        private static double CountMeanConcededGoals(Match[] previousMatches, string team)
         {
             double sum = 0;
 

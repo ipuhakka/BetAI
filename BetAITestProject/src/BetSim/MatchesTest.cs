@@ -196,7 +196,7 @@ namespace BetSim
         }
 
         [Test]
-        public void Test_CreateMatchDataStructs_Runs()
+        public void Test_CreateMatchDataStructs_RunsWhenSampleSizeIsTooLarge()
         {
             /*CreateMatchDataStructs should not throw errors when samplesize is too long.*/
             Assert.DoesNotThrow(() => Matches.CreateMatchDataStructs(matches, 6));

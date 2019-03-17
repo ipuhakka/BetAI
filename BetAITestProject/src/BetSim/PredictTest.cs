@@ -57,8 +57,7 @@ namespace BetSim
             Matches.SetMatches(path);
             Matches.CreateMatchDataStructs(matches, 7);
             Match toPredict = Matches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
-            Predict betSim = new Predict();
-            double result = betSim.PredictResult(toPredict, 3);
+            double result = Predict.PredictResult(toPredict, 3);
             Console.WriteLine("Result: " + result);
             Assert.AreEqual(-0.54, Math.Round(result, 2));
         }
@@ -91,8 +90,7 @@ namespace BetSim
                 sample.Add(new Match(homeT, awayT, league, season, d, homeS, awayS, homeO, drawO, awayO));
             }
             Matches.CreateMatchDataStructs(sample, 18);
-            Predict betSim = new Predict();
-            Assert.Throws<NotSimulatedException>(() => betSim.PredictResult(sample[4], 18));
+            Assert.Throws<NotSimulatedException>(() => Predict.PredictResult(sample[4], 18));
             Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
         }
 
@@ -102,8 +100,8 @@ namespace BetSim
             Matches.SetMatches(path);
             Matches.CreateMatchDataStructs(matches, 7);
             Match toPredict = Matches.SelectMatchesWithRowIndex(new List<int>() { 6 })[0];
-            Predict betSim = new Predict();
-            Assert.Throws<NotSimulatedException>(() => betSim.PredictResult(toPredict, 3));
+
+            Assert.Throws<NotSimulatedException>(() => Predict.PredictResult(toPredict, 3));
         }
 
         /// <summary>
@@ -121,8 +119,7 @@ namespace BetSim
                 new Match("Real Madrid", "Valencia", 1.89, 3.14, 4.2, DateTime.Now)
             };
 
-            Predict predict = new Predict();
-            Assert.AreEqual(2, predict.PredictBets(matches, Path.GetFullPath(@"Files\test"), "2018-2019").Count);
+            Assert.AreEqual(2, Predict.PredictBets(matches, Path.GetFullPath(@"Files\test"), "2018-2019").Count);
             Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
         }
     }

@@ -85,26 +85,25 @@ namespace BetAI
             {
                 List<Match> sample = Sample.CreateSample(values.SampleSize);
                 Save.WriteSample(Savefile, sample, nodes[0].Generation);
+
                 int maxSampleSize = nodes.Max(n => n.SimulationSampleSize);
                 Matches.CreateMatchDataStructs(sample, maxSampleSize);
-                EvaluateNodes(sample);
+
+                for (int i = 0; i < nodes.Count; i++)
+                {
+                    nodes[i].EvaluateFitness(sample);
+                }
+
                 Log();
                 List<Node> newGeneration = reproduce.CreateNewGeneration(nodes);
                 newGeneration = Mutation.Mutate(newGeneration, values.MutationProbability);
+
                 Save.WriteGeneration(Savefile, nodes, nodes[0].Generation);
                 Save.WriteGeneration(Savefile, newGeneration, newGeneration[0].Generation);
                 nodes = newGeneration;
             }
             Console.WriteLine("Stopping simulation");
         } 
-
-        private void EvaluateNodes(List<Match> sample)
-        {
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                nodes[i].EvaluateFitness(sample);
-            }
-        }
 
         private void Log()
         {

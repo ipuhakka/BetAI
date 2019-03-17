@@ -10,7 +10,7 @@ namespace BetAI.BetSim
     /// Bet class is responsible for assessing a valid stake for bet, 
     /// and playing the bet accordingly.
     /// </summary>
-    public class Bet
+    public static class Bet
     {
         /// <summary>
         /// PlayBet assesses the risk involved in playing bet for Match m,
@@ -26,7 +26,7 @@ namespace BetAI.BetSim
         /// is predicted as a draw.</param>
         /// <returns>Profit of the bet. If bet is lost: -stake,
         /// if bet is won = (stake * predictedResultOdd) - stake</returns>
-        public double PlayBet(Match m, double predictedResult, double playLimit, double baseStake, double drawLimit)
+        public static double PlayBet(Match m, double predictedResult, double playLimit, double baseStake, double drawLimit)
         {
             double predictedResultOdd = GetOddForPredictedResult(m, predictedResult, drawLimit);
             double betCoefficient = CalculateBetRisk(m, predictedResult, predictedResultOdd, drawLimit, playLimit);
@@ -41,7 +41,7 @@ namespace BetAI.BetSim
                 return -stake;
         }
 
-        public double CalculateStake(double baseStake, double risk, double playLimit)
+        public static double CalculateStake(double baseStake, double risk, double playLimit)
         {
             return baseStake * (risk / playLimit);
         }
@@ -51,7 +51,7 @@ namespace BetAI.BetSim
         /// estimated result, margin for a tie game, and
         /// set limit for when bet is playable.
         /// </summary>
-        public double CalculateBetRisk(Match m, double predictedResult, double predictedOdd, double drawLimit, double playLimit)
+        public static double CalculateBetRisk(Match m, double predictedResult, double predictedOdd, double drawLimit, double playLimit)
         {
             double expectedResultPercentage = CalculateExpectedResultPercentage(predictedResult);
             return expectedResultPercentage / (1 / predictedOdd);
@@ -62,7 +62,7 @@ namespace BetAI.BetSim
         /// if predicted away win.
         /// </summary>
         /// <returns></returns>
-        public int GetPredictedBetResult(double predictedResult, double drawLimit)
+        public static int GetPredictedBetResult(double predictedResult, double drawLimit)
         {
             if (Math.Abs(predictedResult) < drawLimit)
                 return 0;
@@ -74,7 +74,7 @@ namespace BetAI.BetSim
                 return 0;
         }
 
-        public double GetOddForPredictedResult(Match m, double predictedResult, double drawLimit)
+        public static double GetOddForPredictedResult(Match m, double predictedResult, double drawLimit)
         {
             if (Math.Abs(predictedResult) < drawLimit)
                 return m.DrawOdd;
@@ -89,7 +89,7 @@ namespace BetAI.BetSim
         /// <summary>
         /// Returns 1 if simulated bet was correct, 0 if not.
         /// </summary>
-        private int GetBetResult(Match m, double predictedResult, double drawLimit)
+        private static int GetBetResult(Match m, double predictedResult, double drawLimit)
         {
             int predictedBetResult = GetPredictedBetResult(predictedResult, drawLimit);
             if (predictedBetResult == m.Homescore - m.Awayscore)
@@ -109,7 +109,7 @@ namespace BetAI.BetSim
         /// </summary>
         /// <param name="expectedResult">Result simulated.</param>
         /// <returns>Calculated probability of the expectedResult</returns>
-        private double CalculateExpectedResultPercentage(double expectedResult)
+        private static double CalculateExpectedResultPercentage(double expectedResult)
         {
             return Math.Pow(Math.E, -Math.Abs(expectedResult)) * Math.Abs(expectedResult) / 1;
         }

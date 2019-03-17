@@ -95,7 +95,7 @@ namespace BetAI.BetSim
                 MatchesData.Add(
                     $"{sample[i].Hometeam}-{sample[i].Awayteam}-{sample[i].Date}", 
                     new MatchData(homeAvg, awayAvg, hometeamPrevious, awayteamPrevious, 
-                        sample[i]));
+                        sample[i].Hometeam, sample[i].Awayteam));
             }
         }
 
@@ -243,19 +243,22 @@ namespace BetAI.BetSim
         /// </summary>
         protected struct MatchData
         {
-            public Match toPredict;
+            string Hometeam { get; }
+            string Awayteam { get; }
             double HomeAvg { get; }
             double AwayAvg { get; }
             Match[] hometeamPreviousMatches;
             Match[] awayteamPreviousMatches;
 
-            public MatchData(double homeA, double awayA, Match[] hometeamPM, Match[] awayteamPM, Match toPred )
+            public MatchData(double homeA, double awayA, Match[] hometeamPM
+                , Match[] awayteamPM, string hometeam, string awayteam)
             {
                 HomeAvg = homeA;
                 AwayAvg = awayA;
+                Hometeam = hometeam;
+                Awayteam = awayteam;
                 hometeamPreviousMatches = hometeamPM;
                 awayteamPreviousMatches = awayteamPM;
-                toPredict = toPred;                   
             }
             
             /// <summary>
@@ -274,7 +277,7 @@ namespace BetAI.BetSim
                 if (n > hometeamPreviousMatches.Length)
                    throw new NotEnoughDataException();
 
-                var hometeam = toPredict.Hometeam;
+                var hometeam = Hometeam;
                 var homeMatches = hometeamPreviousMatches
                     .Where(match => match.Hometeam.Equals(hometeam))
                     .ToList()
@@ -287,7 +290,8 @@ namespace BetAI.BetSim
                 return hometeamPreviousMatches
                     .ToList()
                     .OrderByDescending(match => match.Date)
-                    .ToList().GetRange(0, n)
+                    .ToList()
+                    .GetRange(0, n)
                     .ToArray(); 
             }
 
@@ -307,7 +311,7 @@ namespace BetAI.BetSim
                 if (n > awayteamPreviousMatches.Length)
                     throw new NotEnoughDataException();
 
-                var awayteam = toPredict.Awayteam;
+                var awayteam = Awayteam;
                 var awayMatches = awayteamPreviousMatches
                     .Where(match => 
                         match.Awayteam.Equals(awayteam))
