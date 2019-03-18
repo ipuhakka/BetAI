@@ -111,32 +111,36 @@ namespace BetAI.Genetics
 
             foreach(Match m in matches)
             {
-                try
-                {
-                    double predictedResult = Predict.PredictResult(m, SimulationSampleSize);
-                    double predictedOdd = Bet.GetOddForPredictedResult(m, predictedResult, DrawLimit);
-                    double betRisk = Bet.CalculateBetRisk(m, predictedResult, predictedOdd, DrawLimit, PlayLimit);
-                    double stake = Bet.CalculateStake(MinimumStake, betRisk, PlayLimit);
 
-                    int result = Bet.GetPredictedBetResult(predictedResult, DrawLimit);
-                    if (result == 1)
-                    {
-                        m.SimulatedResult = '1';
-                    } else if (result == 0)
-                    {
-                        m.SimulatedResult = 'X';
-                    } else
-                    {
-                        m.SimulatedResult = '2';
-                    }
+                double? predictedReturnedValue = Predict.PredictResult(m, SimulationSampleSize);
 
-                    if (PlayLimit <= betRisk)
-                    {
-                        wagers.Add(new Wager(new List<Match> {m}, stake));
-                    }
-                } catch (NotSimulatedException)
+                if (predictedReturnedValue == null)
                 {
+                    BetsSkipped++;
                     continue;
+                }
+
+                double predictedResult = (double)predictedReturnedValue;
+
+                double predictedOdd = Bet.GetOddForPredictedResult(m, predictedResult, DrawLimit);
+                double betRisk = Bet.CalculateBetRisk(m, predictedResult, predictedOdd, DrawLimit, PlayLimit);
+                double stake = Bet.CalculateStake(MinimumStake, betRisk, PlayLimit);
+
+                int result = Bet.GetPredictedBetResult(predictedResult, DrawLimit);
+                if (result == 1)
+                {
+                    m.SimulatedResult = '1';
+                } else if (result == 0)
+                {
+                    m.SimulatedResult = 'X';
+                } else
+                {
+                    m.SimulatedResult = '2';
+                }
+
+                if (PlayLimit <= betRisk)
+                {
+                    wagers.Add(new Wager(new List<Match> {m}, stake));
                 }
             }
             return wagers;
@@ -157,24 +161,25 @@ namespace BetAI.Genetics
 
             foreach (Match m in sample)
             {
-                try
-                {
-                    double predictedResult = Predict.PredictResult(m, SimulationSampleSize);
-                    double betProfit = Bet.PlayBet(m, predictedResult, PlayLimit, MinimumStake, DrawLimit);
-                    if (betProfit == 0)
-                        BetsNotPlayed++;
-                    else if (betProfit > 0)
-                        BetsWon++;
-                    else
-                        BetsLost++;
+                double? predictedReturnedValue = Predict.PredictResult(m, SimulationSampleSize);
 
-                    Fitness += betProfit;
-                }
-                catch (NotSimulatedException)
+                if (predictedReturnedValue == null)
                 {
                     BetsSkipped++;
                     continue;
                 }
+
+                double predictedResult = (double)predictedReturnedValue;
+
+                double betProfit = Bet.PlayBet(m, predictedResult, PlayLimit, MinimumStake, DrawLimit);
+                if (betProfit == 0)
+                    BetsNotPlayed++;
+                else if (betProfit > 0)
+                    BetsWon++;
+                else
+                    BetsLost++;
+
+                Fitness += betProfit;
             }
             return Fitness;
         }

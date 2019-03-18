@@ -57,7 +57,7 @@ namespace BetSim
             Matches.SetMatches(path);
             Matches.CreateMatchDataStructs(matches, 7);
             Match toPredict = Matches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
-            double result = Predict.PredictResult(toPredict, 3);
+            double result = (double)Predict.PredictResult(toPredict, 3);
             Console.WriteLine("Result: " + result);
             Assert.AreEqual(-0.54, Math.Round(result, 2));
         }
@@ -65,11 +65,11 @@ namespace BetSim
         /// <summary>
         /// This test involves a situation, where a game has been played that season
         /// but no goals were scored. As league goal averages are then 0, this would produce
-        /// a NaN strength value, so NotSimulatedException is thrown so that bet is not played
+        /// a NaN strength value, so null should be returned as bet is not played
         /// in such a situation.
         /// </summary>
         [Test]
-        public void Test_Predict_LaCoruna_Sociedad_15_16_throws_NotSimulatedException()
+        public void Test_Predict_LaCoruna_Sociedad_15_16_returnsNull()
         {
             Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"test-files"));
             Matches.SetMatches(largeDatabase);
@@ -90,18 +90,18 @@ namespace BetSim
                 sample.Add(new Match(homeT, awayT, league, season, d, homeS, awayS, homeO, drawO, awayO));
             }
             Matches.CreateMatchDataStructs(sample, 18);
-            Assert.Throws<NotSimulatedException>(() => Predict.PredictResult(sample[4], 18));
+            Assert.IsNull(Predict.PredictResult(sample[4], 18));
             Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
         }
 
         [Test]
-        public void Test_PredictResult_Throws_NotSimulatedException()
+        public void Test_PredictResult_ReturnNull()
         {
             Matches.SetMatches(path);
             Matches.CreateMatchDataStructs(matches, 7);
             Match toPredict = Matches.SelectMatchesWithRowIndex(new List<int>() { 6 })[0];
 
-            Assert.Throws<NotSimulatedException>(() => Predict.PredictResult(toPredict, 3));
+            Assert.IsNull(Predict.PredictResult(toPredict, 3));
         }
 
         /// <summary>

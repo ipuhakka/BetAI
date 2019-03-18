@@ -112,15 +112,15 @@ namespace BetSim
         }
 
         [Test]
-        public void Test_GetNLastFromTeamBeforeMatch_throws_NotEnoughDataException()
+        public void Test_GetNLastFromTeamBeforeMatch_NotEnoughMatches_returnsNull()
         {
             Match m = new Match("West Ham", "Chelsea", "England", "2016-2017", new DateTime(2017, 12, 03), 0, 2, 2.2, 3.15, 2.7);
             Matches.CreateMatchDataStructs(matches, 6);
-            Assert.Throws<NotEnoughDataException>(() => Matches.GetNLastFromTeamBeforeMatch(false, m, 6));
+            Assert.IsNull(Matches.GetNLastFromTeamBeforeMatch(false, m, 6));
         }
 
         [Test]
-        public void Test_GetNLastFromTeamBeforeMatch_throw_NotEnoughDataException()
+        public void Test_GetNLastFromTeamBeforeMatch_TooSmallSampleSize_ReturnNull()
         {
             /* If max sample size in CreateMatchDataStructs is smaller
              * than the sample size used later in GetNLastFromTeamBeforeMatch, 
@@ -129,7 +129,7 @@ namespace BetSim
               set for the structure.*/
             Matches.CreateMatchDataStructs(matches, 4);
             Console.WriteLine(matches[10].Hometeam + matches[10].Awayteam);
-            Assert.Throws<NotEnoughDataException>(() => Matches.GetNLastFromTeamBeforeMatch(false, matches[10], 5));
+            Assert.IsNull(Matches.GetNLastFromTeamBeforeMatch(false, matches[10], 5));
         }
 
         [Test]
@@ -185,9 +185,9 @@ namespace BetSim
         }
 
         [Test]
-        public void Test_GetSeasonAverage_throws_NotEnoughDataException()
+        public void Test_GetSeasonAverage_NoMatchesBeforeMatchInSeason_returns_minus1()
         {
-            Assert.Throws<NotEnoughDataException>(() => Matches.GetSeasonAverage(true, matches[0]));
+            Assert.AreEqual(-1, Matches.GetSeasonAverage(true, matches[0]));
         }
 
         public void Test_GetSeasonAverage_runs()

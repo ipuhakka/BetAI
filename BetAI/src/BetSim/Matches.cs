@@ -265,22 +265,22 @@ namespace BetAI.BetSim
                 hometeamPreviousMatches = hometeamPM;
                 awayteamPreviousMatches = awayteamPM;
             }
-            
+
             /// <summary>
             /// Returns an array of last matches from team.
             /// If team has n previous homematches in the list, these 
             /// are returned. Otherwise n-last total matches for team are
             /// returned.
             /// If n is larger than array of previous matches, 
-            /// NotEnoughDataException is thrown.
+            /// null is returned to mark that there are not enough
+            /// matches to simulate a match.
             /// </summary>
             /// <param name="n">Number of matches that are looked for.</param>
             /// <returns>n-sized array of teams previous matches.</returns>
-            /// <exception cref="NotEnoughDataException"></exception>
             public Match[] GetNLastFromSampleFromHometeam(int n)
             {
                 if (n > hometeamPreviousMatches.Length)
-                   throw new NotEnoughDataException();
+                    return null;
 
                 var hometeam = Hometeam;
                 var homeMatches = hometeamPreviousMatches
@@ -303,15 +303,15 @@ namespace BetAI.BetSim
             /// are returned. Otherwise n-last total matches for team are
             /// returned.
             /// If n is larger than array of previous matches, 
-            /// NotEnoughDataException is thrown.
+            /// null is returned to mark that there are not enough
+            /// matches to simulate a match.
             /// </summary>
             /// <param name="n">Number of matches that are looked for.</param>
             /// <returns>n-sized array of teams previous matches.</returns>
-            /// <exception cref="NotEnoughDataException"></exception>
             public Match[] GetNLastFromSampleFromAwayteam(int n)
             {
                 if (n > awayteamPreviousMatches.Length)
-                    throw new NotEnoughDataException();
+                    return null;
 
                 var awayteam = Awayteam;
                 var awayMatches = awayteamPreviousMatches
@@ -332,32 +332,24 @@ namespace BetAI.BetSim
             /// <summary>
             /// Returns homeAvg. If homeAvg is -1,
             /// there are no matches played before, and
-            /// NotEnoughDataException is thrown.
+            /// match should not be simulated.
             /// </summary>
             /// <returns>Average numebr of goals scored by hometeam in season
             /// of match toPredict.</returns>
-            /// <exception cref="NotEnoughDataException"></exception>
             public double GetSeasonHomeGoalAverage()
             {
-                if (HomeAvg == -1)
-                    throw new NotEnoughDataException();
-
                 return HomeAvg;
             }
 
             /// <summary>
             /// Returns awayAvg. If awayAvg is -1,
             /// there are no matches played before, and
-            /// NotEnoughDataException is thrown.
+            /// match should not be simulated.
             /// </summary>
             /// <returns>Average numebr of goals scored by awayteam in season
             /// of match toPredict.</returns>
-            /// <exception cref="NotEnoughDataException"></exception>
             public double GetSeasonAwayGoalAverage()
             {
-                if (AwayAvg == -1)
-                    throw new NotEnoughDataException();
-
                 return AwayAvg;
             }
         }

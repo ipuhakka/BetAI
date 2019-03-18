@@ -42,31 +42,26 @@ namespace BetAI.BetSim
 
         /// <summary>
         /// Calculates predicted result for a match. 
+        /// Returns null if match could not be simulated:
+        /// In that case, either average goals could not be counted
+        /// for the season, or teams did not have enough matches played.
         /// </summary>
-        /// <exception cref="NotSimulatedException">Thrown when NotEnoughDataException
-        /// is thrown by a call to database layer, or when league average goals 
-        /// are zero, as it would result to NaN strengths.</exception>
-        public static double PredictResult(Match toPredict, int sampleSize)
+        public static double? PredictResult(Match toPredict, int sampleSize)
         {
             Match[] hometeamPreviousMatches;
             Match[] awayteamPreviousMatches;
             double homeScoredLeagueAvg = 0;
             double awayScoredLeagueAvg = 0;
 
-            try
-            {
-                hometeamPreviousMatches = Matches.GetNLastFromTeamBeforeMatch(true, toPredict, sampleSize);
-                awayteamPreviousMatches = Matches.GetNLastFromTeamBeforeMatch(false, toPredict, sampleSize);
-                homeScoredLeagueAvg = Matches.GetSeasonAverage(true, toPredict);
-                awayScoredLeagueAvg = Matches.GetSeasonAverage(false, toPredict);
-            }
-            catch (NotEnoughDataException)
-            {
-                throw new NotSimulatedException();
-            }
+            hometeamPreviousMatches = Matches.GetNLastFromTeamBeforeMatch(true, toPredict, sampleSize);
+            awayteamPreviousMatches = Matches.GetNLastFromTeamBeforeMatch(false, toPredict, sampleSize);
+            homeScoredLeagueAvg = Matches.GetSeasonAverage(true, toPredict);
+            awayScoredLeagueAvg = Matches.GetSeasonAverage(false, toPredict);
 
-            if (homeScoredLeagueAvg == 0 || awayScoredLeagueAvg == 0)
-                throw new NotSimulatedException();
+
+            if (homeScoredLeagueAvg <= 0 || awayScoredLeagueAvg <= 0 ||
+                hometeamPreviousMatches == null || awayteamPreviousMatches == null)
+                return null;
 
             double homeScoredAvg = CountMeanScoredGoals(hometeamPreviousMatches.ToArray(), toPredict.Hometeam);
             double awayScoredAvg = CountMeanScoredGoals(awayteamPreviousMatches.ToArray(), toPredict.Awayteam);

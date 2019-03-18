@@ -45,7 +45,7 @@ namespace BetSim
              
              betCoefficient is smaller than playLimit, function returns 0.*/
             Match toPredict = Matches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
-            double result = Predict.PredictResult(toPredict, 3); 
+            double result = (double)Predict.PredictResult(toPredict, 3); 
 
             Assert.AreEqual(0, Bet.PlayBet(toPredict, result, 1.05, 5, 0.2));
         }
@@ -61,7 +61,7 @@ namespace BetSim
              stake = 5 * (0.991305 / 0.5) = 9.91305 
              result = 9.91305 * 3.15 */
             Match toPredict = Matches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
-            double result = Predict.PredictResult(toPredict, 3); //result is ~ -0.54
+            double result = (double)Predict.PredictResult(toPredict, 3); //result is ~ -0.54
 
             Assert.AreEqual(21.31, Math.Round(Bet.PlayBet(toPredict, Math.Round(result, 2), 0.5, 5, 1), 2));
         }
@@ -79,7 +79,7 @@ namespace BetSim
              stake = 5 * (0.8496 / 0.5) = 8.496 
              result = -8.496 */
             Match toPredict = Matches.SelectMatchesWithRowIndex(new List<int>() { 7 })[0];
-            double result = Predict.PredictResult(toPredict, 3); //result is ~ -0.54
+            double result = (double)Predict.PredictResult(toPredict, 3); //result is ~ -0.54
 
             Assert.AreEqual(-8.5, Math.Round(Bet.PlayBet(toPredict, Math.Round(result, 2), 0.5, 5, 0.53), 2));
         }
