@@ -29,43 +29,6 @@ namespace BetAI.BetSim
         }
 
         /// <summary>
-        /// Returns a list of matches based on the indexes.
-        /// </summary>
-        /// <param name="indexes"></param>
-        /// <returns></returns>
-        /// <exception cref="IndexOutOfRangeException"></exception>
-        /// <exception cref="NullReferenceException">thrown if matches are not set.</exception>
-        public static List<Match> SelectMatchesWithRowIndex(List<int> indexes)
-        {
-            var matchSample = new List<Match>();
-
-            foreach (int index in indexes)
-            {
-                if (index < 0 || index >= Match.Count)
-                    throw new IndexOutOfRangeException();
-                matchSample.Add(Match[index]);
-            }
-
-            return matchSample;
-        }
-
-        /// <summary>
-        /// Returns true if Match-list contains both home and away teams.
-        /// </summary>
-        /// <param name="home"></param>
-        /// <param name="away"></param>
-        /// <returns></returns>
-        public static bool TeamsExist(string home, string away)
-        {
-            return 
-                Match
-                    .Any(m => m.Hometeam == home ||
-                                m.Awayteam == home) && 
-                Match
-                    .Any(m => m.Hometeam == away || m.Awayteam == away);
-        }
-
-        /// <summary>
         /// Function creates a dictionary of MatchData-structs for each match in sample.
         /// </summary>
         /// <param name="sample">List of match objects</param>
@@ -91,21 +54,12 @@ namespace BetAI.BetSim
                     sample[i].Date, 
                     sample[i].Awayteam)
                     .ToArray();
-               
+
                 MatchesData.Add(
                     $"{sample[i].Hometeam}-{sample[i].Awayteam}-{sample[i].Date}", 
                     new MatchData(homeAvg, awayAvg, hometeamPrevious, awayteamPrevious, 
                         sample[i].Hometeam, sample[i].Awayteam));
             }
-        }
-
-        /// <summary>
-        /// Returns number of loaded matches.
-        /// </summary>
-        /// <exception cref="NullReferenceException"></exception>
-        public static int GetMatchCount()
-        {
-            return Match.Count;
         }
 
         /// <summary>
@@ -132,7 +86,7 @@ namespace BetAI.BetSim
         }
 
         /// <summary>
-        /// returns the average number of goals scored in home- or
+        /// Returns the average number of goals scored by a team in home- or
         /// awaymatches, depending on boolean parameter homematches.
         /// </summary>
         /// <param name="homematches">Indicates if home or away average is returned.</param>
@@ -160,7 +114,53 @@ namespace BetAI.BetSim
         }
 
         /// <summary>
-        /// Returns an average number of goals 
+        /// Returns number of loaded matches.
+        /// </summary>
+        /// <exception cref="NullReferenceException"></exception>
+        public static int GetMatchCount()
+        {
+            return Match.Count;
+        }
+
+        /// <summary>
+        /// Returns true if Match-list contains both home and away teams.
+        /// </summary>
+        /// <param name="home"></param>
+        /// <param name="away"></param>
+        /// <returns></returns>
+        public static bool TeamsExist(string home, string away)
+        {
+            return
+                Match
+                    .Any(m => m.Hometeam == home ||
+                                m.Awayteam == home) &&
+                Match
+                    .Any(m => m.Hometeam == away || m.Awayteam == away);
+        }
+
+        /// <summary>
+        /// Returns a list of matches based on the indexes.
+        /// </summary>
+        /// <param name="indexes"></param>
+        /// <returns></returns>
+        /// <exception cref="IndexOutOfRangeException"></exception>
+        /// <exception cref="NullReferenceException">thrown if matches are not set.</exception>
+        public static List<Match> SelectMatchesWithRowIndex(List<int> indexes)
+        {
+            var matchSample = new List<Match>();
+
+            foreach (int index in indexes)
+            {
+                if (index < 0 || index >= Match.Count)
+                    throw new IndexOutOfRangeException();
+                matchSample.Add(Match[index]);
+            }
+
+            return matchSample;
+        }
+
+        /// <summary>
+        /// Function initializes MatchData averages by returning number of goals 
         /// scored by hometeam,in selected league and season before date d.
         /// </summary>
         /// <exception cref="ArgumentNullException">Thrown if MatchData structures
@@ -170,7 +170,7 @@ namespace BetAI.BetSim
         private static double SeasonHomeGoalAvgBeforeDate(Match m)
         {
             var seasonMatchesBeforeDate = Match
-                .Where(x => x.Season == m.Season && x.Date < m.Date && x.League == m.League)
+                .Where(x => x.League == m.League && x.Season == m.Season && x.Date < m.Date)
                 .ToList();
 
             if (seasonMatchesBeforeDate.Count == 0)
@@ -180,7 +180,7 @@ namespace BetAI.BetSim
         }
 
         /// <summary>
-        /// Returns an average number of goals 
+        /// Function initializes MatchData averages by returning an average number of goals 
         /// scored by awayteam,in selected league and season before date d.
         /// </summary>
         /// <param name="d"></param>
@@ -191,7 +191,7 @@ namespace BetAI.BetSim
         private static double SeasonAwayGoalAvgBeforeDate(Match m)
         {
             var seasonMatchesBeforeDate = Match
-                .Where(x => x.Season == m.Season && x.Date < m.Date && x.League == m.League)
+                .Where(x => x.League == m.League && x.Season == m.Season && x.Date < m.Date)
                 .ToList();
 
             if (seasonMatchesBeforeDate.Count == 0)
@@ -201,39 +201,44 @@ namespace BetAI.BetSim
         }
 
         /// <summary>
-        /// Function selects N last home or away matches from team before date.
-        /// If not enough homeaway matches are found,  both home/away matches are searched,
+        /// Function selects N last home or away matches from team before date,
+        /// to initialize MatchData-dictionary.
+        /// If not enough homeaway matches are found, both home/away matches are searched,
         /// and returned.
         /// </summary>
         /// <returns>Match-array the size of n or of match count prior to beforeDate.</returns>
         private static Match[] SelectNLastFromTeam(bool searchHomeMatches, int n, DateTime beforeDate, string teamname)
         {
-            var nLast = new List<Match>();
+            var nLast = new Match[n];
 
             if (searchHomeMatches)
             {
                 nLast = Match
                     .Where(match => match.Date < beforeDate && match.Hometeam == teamname)
-                    .ToList();
+                    .OrderByDescending(m => m.Date)
+                    .Take(n)
+                    .ToArray();
             }
             else
             {
                 nLast = Match
                     .Where(match => match.Date < beforeDate && match.Awayteam == teamname)
-                    .ToList();
+                    .OrderByDescending(m => m.Date)
+                    .Take(n)
+                    .ToArray();
             }
 
-            if (nLast.Count < n)
+            if (nLast.Length < n)
             {
-                nLast = Match
+                return Match
                     .Where(match => 
                         match.Date < beforeDate && (match.Hometeam == teamname || match.Awayteam == teamname))
-                    .ToList();
+                    .OrderByDescending(m => m.Date)
+                    .Take(n)
+                    .ToArray();
             }
           
-            return nLast.OrderByDescending(m => m.Date)
-                .Take(n)
-                .ToArray();
+            return nLast;
         }
 
         /// <summary>
@@ -280,7 +285,6 @@ namespace BetAI.BetSim
                 var hometeam = Hometeam;
                 var homeMatches = hometeamPreviousMatches
                     .Where(match => match.Hometeam.Equals(hometeam))
-                    .ToList()
                     .OrderByDescending(match => match.Date)
                     .ToArray();
 
@@ -288,10 +292,8 @@ namespace BetAI.BetSim
                     return homeMatches;
 
                 return hometeamPreviousMatches
-                    .ToList()
                     .OrderByDescending(match => match.Date)
-                    .ToList()
-                    .GetRange(0, n)
+                    .Take(n)
                     .ToArray(); 
             }
 
@@ -315,17 +317,15 @@ namespace BetAI.BetSim
                 var awayMatches = awayteamPreviousMatches
                     .Where(match => 
                         match.Awayteam.Equals(awayteam))
-                    .ToList()
                     .OrderByDescending(match => match.Date)
                     .ToArray();
 
                 if (awayMatches.Length == n)
                     return awayMatches;
+
                 return awayteamPreviousMatches
-                    .ToList()
                     .OrderByDescending(match => match.Date)
-                    .ToList()
-                    .GetRange(0, n)
+                    .Take(n)
                     .ToArray();
             }
 
