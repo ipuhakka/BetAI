@@ -34,12 +34,14 @@ namespace BetAI.Genetics.Selection
         /// <returns></returns>
         public Parents SelectForCrossover(List<Node> generation)
         {
-            Node[] gen = generation.ToArray();
-            List<Node> tournament = CreateTournament(gen);
-            Node parent1 = MaxNode(tournament);
+            var gen = generation.ToArray();
+            var tournament = CreateTournament(gen);
+            var parent1 = MaxNode(tournament);
+
             gen = gen.ToList().Where(n => !n.Equals(parent1)).ToArray();
             tournament = CreateTournament(gen);
-            Node parent2 = MaxNode(tournament);
+            var parent2 = MaxNode(tournament);
+
             return new Parents(parent1, parent2);
         }   
 
@@ -51,23 +53,28 @@ namespace BetAI.Genetics.Selection
         /// <returns></returns>
         private List<Node> CreateTournament(Node[] generation)
         {
-            Node[] tournament = new Node[TournamentSize];
+            var tournament = new Node[TournamentSize];
             Randomise.InitRandom();
+
             for (int i = 0; i < tournament.Length; i++)
             {
+                // TODO: this should not include duplicates in tournament.
                 tournament[i] = generation[Randomise.random.Next(0, generation.Length)];
             }
+
             return tournament.ToList();
         }
 
         private Node MaxNode(List<Node> tournament)
         {
-            Node max = tournament[0];
+            var max = tournament[0];
+
             for (int i = 1; i < tournament.Count; i++)
             {
                 if (tournament[i].Fitness > max.Fitness)
                     max = tournament[i];
             }
+
             return max;
         }
     }

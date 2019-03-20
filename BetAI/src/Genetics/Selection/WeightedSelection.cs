@@ -35,19 +35,17 @@ namespace BetAI.Genetics.Selection
         private Parents ProbabilityRandomise(List<Node> generation)
         {
             generation = generation.OrderBy(n => n.CrossoverValue).ToList();
-            List<Node> toReproduce = new List<Node>();
+            var toReproduce = new List<Node>();
 
             for (int i = 0; i < 2; i++)
             {
-                double minimumCrossoverValue = generation.Min(n => n.CrossoverValue);
-                double maximumCrossoverValue = generation.Max(n => n.CrossoverValue);
-                double next = Randomise.random.NextDouble() * (maximumCrossoverValue - minimumCrossoverValue) + minimumCrossoverValue;
+                var minimumCrossoverValue = generation.Min(n => n.CrossoverValue);
+                var maximumCrossoverValue = generation.Max(n => n.CrossoverValue);
+                var next = Randomise.random.NextDouble() * (maximumCrossoverValue - minimumCrossoverValue) + minimumCrossoverValue;
 
-                Node selected = generation.FirstOrDefault(n => n.CrossoverValue > next);
-                if (selected == null)
-                {
-                    selected = generation[0];
-                }
+                var selected = generation.FirstOrDefault(n => n.CrossoverValue > next) ?? 
+                    generation[0];
+
                 toReproduce.Add(selected);
                 generation.Remove(selected);
             }
@@ -71,27 +69,28 @@ namespace BetAI.Genetics.Selection
         /// <returns></returns>
         private List<Node> SetWeights(Node[] generation)
         {
-            bool crossoverValuesCalculated = generation.ToList().Any(node => node.CrossoverValue != 0);
+            var crossoverValuesCalculated = generation.ToList().Any(node => node.CrossoverValue != 0);
 
             if (crossoverValuesCalculated) //CrossoverValues already calculated, no excess calculation should be done
             {
                 return generation.ToList();
             }
 
-            List<Node> sortedByFitness = generation.ToList().OrderBy(n => n.Fitness).ToList();
-            double runningSum = 0;
-            for (int i = 0; i < sortedByFitness.Count; i++)
+            var generationSortedByFitness = generation.ToList().OrderBy(n => n.Fitness).ToList();
+            var runningSum = 0.0;
+            for (int i = 0; i < generationSortedByFitness.Count; i++)
             {
                 if (i == 0)
-                    sortedByFitness[i].CrossoverValue = 0;
+                    generationSortedByFitness[i].CrossoverValue = 0;
                 else
-                    sortedByFitness[i].CrossoverValue = runningSum + (sortedByFitness[i].Fitness - sortedByFitness[i - 1].Fitness);
+                    generationSortedByFitness[i].CrossoverValue = runningSum + 
+                        (generationSortedByFitness[i].Fitness - generationSortedByFitness[i - 1].Fitness);
                 
                 
-                runningSum += sortedByFitness[i].CrossoverValue;
+                runningSum += generationSortedByFitness[i].CrossoverValue;
             }
 
-            return sortedByFitness;
+            return generationSortedByFitness;
         }
 
         /// <summary>
@@ -100,7 +99,7 @@ namespace BetAI.Genetics.Selection
         /// <param name="generation"></param>
         private double MinimumFitness(Node[] generation)
         {
-            double minimumFitness = generation[0].Fitness;
+            var minimumFitness = generation[0].Fitness;
 
             for (var i = 1; i < generation.Length; i++)
             {

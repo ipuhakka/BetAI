@@ -4,7 +4,6 @@ using System.IO;
 using NUnit.Framework;
 using Database;
 using BetAI.BetSim;
-using BetAI.Exceptions;
 using Newtonsoft.Json.Linq;
 
 namespace BetSim

@@ -24,7 +24,8 @@ namespace BetAI.FileOperations
         /// <exception cref="FormatException">Thrown if args contains invalid data</exception>
         public static void InitializeSave(string filename, params string[] args)
         {
-            string relativePath = Path.Combine(@"Files\", filename);
+            var relativePath = Path.Combine(@"Files\", filename);
+
             if (Directory.Exists(relativePath))
                 throw new DirectoryExistsException();
 
@@ -38,7 +39,7 @@ namespace BetAI.FileOperations
                 return;
             }
 
-            dynamic json = JsonConvert.DeserializeObject(File.ReadAllText(@"Files\defaults.json"));
+            var json = JsonConvert.DeserializeObject(File.ReadAllText(@"Files\defaults.json"));
             json = Values.ParseArguments(json, args);
                         
             File.WriteAllText(Path.Combine(relativePath, "values.json"), JsonConvert.SerializeObject(json));
@@ -54,8 +55,8 @@ namespace BetAI.FileOperations
         /// <exception cref="DirectoryNotFoundException"></exception>
         public static void WriteGeneration(string filename, List<Node> nodes, int generation)
         {
-            string directory = Path.Combine(@"Files\", filename, "gen_data");
-            string json = JsonConvert.SerializeObject(nodes);
+            var directory = Path.Combine(@"Files\", filename, "gen_data");
+            var json = JsonConvert.SerializeObject(nodes);
             File.WriteAllText(Path.Combine(directory, String.Format("gen{0}.json", generation)), json);
         }
 
@@ -69,8 +70,8 @@ namespace BetAI.FileOperations
         /// <exception cref="DirectoryNotFoundException"></exception>
         public static void WriteSample(string filename, List<Match> sample, int generation)
         {
-            string directory = Path.Combine(@"Files\", filename, "sample_data");
-            string json = JsonConvert.SerializeObject(sample);
+            var directory = Path.Combine(@"Files\", filename, "sample_data");
+            var json = JsonConvert.SerializeObject(sample);
             File.WriteAllText(Path.Combine(directory, String.Format("sample{0}.json", generation)), json);
         }
 
@@ -82,7 +83,7 @@ namespace BetAI.FileOperations
         /// <exception cref="DirectoryNotFoundException"></exception>
         public static void Log(string savefile, string[] lines)
         {
-            string path = Path.Combine(@"Files\", savefile, "log.txt");
+            var path = Path.Combine(@"Files\", savefile, "log.txt");
             File.AppendAllLines(path, lines);
         }
     }

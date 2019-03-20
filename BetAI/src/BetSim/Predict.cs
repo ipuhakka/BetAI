@@ -63,18 +63,18 @@ namespace BetAI.BetSim
                 hometeamPreviousMatches == null || awayteamPreviousMatches == null)
                 return null;
 
-            double homeScoredAvg = CountMeanScoredGoals(hometeamPreviousMatches.ToArray(), toPredict.Hometeam);
-            double awayScoredAvg = CountMeanScoredGoals(awayteamPreviousMatches.ToArray(), toPredict.Awayteam);
-            double homeConcededAvg = CountMeanConcededGoals(hometeamPreviousMatches.ToArray(), toPredict.Hometeam);
-            double awayConcededAvg = CountMeanConcededGoals(awayteamPreviousMatches.ToArray(), toPredict.Awayteam);
+            var homeScoredAvg = CountMeanScoredGoals(hometeamPreviousMatches.ToArray(), toPredict.Hometeam);
+            var awayScoredAvg = CountMeanScoredGoals(awayteamPreviousMatches.ToArray(), toPredict.Awayteam);
+            var homeConcededAvg = CountMeanConcededGoals(hometeamPreviousMatches.ToArray(), toPredict.Hometeam);
+            var awayConcededAvg = CountMeanConcededGoals(awayteamPreviousMatches.ToArray(), toPredict.Awayteam);
 
-            double homeAttStrength = CountStrength(homeScoredAvg, homeScoredLeagueAvg);
-            double homeDefStrength = CountStrength(homeConcededAvg, awayScoredLeagueAvg);
-            double awayAttStrength = CountStrength(awayScoredAvg, awayScoredLeagueAvg);
-            double awayDefStrength = CountStrength(awayConcededAvg, homeScoredLeagueAvg);
+            var homeAttStrength = CountStrength(homeScoredAvg, homeScoredLeagueAvg);
+            var homeDefStrength = CountStrength(homeConcededAvg, awayScoredLeagueAvg);
+            var awayAttStrength = CountStrength(awayScoredAvg, awayScoredLeagueAvg);
+            var awayDefStrength = CountStrength(awayConcededAvg, homeScoredLeagueAvg);
 
-            double homeGoalEstimate = CountGoalEstimate(homeAttStrength, awayDefStrength, homeScoredLeagueAvg);
-            double awayGoalEstimate = CountGoalEstimate(awayAttStrength, homeDefStrength, awayScoredLeagueAvg);
+            var homeGoalEstimate = CountGoalEstimate(homeAttStrength, awayDefStrength, homeScoredLeagueAvg);
+            var awayGoalEstimate = CountGoalEstimate(awayAttStrength, homeDefStrength, awayScoredLeagueAvg);
             
             return homeGoalEstimate - awayGoalEstimate;
         }
@@ -106,7 +106,7 @@ namespace BetAI.BetSim
         /// <returns>Average number of goals scored.</returns>
         private static double CountMeanScoredGoals(Match[] previousMatches, string team)
         {
-            double sum = 0;
+            var sum = 0.0;
 
             for (int i = 0; i < previousMatches.Length; i++)
             {
@@ -127,7 +127,7 @@ namespace BetAI.BetSim
         /// <returns>Average number of goals conceded by team.</returns>
         private static double CountMeanConcededGoals(Match[] previousMatches, string team)
         {
-            double sum = 0;
+            var sum = 0.0;
 
             for (int i = 0; i < previousMatches.Length; i++)
             {

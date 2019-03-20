@@ -28,12 +28,13 @@ namespace BetAI.BetSim
         /// if bet is won = (stake * predictedResultOdd) - stake</returns>
         public static double PlayBet(Match m, double predictedResult, double playLimit, double baseStake, double drawLimit)
         {
-            double predictedResultOdd = GetOddForPredictedResult(m, predictedResult, drawLimit);
-            double betCoefficient = CalculateBetRisk(m, predictedResult, predictedResultOdd, drawLimit, playLimit);
+            var predictedResultOdd = GetOddForPredictedResult(m, predictedResult, drawLimit);
+            var betCoefficient = CalculateBetRisk(m, predictedResult, predictedResultOdd, drawLimit, playLimit);
+
             if (playLimit > betCoefficient)
                 return 0;
 
-            double stake = CalculateStake(baseStake, betCoefficient, playLimit);
+            var stake = CalculateStake(baseStake, betCoefficient, playLimit);
 
             if (GetBetResult(m, predictedResult, drawLimit) == 1)
                 return (stake * predictedResultOdd) - stake;
@@ -53,8 +54,8 @@ namespace BetAI.BetSim
         /// </summary>
         public static double CalculateBetRisk(Match m, double predictedResult, double predictedOdd, double drawLimit, double playLimit)
         {
-            double expectedResultPercentage = CalculateExpectedResultPercentage(predictedResult);
-            return expectedResultPercentage / (1 / predictedOdd);
+            return CalculateExpectedResultPercentage(predictedResult) /
+                 (1 / predictedOdd);
         }
 
         /// <summary>
@@ -70,7 +71,7 @@ namespace BetAI.BetSim
                 return 1;
             else if (predictedResult < 0)
                 return -1;
-            else // predictedResult is exactly 0
+            else 
                 return 0;
         }
 
@@ -82,7 +83,7 @@ namespace BetAI.BetSim
                 return m.HomeOdd;
             else if (predictedResult < 0)
                 return m.AwayOdd;
-            else // predictedResult is exactly 0
+            else 
                 return m.DrawOdd;
         }
 
@@ -91,7 +92,7 @@ namespace BetAI.BetSim
         /// </summary>
         private static int GetBetResult(Match m, double predictedResult, double drawLimit)
         {
-            int predictedBetResult = GetPredictedBetResult(predictedResult, drawLimit);
+            var predictedBetResult = GetPredictedBetResult(predictedResult, drawLimit);
             if (predictedBetResult == m.Homescore - m.Awayscore)
                 return 1;
             if (predictedBetResult == 1 && m.Homescore > m.Awayscore)

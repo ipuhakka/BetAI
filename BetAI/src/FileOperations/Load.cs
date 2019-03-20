@@ -17,17 +17,13 @@ namespace BetAI.FileOperations
         {
             if (isFullPath)
             {
-                if (Directory.Exists(savefile))
-                    return true;
-                else
-                    return false;             
+                return Directory.Exists(savefile);         
             }
 
             var directory = Path.Combine(@"Files\", savefile);
 
-            if (Directory.Exists(directory))
-                return true;
-            return false;
+            return Directory.Exists(directory);
+
         }
 
         /// <summary>
@@ -38,13 +34,19 @@ namespace BetAI.FileOperations
         /// <exception cref="DirectoryNotFoundException"></exception>
         public static Values LoadValues(string savefile, bool isFullPath = false)
         {
-            string path = isFullPath ? Path.Combine(savefile, "values.json") : Path.Combine(@"Files\", savefile, "values.json");
-            string json = File.ReadAllText(path);
+            var path = isFullPath ? 
+                Path.Combine(savefile, "values.json") : 
+                Path.Combine(@"Files\", savefile, "values.json");
+
+            var json = File.ReadAllText(path);
+
             return JsonConvert.DeserializeObject<Values>(json);
         }
 
         /// <summary>
         /// Function returns the latest generation of nodes.
+        /// Returns null if there save contains no generation 
+        /// of nodes.
         /// </summary>
         /// <param name="savefile">Name of the savefile from which generation is loaded.</param>
         /// <exception cref="DirectoryNotFoundException">Savefile was not found.</exception>
@@ -52,8 +54,9 @@ namespace BetAI.FileOperations
         /// null if no generational data was not found.</returns>
         public static List<Node> LoadLatestGeneration(string savefile)
         {
-            string directory = Path.Combine(@"Files\", savefile, "gen_data");
-            int latestGeneration = LatestGeneration(directory);
+            var directory = Path.Combine(@"Files\", savefile, "gen_data");
+
+            var latestGeneration = LatestGeneration(directory);
             if (latestGeneration == -1)
                 return null;
 
@@ -67,8 +70,9 @@ namespace BetAI.FileOperations
         /// </summary>
         public static List<Node> LoadSecondNewestGeneration(string savefile)
         {
-            string directory = Path.Combine(@"Files\", savefile, "gen_data");
-            int latestGeneration = LatestGeneration(directory);
+            var directory = Path.Combine(@"Files\", savefile, "gen_data");
+
+            var latestGeneration = LatestGeneration(directory);
             if (latestGeneration < 1)
                 return null;
 
@@ -83,15 +87,17 @@ namespace BetAI.FileOperations
         /// <returns></returns>
         private static List<Node> LoadGeneration(string savefile, int generation)
         {
-            string directory = Path.Combine(@"Files\", savefile, "gen_data");
+            var directory = Path.Combine(@"Files\", savefile, "gen_data");
+
             int latestGeneration = LatestGeneration(directory);
             if (latestGeneration == -1)
                 return null;
 
-            string latestFile = Path.Combine(directory, String.Format("gen{0}.json", generation));
-            string json = File.ReadAllText(latestFile);
-            List<Node> nodes = JsonConvert.DeserializeObject<List<Node>>(json);
-            return nodes;
+            var latestFile = Path.Combine(directory, String.Format("gen{0}.json", generation));
+
+            var json = File.ReadAllText(latestFile);
+
+            return JsonConvert.DeserializeObject<List<Node>>(json);
         }
 
         /// <summary>
@@ -115,15 +121,10 @@ namespace BetAI.FileOperations
                 string splitted = filename.Split('.')[0]; //Filter out extension
                 splitted = splitted.Remove(0, 3); //remove "gen".
 
-                try
+                if (int.TryParse(splitted, out int generation))
                 {
-                    int generation = Convert.ToInt32(splitted);
                     if (generation > max)
                         max = generation;
-                }
-                catch (FormatException)
-                {
-                    continue;
                 }
             }
             return max;

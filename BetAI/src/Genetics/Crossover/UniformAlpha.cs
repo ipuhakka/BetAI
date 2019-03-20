@@ -23,6 +23,7 @@ namespace BetAI.Genetics.Crossover
         {
             if (alpha < 0)
                 throw new ArgumentException("Alpha cannot be less than 0");
+
             Alpha = alpha;
         }
 
@@ -39,11 +40,12 @@ namespace BetAI.Genetics.Crossover
         {
             if (parent1 == null || parent2 == null)
                 throw new ArgumentNullException("Parent nodes cannot be null");
+
             Randomise.InitRandom();
 
-            double[] drawLimits = CreateUniformAlphaValues(parent1.DrawLimit, parent2.DrawLimit);
-            double[] playLimits = CreateUniformAlphaValues(parent1.PlayLimit, parent2.PlayLimit);
-            int[] sampleSize = CreateUniformAlphaValues(parent1.SimulationSampleSize, parent2.SimulationSampleSize);
+            var drawLimits = CreateUniformAlphaValues(parent1.DrawLimit, parent2.DrawLimit);
+            var playLimits = CreateUniformAlphaValues(parent1.PlayLimit, parent2.PlayLimit);
+            var sampleSize = CreateUniformAlphaValues(parent1.SimulationSampleSize, parent2.SimulationSampleSize);
 
             return new List<Node>
             {
@@ -60,15 +62,15 @@ namespace BetAI.Genetics.Crossover
         /// <param name="values">Parameter values from both parents.</param>
         private double[] CreateUniformAlphaValues(params double[] values)
         {
-            Random rand = Randomise.random;
-            double[] childValues = new double[2];
+            var random = Randomise.random;
+            var childValues = new double[2];
 
             for (int i = 0; i < 2; i++)
             {
-                double nextVal = values[rand.Next(0, 1)];
-                double min = nextVal - Alpha;
-                double max = nextVal + Alpha;
-                childValues[i] = rand.NextDouble() * (max - min) + min;
+                var nextVal = values[random.Next(0, 1)];
+                var min = nextVal - Alpha;
+                var max = nextVal + Alpha;
+                childValues[i] = random.NextDouble() * (max - min) + min;
             }
             return childValues;
         }
@@ -82,15 +84,15 @@ namespace BetAI.Genetics.Crossover
         /// <param name="values">Parameter values from both parents.</param>
         private int[] CreateUniformAlphaValues(params int[] values)
         {
-            Random rand = Randomise.random;
-            int[] childValues = new int[2];
+            var random = Randomise.random;
+            var childValues = new int[2];
 
             for (int i = 0; i < 2; i++)
             {
-                int nextVal = values[rand.Next(0, 1)];
-                int min = (int)Math.Round(nextVal - (nextVal * Alpha), 0);
-                int max = (int)Math.Round(nextVal + (nextVal * Alpha), 0);
-                childValues[i] = rand.Next(min, max);
+                var nextVal = values[random.Next(0, 1)];
+                var min = (int)Math.Round(nextVal - (nextVal * Alpha), 0);
+                var max = (int)Math.Round(nextVal + (nextVal * Alpha), 0);
+                childValues[i] = random.Next(min, max);
             }
             return childValues;
         }

@@ -77,5 +77,16 @@ namespace Genetics.Selection
             }
         }
 
+        [Test]
+        public void Test_SelectForCrossover_EqualTournamentSizeAndGenerationSize_ReturnMaxNodes()
+        {
+            var tournamentSelection = new TournamentSelection(nodes.Count, nodes.Count);
+            var parents = tournamentSelection.SelectForCrossover(nodes);
+            var nodesOrdered = nodes.OrderByDescending(n => n.Fitness)
+                .ToList();
+            Assert.AreEqual(parents.Parent1, nodesOrdered[0]);
+            Assert.AreEqual(parents.Parent2, nodesOrdered[1]);
+        }
+
     }
 }
