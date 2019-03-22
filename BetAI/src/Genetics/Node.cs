@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using Database;
 using BetAI.BetSim;
 using BetAI.Exceptions;
@@ -7,6 +9,7 @@ using Newtonsoft.Json;
 
 namespace BetAI.Genetics
 {
+    [Serializable]
     public class Node
     {
         const int MaxSimulationSampleSize = 40;
@@ -188,6 +191,20 @@ namespace BetAI.Genetics
         public double GetMinPlayLimit() { return MinPlayLimit; }
         public double GetMaxDrawLimit() { return MaxDrawLimit; }
         public int GetMaxSimulationSampleSize() { return MaxSimulationSampleSize; }
+
+        public Node Clone()
+        {
+            MemoryStream ms = new MemoryStream();
+            BinaryFormatter bf = new BinaryFormatter();
+
+            bf.Serialize(ms, this);
+
+            ms.Position = 0;
+            object obj = bf.Deserialize(ms);
+            ms.Close();
+
+            return obj as Node;
+        }
 
         public override bool Equals(object obj)
         {

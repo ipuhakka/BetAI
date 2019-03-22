@@ -8,6 +8,7 @@ namespace BetAI.Genetics.Selection
     public class TournamentSelection: ISelection
     {
         public int TournamentSize { get; private set; }
+        private int Round { get; set; }
 
         /// <summary>
         /// Constructor for tournament selection. If tournamentSize
@@ -23,6 +24,8 @@ namespace BetAI.Genetics.Selection
                 TournamentSize = generationSize;
             else
                 TournamentSize = tournamentSize;
+
+            Round = 0;
         }
 
         /// <summary>
@@ -34,12 +37,18 @@ namespace BetAI.Genetics.Selection
         /// <returns></returns>
         public Parents SelectForCrossover(List<Node> generation)
         {
-            Node[] gen = generation.ToArray();
-            List<Node> tournament = CreateTournament(gen);
+            var cpyGeneration = generation.Select(node => node.Clone()).ToList();
+
+            List<Node> tournament = CreateTournament(cpyGeneration);
             Node parent1 = MaxNode(tournament);
-            gen = gen.ToList().Where(n => !n.Equals(parent1)).ToArray();
-            tournament = CreateTournament(gen);
+
+            cpyGeneration = generation.Select(node => node.Clone()).ToList();
+            cpyGeneration.Remove(parent1);
+
+            tournament = CreateTournament(cpyGeneration);
             Node parent2 = MaxNode(tournament);
+
+            Round = 0;
             return new Parents(parent1, parent2);
         }   
 
@@ -49,20 +58,26 @@ namespace BetAI.Genetics.Selection
         /// </summary>
         /// <param name="generation"></param>
         /// <returns></returns>
-        private List<Node> CreateTournament(Node[] generation)
+        private List<Node> CreateTournament(List<Node> nodes)
         {
-            Node[] tournament = new Node[TournamentSize];
+            Node[] tournament = new Node[TournamentSize - Round];
+            Round++;
             Randomise.InitRandom();
+
             for (int i = 0; i < tournament.Length; i++)
             {
-                tournament[i] = generation[Randomise.random.Next(0, generation.Length)];
+                var randomDouble = Randomise.random.Next(0, nodes.Count - 1);
+                tournament[i] = nodes[randomDouble];
+                nodes.RemoveAt(randomDouble);
             }
+
             return tournament.ToList();
         }
 
         private Node MaxNode(List<Node> tournament)
         {
             Node max = tournament[0];
+
             for (int i = 1; i < tournament.Count; i++)
             {
                 if (tournament[i].Fitness > max.Fitness)
