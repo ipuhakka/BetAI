@@ -58,7 +58,6 @@ namespace BetAI.Genetics.Selection
 
             for (int i = 0; i < tournament.Length; i++)
             {
-                // TODO: this should not include duplicates in tournament.
                 tournament[i] = generation[Randomise.random.Next(0, generation.Length)];
             }
 
