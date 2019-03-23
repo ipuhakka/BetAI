@@ -26,8 +26,8 @@ namespace BetAI.Genetics
         /// amount of parent nodes.</exception>
         public List<Node> CreateNewGeneration(List<Node> generation)
         {
-            int numberOfCrossovers = (int)Math.Floor((double) generation.Count / 2);
-            List<Node> newGeneration = new List<Node>();
+            var numberOfCrossovers = (int)Math.Floor((double) generation.Count / 2);
+            var newGeneration = new List<Node>();
 
             for (int i = 0; i < numberOfCrossovers; i++)
             {

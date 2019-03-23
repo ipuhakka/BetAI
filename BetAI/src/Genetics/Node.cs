@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Database;
 using BetAI.BetSim;
-using BetAI.Exceptions;
 using Newtonsoft.Json;
 
 namespace BetAI.Genetics
@@ -107,12 +106,12 @@ namespace BetAI.Genetics
         /// </summary>
         public List<Wager> PlayBets(List<Match> matches)
         {
-            List<Wager> wagers = new List<Wager>();
+            var wagers = new List<Wager>();
 
             foreach(Match m in matches)
             {
 
-                double? predictedReturnedValue = Predict.PredictResult(m, SimulationSampleSize);
+                var predictedReturnedValue = Predict.PredictResult(m, SimulationSampleSize);
 
                 if (predictedReturnedValue == null)
                 {
@@ -120,23 +119,15 @@ namespace BetAI.Genetics
                     continue;
                 }
 
-                double predictedResult = (double)predictedReturnedValue;
+                var predictedResult = (double)predictedReturnedValue;
 
-                double predictedOdd = Bet.GetOddForPredictedResult(m, predictedResult, DrawLimit);
-                double betRisk = Bet.CalculateBetRisk(m, predictedResult, predictedOdd, DrawLimit, PlayLimit);
-                double stake = Bet.CalculateStake(MinimumStake, betRisk, PlayLimit);
+                var predictedOdd = Bet.GetOddForPredictedResult(m, predictedResult, DrawLimit);
+                var betRisk = Bet.CalculateBetRisk(m, predictedResult, predictedOdd, DrawLimit, PlayLimit);
+                var stake = Bet.CalculateStake(MinimumStake, betRisk, PlayLimit);
 
-                int result = Bet.GetPredictedBetResult(predictedResult, DrawLimit);
-                if (result == 1)
-                {
-                    m.SimulatedResult = '1';
-                } else if (result == 0)
-                {
-                    m.SimulatedResult = 'X';
-                } else
-                {
-                    m.SimulatedResult = '2';
-                }
+                var result = Bet.GetPredictedBetResult(predictedResult, DrawLimit);
+
+                m.SimulatedResult = Bet.GetBetResultMark(result);
 
                 if (PlayLimit <= betRisk)
                 {
@@ -161,7 +152,7 @@ namespace BetAI.Genetics
 
             foreach (Match m in sample)
             {
-                double? predictedReturnedValue = Predict.PredictResult(m, SimulationSampleSize);
+                var predictedReturnedValue = Predict.PredictResult(m, SimulationSampleSize);
 
                 if (predictedReturnedValue == null)
                 {
@@ -169,9 +160,10 @@ namespace BetAI.Genetics
                     continue;
                 }
 
-                double predictedResult = (double)predictedReturnedValue;
+                var predictedResult = (double)predictedReturnedValue;
 
-                double betProfit = Bet.PlayBet(m, predictedResult, PlayLimit, MinimumStake, DrawLimit);
+                var betProfit = Bet.PlayBet(m, predictedResult, PlayLimit, MinimumStake, DrawLimit);
+
                 if (betProfit == 0)
                     BetsNotPlayed++;
                 else if (betProfit > 0)
@@ -202,7 +194,7 @@ namespace BetAI.Genetics
 
         public override int GetHashCode()
         {
-            int hash = PlayLimit.GetHashCode() * 12;
+            var hash = PlayLimit.GetHashCode() * 12;
             hash = hash * SimulationSampleSize.GetHashCode() * 5;
             hash = hash * DrawLimit.GetHashCode() + 2;
             return hash;

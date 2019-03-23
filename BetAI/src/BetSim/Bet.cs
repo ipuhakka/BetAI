@@ -88,6 +88,27 @@ namespace BetAI.BetSim
         }
 
         /// <summary>
+        /// Returns character mark for result.
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public static char GetBetResultMark(int result)
+        {
+            switch (result)
+            {
+                case 1:
+                    return '1';
+                case 0:
+                    return 'X';
+                case -1:
+                    return '2';
+                default:
+                    throw new ArgumentException($"GetBetResultMark accepts integers 1 (home win)," +
+                        $"0 (draw) or -1 (away win)");
+            }
+        }
+
+        /// <summary>
         /// Returns 1 if simulated bet was correct, 0 if not.
         /// </summary>
         private static int GetBetResult(Match m, double predictedResult, double drawLimit)
