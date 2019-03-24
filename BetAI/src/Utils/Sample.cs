@@ -21,20 +21,22 @@ namespace BetAI.Utils
         /// <exception cref="SQLiteException"></exception>
         public static List<Match> CreateSample(int sampleSize)
         {
-            List<int> indexes = new List<int>();
+            var indexes = new List<int>();
 
-            int matchCount = Matches.GetMatchCount();
+            var matchCount = Matches.GetMatchCount();
             if (sampleSize > matchCount)
                 throw new NotEnoughDataException();
 
-            List<int> possibleIndexes = Enumerable.Range(0, matchCount).ToList();
-            Random rand = new Random();
+            var possibleIndexes = Enumerable.Range(0, matchCount).ToList();
+            var rand = new Random();
+
             for (int i = 0; i < sampleSize; i++)
             {
-                int newPoint = rand.Next(0, possibleIndexes.Count - 1);
-                indexes.Add(possibleIndexes[newPoint]);
-                possibleIndexes.RemoveAt(newPoint);
+                var newIndex = rand.Next(0, possibleIndexes.Count - 1);
+                indexes.Add(possibleIndexes[newIndex]);
+                possibleIndexes.RemoveAt(newIndex);
             }
+
             return Matches.SelectMatchesWithRowIndex(indexes);
         }
     }

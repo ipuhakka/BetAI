@@ -96,6 +96,5 @@ namespace Genetics.Selection
             Assert.AreEqual(parents.Parent1, nodesOrdered[0]);
             Assert.AreEqual(parents.Parent2, nodesOrdered[1]);
         }
-
     }
 }

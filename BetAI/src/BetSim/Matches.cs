@@ -24,6 +24,7 @@ namespace BetAI.BetSim
         {
             if (path == null)
                 throw new ArgumentNullException();
+
             var db = new DB(path);
             Match = db.SelectAllMatchesFromDatabase();
         }
@@ -153,6 +154,7 @@ namespace BetAI.BetSim
             {
                 if (index < 0 || index >= Match.Count)
                     throw new IndexOutOfRangeException();
+
                 matchSample.Add(Match[index]);
             }
 
@@ -283,6 +285,7 @@ namespace BetAI.BetSim
                     return null;
 
                 var hometeam = Hometeam;
+
                 var homeMatches = hometeamPreviousMatches
                     .Where(match => match.Hometeam.Equals(hometeam))
                     .OrderByDescending(match => match.Date)
@@ -314,6 +317,7 @@ namespace BetAI.BetSim
                     return null;
 
                 var awayteam = Awayteam;
+
                 var awayMatches = awayteamPreviousMatches
                     .Where(match => 
                         match.Awayteam.Equals(awayteam))

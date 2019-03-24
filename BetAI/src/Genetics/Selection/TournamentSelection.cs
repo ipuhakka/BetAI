@@ -39,14 +39,14 @@ namespace BetAI.Genetics.Selection
         {
             var cpyGeneration = generation.Select(node => node.Clone()).ToList();
 
-            List<Node> tournament = CreateTournament(cpyGeneration);
-            Node parent1 = MaxNode(tournament);
+            var tournament = CreateTournament(cpyGeneration);
+            var parent1 = MaxNode(tournament);
 
             cpyGeneration = generation.Select(node => node.Clone()).ToList();
             cpyGeneration.Remove(parent1);
 
             tournament = CreateTournament(cpyGeneration);
-            Node parent2 = MaxNode(tournament);
+            var parent2 = MaxNode(tournament);
 
             Round = 0;
             return new Parents(parent1, parent2);
@@ -60,8 +60,9 @@ namespace BetAI.Genetics.Selection
         /// <returns></returns>
         private List<Node> CreateTournament(List<Node> nodes)
         {
-            Node[] tournament = new Node[TournamentSize - Round];
+            var tournament = new Node[TournamentSize - Round];
             Round++;
+
             Randomise.InitRandom();
 
             for (int i = 0; i < tournament.Length; i++)
@@ -76,14 +77,15 @@ namespace BetAI.Genetics.Selection
 
         private Node MaxNode(List<Node> tournament)
         {
-            Node max = tournament[0];
+            var maxNode = tournament[0];
 
             for (int i = 1; i < tournament.Count; i++)
             {
-                if (tournament[i].Fitness > max.Fitness)
-                    max = tournament[i];
+                if (tournament[i].Fitness > maxNode.Fitness)
+                    maxNode = tournament[i];
             }
-            return max;
+
+            return maxNode;
         }
     }
 }

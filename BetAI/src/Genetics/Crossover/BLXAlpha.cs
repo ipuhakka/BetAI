@@ -21,6 +21,7 @@ namespace BetAI.Genetics.Crossover
         {
             if (alpha_par < 0)
                 throw new ArgumentException("Alpha parameter cannot be less than 0.");
+
             Alpha = alpha_par;
         }
 
@@ -43,14 +44,14 @@ namespace BetAI.Genetics.Crossover
 
         public List<Node> BLX_alpha(Node parent1, Node parent2)
         {
-            Random rand = new Random();
-            double[] drawLimits = BlendDoubles(rand, Alpha, parent1.DrawLimit, parent2.DrawLimit);
-            double[] playLimits = BlendDoubles(rand, Alpha, parent1.PlayLimit, parent2.PlayLimit);
-            int[] simulationSampleSizes = BlendInts(rand, Alpha, parent1.SimulationSampleSize, parent2.SimulationSampleSize);
+            var random = new Random();
+            var drawLimits = BlendDoubles(random, Alpha, parent1.DrawLimit, parent2.DrawLimit);
+            var playLimits = BlendDoubles(random, Alpha, parent1.PlayLimit, parent2.PlayLimit);
+            var simulationSampleSizes = BlendInts(random, Alpha, parent1.SimulationSampleSize, parent2.SimulationSampleSize);
 
-            Node child1 = new Node(playLimits[0], drawLimits[0], parent1.MinimumStake, parent1.Generation + 1, simulationSampleSizes[0]);
-            Node child2 = new Node(playLimits[1], drawLimits[1], parent2.MinimumStake, parent2.Generation + 1, simulationSampleSizes[1]);
-            return new List<Node> { child1, child2};
+            var child1 = new Node(playLimits[0], drawLimits[0], parent1.MinimumStake, parent1.Generation + 1, simulationSampleSizes[0]);
+            var child2 = new Node(playLimits[1], drawLimits[1], parent2.MinimumStake, parent2.Generation + 1, simulationSampleSizes[1]);
+            return new List<Node> { child1, child2 };
         }
 
         /// <summary>
@@ -69,12 +70,14 @@ namespace BetAI.Genetics.Crossover
         /// <returns></returns>
         private double[] BlendDoubles(Random rand, double alpha, double val1, double val2)
         {
-            double[] newValues = new double[2];
-            double d = Math.Abs(val1 - val2);
-            double min = Math.Min(val1, val2);
-            double max = Math.Max(val1, val2);
-            newValues[0] = rand.NextDouble() * ((max + alpha * d) - (min - alpha * d)) + min - alpha * d;
-            newValues[1] = rand.NextDouble() * ((max + alpha * d) - (min - alpha * d)) + min - alpha * d;
+            var newValues = new double[2];
+            var d = Math.Abs(val1 - val2);
+            var min = Math.Min(val1, val2);
+            var max = Math.Max(val1, val2);
+
+            newValues[0] = rand.NextDouble() * (max + alpha * d - (min - alpha * d)) + min - alpha * d;
+            newValues[1] = rand.NextDouble() * (max + alpha * d - (min - alpha * d)) + min - alpha * d;
+
             return newValues;
         }
 
@@ -88,14 +91,15 @@ namespace BetAI.Genetics.Crossover
         /// <returns></returns>
         private int[] BlendInts(Random rand, double alpha, int val1, int val2)
         {
-            int[] newValues = new int[2];
-            int d = Math.Abs(val1 - val2);
-            int min = Math.Min(val1, val2);
-            int max = Math.Max(val1, val2);
+            var newValues = new int[2];
+            var d = Math.Abs(val1 - val2);
+            var min = Math.Min(val1, val2);
+            var max = Math.Max(val1, val2);
+
             newValues[0] = rand.Next((int)Math.Round(min - alpha * d), (int)Math.Round(max + alpha * d));
             newValues[1] = rand.Next((int)Math.Round(min - alpha * d), (int)Math.Round(max + alpha * d));
+
             return newValues;
         }
-
     }
 }

@@ -42,8 +42,7 @@ namespace BetAI.Genetics
         public void LogValues()
         {
             Console.WriteLine("Starting with arguments:");
-            FileInfo file = new FileInfo(Database);
-            Console.WriteLine("Database: " + file.FullName);
+            Console.WriteLine("Database: " + new FileInfo(Database).FullName);
             Console.WriteLine("Number of nodes: " + NumberOfNodes);
             Console.WriteLine("Sample size: " + SampleSize);
             Console.WriteLine("Minimum stake: " + MinimumStake);
@@ -75,7 +74,8 @@ namespace BetAI.Genetics
         {
             foreach (string arg in args)
             {
-                string[] argument = arg.Split('=');
+                var argument = arg.Split('=');
+
                 switch (argument[0].Trim().ToLower())
                 {
                     case "alpha":
@@ -122,9 +122,9 @@ namespace BetAI.Genetics
         /// <exception cref="InitializationException">Parent selection method is not identified.</exception>
         public static ISelection InitializeSelectionMethod(Values values, int nodeCount)
         {
-            string method = values.ParentSelectionMethod;
+            var parentSelectionMethod = values.ParentSelectionMethod;
 
-            switch (method.Trim().ToLower())
+            switch (parentSelectionMethod.Trim().ToLower())
             {
                 case "weighted":
                     return new WeightedSelection();
@@ -142,9 +142,9 @@ namespace BetAI.Genetics
         /// <exception cref="InitializationException">Crossover method is not identified.</exception>
         public static ICrossover InitializeCrossoverMethod(Values values)
         {
-            string method = values.CrossoverMethod;
+            var crossoverMethod = values.CrossoverMethod;
 
-            switch (method.Trim().ToLower())
+            switch (crossoverMethod.Trim().ToLower())
             {
                 case "blx":
                     return new BLXAlpha(values.Alpha);
@@ -164,9 +164,9 @@ namespace BetAI.Genetics
         /// <param name="values"></param>
         public static IMutation InitializeMutationMethod(Values values)
         {
-            string method = values.MutationMethod;
+            var mutationMethod = values.MutationMethod;
 
-            switch (method.Trim().ToLower())
+            switch (mutationMethod.Trim().ToLower())
             {
                 case "uniform":
                     return new UniformMutation();

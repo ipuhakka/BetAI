@@ -100,6 +100,9 @@
     <Content Include="test-files\data.sqlite3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="test-files\Files\defaults.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="test-files\Files\test\gen_data\gen0.json" />
     <None Include="test-files\Files\test\gen_data\gen1.json" />
     <None Include="test-files\Files\test\gen_data\gen3.json" />
