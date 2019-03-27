@@ -77,9 +77,41 @@ namespace Database
                 }
                 transaction.Commit();
             }
-            con.Close();
 
             return addedMatches;
+        }
+
+        /// <summary>
+        /// Deletes matches.
+        /// </summary>
+        /// <param name="matchesToDelete"></param>
+        /// <returns></returns>
+        public int DeleteMatches(List<Match> matchesToDelete)
+        {
+            var deletedMatches = 0;
+
+            var con = new SQLiteConnection(ConnectionString);
+            con.Open();
+
+            using (var cmd = new SQLiteCommand(con))
+            using (var transaction = con.BeginTransaction())
+            {
+                matchesToDelete.ForEach(match =>
+                {
+                    cmd.CommandText = "DELETE FROM matches " +
+                    "WHERE playedDate=@playedDate AND " +
+                        "hometeam=@hometeam AND " +
+                        "awayteam=@awayteam";
+                    cmd.Parameters.AddWithValue(@"playedDate", match.Date);
+                    cmd.Parameters.AddWithValue(@"hometeam", match.Hometeam);
+                    cmd.Parameters.AddWithValue(@"awayteam", match.Awayteam);
+                    deletedMatches += cmd.ExecuteNonQuery();
+                });
+
+                transaction.Commit();
+            }
+
+            return deletedMatches;
         }
 
         /// <summary>

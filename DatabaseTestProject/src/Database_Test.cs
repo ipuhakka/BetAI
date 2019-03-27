@@ -21,18 +21,7 @@ namespace DatabaseTestProject
             db = new DB(path);
             db.CreateDatabase(path);
             db.ExecuteScript("db_schema_dump.sql");
-        }
-
-        [SetUp]
-        public void SetUp()
-        {
             db.ExecuteScript("db_testdata_dump.sql");
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            db.ClearDatabase();
         }
 
         [OneTimeTearDown]
@@ -44,9 +33,10 @@ namespace DatabaseTestProject
         [Test]
         public void Test_ExecuteScript_return_1()
         {
-            DB database = new DB("testDB.db");
+            var database = new DB("testDB.db");
             database.CreateDatabase("testDB.db");
-            int result = database.ExecuteScript("db_schema_dump.sql");
+
+            var result = database.ExecuteScript("db_schema_dump.sql");
             database.DeleteDatabase("testDB.db");
             Assert.AreEqual(1, result);
         }
@@ -57,8 +47,9 @@ namespace DatabaseTestProject
         [Test]
         public void Test_ExecuteScript_throw_SQLiteException()
         {
-            DB database = new DB("testDB.db");
+            var database = new DB("testDB.db");
             database.CreateDatabase("testDB.db");
+
             Assert.Throws<SQLiteException>(() => database.ExecuteScript(@"..\..\DatabaseTestProject\test-files\db_schema_throws_SQLiteE_dump.sql"));
             database.DeleteDatabase("testDB.db");
         }
@@ -66,37 +57,60 @@ namespace DatabaseTestProject
         [Test]
         public void Test_ExecuteScript_Unexisting_File_throws_SQLiteException()
         {
-            DB database = new DB("unusedDatabase.db");
+            var database = new DB("unusedDatabase.db");
+
             Assert.Throws<SQLiteException>(() => database.ExecuteScript(@"..\..\DatabaseTestProject\test-files\db_schema_throws_SQLiteE_dump.sql"));
+        }
+
+        /// <summary>
+        /// Checks that DeleteMatches deletes correct amount of matches.
+        /// </summary>
+        /// <returns></returns>
+        [Test]
+        public void Test_DeleteMatches()
+        {
+            var matches = new List<Match>
+            {
+                new Match("ManU", "Nor", "England", "2016-2017", new DateTime(2018, 1, 1), 2, 1, 1.34, 3.1, 4.2),
+                new Match("ManU", "Liverpool", "England", "2016-2017", new DateTime(2018, 1, 2), 2, 1, 1.34, 3.1, 4.2),
+                new Match("ManU", "Nor", "England", "2016-2017", new DateTime(2018, 1, 3), 2, 1, 1.34, 3.1, 4.2)
+            };
+
+            db.AddMatches(matches);
+
+            Assert.AreEqual(3, db.DeleteMatches(matches));
         }
 
         [Test]
         public void Test_AddMatches_Invalid_format_throws_ArgumentException()
         {
-            List<Match> matches = new List<Match>
+            var matches = new List<Match>
             {
                 new Match("ManU", "Nor", "England", "2016/2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2)
             };
+
             Assert.Throws<ArgumentException>(() => db.AddMatches(matches));
         }
 
         [Test]
         public void Test_AddMatches_Season_TooLong_throws_ArgumentException()
         {
-            List<Match> matches = new List<Match>
+            var matches = new List<Match>
             {
                 new Match("ManU", "Nor", "England", "20162-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2)
             };
+
             Assert.Throws<ArgumentException>(() => db.AddMatches(matches));
         }
 
         [Test]
         public void Test_AddMatches_Season_TooShort_throws_ArgumentException()
         {
-            List<Match> matches = new List<Match>
+            var matches = new List<Match>
             {
                 new Match("ManU", "Nor", "England", "201-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2)
             };
+
             Assert.Throws<ArgumentException>(() => db.AddMatches(matches));
         }
 
@@ -107,12 +121,15 @@ namespace DatabaseTestProject
         [Test]
         public void Test_AddMatches_return1()
         {
-            List<Match> matches = new List<Match>();
+            var matches = new List<Match>();
+
             for (int i = 0; i < 3; i++)
             {
                 matches.Add(new Match("ManU", "Nor", "England", "2016-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2));
             }
-            int result = db.AddMatches(matches);
+
+            var result = db.AddMatches(matches);
+            db.DeleteMatches(matches);
             Assert.AreEqual(1, result);
         }
 
@@ -122,12 +139,14 @@ namespace DatabaseTestProject
         [Test]
         public void Test_AddMatches_throws_SQLiteException()
         {
-            DB database = new DB("noExist.db");
-            List<Match> matches = new List<Match>();
+            var database = new DB("noExist.db");
+            var matches = new List<Match>();
+
             for (int i = 0; i < 3; i++)
             {
                 matches.Add(new Match("ManU", "Nor", "England", "2016-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2));
             }
+
             Assert.Throws<SQLiteException>(() => database.AddMatches(matches));
         }
 
@@ -138,15 +157,19 @@ namespace DatabaseTestProject
         [Test]
         public void Test_AddMatches_380()
         {
-            List<Match> matches = new List<Match>();
+            var matches = new List<Match>();
+
             for (int i = 0; i < 380; i++)
             {
                 matches.Add(new Match(i.ToString(), (i + 1).ToString(), "England", "2016-2017", new DateTime(2018, 9, 23), 2, 1, 1.34, 3.1, 4.2));
             }
-            Stopwatch sw = new Stopwatch();
+
+            var sw = new Stopwatch();
             sw.Start();
-            int count = db.AddMatches(matches);
+            var count = db.AddMatches(matches);
             sw.Stop();
+            db.DeleteMatches(matches);
+
             Console.WriteLine("took " + sw.ElapsedMilliseconds + " milliseconds");
             Assert.LessOrEqual(sw.ElapsedMilliseconds, 2000);
             Assert.AreEqual(380, count);
@@ -161,7 +184,8 @@ namespace DatabaseTestProject
         [Test]
         public void Test_SelectAllFromDatabase_throws_SQLiteException()
         {
-            DB test = new DB("unexistingfile");
+            var test = new DB("unexistingfile");
+
             Assert.Throws<SQLiteException>(() => test.SelectAllMatchesFromDatabase());
         }
 
@@ -191,6 +215,7 @@ namespace DatabaseTestProject
             };
 
             Assert.AreEqual(2, db.AddWagers(wagers, "testAuthor"));
+            db.ClearWagersAndBets();
         }
 
         /// <summary>
@@ -218,6 +243,7 @@ namespace DatabaseTestProject
 
             Assert.AreEqual(2, db.AddWagers(wagers, "testAuthor"));
             Assert.AreEqual(0, db.AddWagers(new List<Wager> { new Wager(matchList1, 2) }, "testAuthor"));
+            db.ClearWagersAndBets();
         }
 
         /// <summary>
@@ -264,6 +290,7 @@ namespace DatabaseTestProject
                     Assert.IsTrue(expectedChars.Contains(match.SimulatedResult));
                 });
             });
+            db.ClearWagersAndBets();
         }
 
         /// <summary>
@@ -335,6 +362,9 @@ namespace DatabaseTestProject
                .Where(wager => wager.Result == -1)
                .ToList()
                .Count);
+
+            db.DeleteMatches(matchList1.Concat(matchList2).ToList());
+            db.ClearWagersAndBets();
         }
     }
 }

@@ -54,12 +54,29 @@ namespace Database
         /// <returns></returns>
         public void ClearDatabase()
         {
-            string query = "DELETE FROM matches; Delete From Bet_Wager; DELETE FROM AI_Wager;" +
+            var query = "DELETE FROM matches; Delete From Bet_Wager; DELETE FROM AI_Wager;" +
                 "Delete FROM AI_Bet;";
             SQLiteConnection con = new SQLiteConnection(ConnectionString);
             con.Open();
+
             SQLiteCommand command = new SQLiteCommand(query, con);
             command.ExecuteNonQuery();
+
+            con.Close();
+        }
+
+        /// <summary>
+        /// Clears wager and bet tables.
+        /// </summary>
+        public void ClearWagersAndBets()
+        {
+            var query = "Delete From AI_Wager; Delete From AI_Bet;";
+            SQLiteConnection con = new SQLiteConnection(ConnectionString);
+            con.Open();
+
+            SQLiteCommand command = new SQLiteCommand(query, con);
+            command.ExecuteNonQuery();
+
             con.Close();
         }
 
@@ -77,6 +94,16 @@ namespace Database
                 return -1;
 
             return 1;
+        }
+
+        /// <summary>
+        /// Deletes matches from database. Returns the number of affected rows.
+        /// </summary>
+        /// <param name="matchesToDelete"></param>
+        /// <returns></returns>
+        public int DeleteMatches(List<Match> matchesToDelete)
+        {
+            return new DB_Matches(ConnectionString).DeleteMatches(matchesToDelete);
         }
 
         /// <summary>
