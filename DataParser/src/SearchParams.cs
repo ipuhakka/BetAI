@@ -39,7 +39,7 @@ namespace DataParser
             {
                 if (arg != null)
                 {
-                    string[] split = arg.Split('=');
+                    var split = arg.Split('=');
 
                     if (split.Length == 2)
                     {

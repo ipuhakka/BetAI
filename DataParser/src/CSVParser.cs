@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using Database;
 using System.Globalization;
@@ -23,33 +25,39 @@ namespace DataParser
         /// default or user inputted, are not found from the inputFile.</exception>
         public List<Match> Parse(string inputFile, string league, string season, params string[] columns)
         {
-            string[] lines = FileOperations.ReadFile(inputFile);
-            SearchParams sp = new SearchParams(columns);
-            List<Tuple<string, int>> indexes = GetColumnIndexes(sp, lines);
-            return ParseColumns(indexes, lines, league, season);
+            var lines = File.ReadAllLines(inputFile);
+            var searchParams = new SearchParams(columns);
+
+            var columnIndexes = GetColumnIndexes(searchParams, lines);
+
+            return ParseColumns(columnIndexes, lines, league, season);
         }
 
         /// <summary>
         /// Parses needed columns from string[] lines into a match list. 
         /// </summary>
+        /// <param name="columnIndexes">Dictionary containing index for each column</param>
+        /// <param name="lines"></param>
+        /// <param name="league"></param>
+        /// <param name="season"></param>
         /// <exception cref="FormatException">Thrown if a value conversion fail.</exception>
-        private List<Match> ParseColumns(List<Tuple<string, int>> indexes, string[] lines, string league, string season)
+        private List<Match> ParseColumns(Dictionary<string, int> columnIndexes, string[] lines, string league, string season)
         {
-            List<Match> matches = new List<Match>();
+            var matches = new List<Match>();
 
             for(int i = 1; i < lines.Length; i++)
             {
                 string[] splitted = lines[i].Split(',');
                 try 
                 {
-                    string date = Convert.ToDateTime(splitted[indexes[indexes.FindIndex(t => t.Item1 == "Date")].Item2]).ToString("yyyy-MM-dd");
-                    string hometeam = splitted[indexes[indexes.FindIndex(t => t.Item1 == "Hometeam")].Item2];
-                    string awayteam = splitted[indexes[indexes.FindIndex(t => t.Item1 == "Awayteam")].Item2];
-                    int homescore = Convert.ToInt32(splitted[indexes[indexes.FindIndex(t => t.Item1 == "Homescore")].Item2]);
-                    int awayscore = Convert.ToInt32(splitted[indexes[indexes.FindIndex(t => t.Item1 == "Awayscore")].Item2]);
-                    double homeOdd = Convert.ToDouble(splitted[indexes[indexes.FindIndex(t => t.Item1 == "HomeOdd")].Item2], CultureInfo.InvariantCulture);
-                    double drawOdd = Convert.ToDouble(splitted[indexes[indexes.FindIndex(t => t.Item1 == "DrawOdd")].Item2], CultureInfo.InvariantCulture);
-                    double awayOdd = Convert.ToDouble(splitted[indexes[indexes.FindIndex(t => t.Item1 == "AwayOdd")].Item2], CultureInfo.InvariantCulture);
+                    var date = Convert.ToDateTime(splitted[columnIndexes["Date"]]).ToString("yyyy-MM-dd");
+                    var hometeam = splitted[columnIndexes["Hometeam"]];
+                    var awayteam = splitted[columnIndexes["Awayteam"]];
+                    var homescore = Convert.ToInt32(splitted[columnIndexes["Homescore"]]);
+                    var awayscore = Convert.ToInt32(splitted[columnIndexes["Awayscore"]]);
+                    var homeOdd = Convert.ToDouble(splitted[columnIndexes["HomeOdd"]], CultureInfo.InvariantCulture);
+                    var drawOdd = Convert.ToDouble(splitted[columnIndexes["DrawOdd"]], CultureInfo.InvariantCulture);
+                    var awayOdd = Convert.ToDouble(splitted[columnIndexes["AwayOdd"]], CultureInfo.InvariantCulture);
                     matches.Add(new Match(hometeam, awayteam, season, league, Convert.ToDateTime(date), homescore,
                         awayscore, homeOdd, drawOdd, awayOdd));
                 }
@@ -75,22 +83,26 @@ namespace DataParser
         /// <param name="lines"></param>
         /// <exception cref="ArgumentException">Thrown if any of the column names
         /// specified in SearchParams-object are not found.</exception>
-        private List<Tuple<string, int>> GetColumnIndexes(SearchParams sp, string[] lines)
+        private Dictionary<string, int> GetColumnIndexes(SearchParams sp, string[] lines)
         {
-            List<Tuple<string, int>> tuples = new List<Tuple<string, int>>();
-            string[] columnNames = lines[0].Split(',');
-            tuples.Add(new Tuple<string, int>("Date", Array.FindIndex(columnNames, x => x.Equals(sp.Date))));
-            tuples.Add(new Tuple<string, int>("Hometeam", Array.FindIndex(columnNames, x => x.Equals(sp.Hometeam))));
-            tuples.Add(new Tuple<string, int>("Awayteam", Array.FindIndex(columnNames, x => x.Equals(sp.Awayteam))));
-            tuples.Add(new Tuple<string, int>("Homescore", Array.FindIndex(columnNames, x => x.Equals(sp.Homescore))));
-            tuples.Add(new Tuple<string, int>("Awayscore", Array.FindIndex(columnNames, x => x.Equals(sp.Awayscore))));
-            tuples.Add(new Tuple<string, int>("HomeOdd", Array.FindIndex(columnNames, x => x.Equals(sp.HomeOdd))));
-            tuples.Add(new Tuple<string, int>("DrawOdd", Array.FindIndex(columnNames, x => x.Equals(sp.DrawOdd))));
-            tuples.Add(new Tuple<string, int>("AwayOdd", Array.FindIndex(columnNames, x => x.Equals(sp.AwayOdd))));
+            var dictionary = new Dictionary<string, int>();
 
-            if (tuples.FindIndex(t => t.Item2 == -1) != -1)
-                throw new ArgumentException();
-            return tuples;
+            var columnNames = lines[0].Split(',');
+            dictionary.Add("Date", Array.FindIndex(columnNames, x => x.Equals(sp.Date)));
+            dictionary.Add("Hometeam", Array.FindIndex(columnNames, x => x.Equals(sp.Hometeam)));
+            dictionary.Add("Awayteam", Array.FindIndex(columnNames, x => x.Equals(sp.Awayteam)));
+            dictionary.Add("Homescore", Array.FindIndex(columnNames, x => x.Equals(sp.Homescore)));
+            dictionary.Add("Awayscore", Array.FindIndex(columnNames, x => x.Equals(sp.Awayscore)));
+            dictionary.Add("HomeOdd", Array.FindIndex(columnNames, x => x.Equals(sp.HomeOdd)));
+            dictionary.Add("DrawOdd", Array.FindIndex(columnNames, x => x.Equals(sp.DrawOdd)));
+            dictionary.Add("AwayOdd", Array.FindIndex(columnNames, x => x.Equals(sp.AwayOdd)));
+
+            if (dictionary.Any(row => row.Value == -1))
+            {
+                throw new ArgumentException("Index was not found");
+            }
+
+            return dictionary;
         }
     }
 }

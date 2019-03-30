@@ -13,7 +13,7 @@ namespace DataParser
         {
             try
             {
-                string fullPath = Path.GetFullPath(filepath);
+                var fullPath = Path.GetFullPath(filepath);
                 return true;
             }
             catch (Exception)
@@ -21,20 +21,6 @@ namespace DataParser
                 Console.WriteLine("Invalid filepath " + filepath);
                 return false;
             }
-        }
-
-        /// <summary>
-        /// Returns all lines in a file.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns>string[] containing all lines in the file.</returns>
-        /// <exception cref="FileNotFoundException"></exception>
-        public static string[] ReadFile(string path)
-        {
-            if (File.Exists(path))
-                return File.ReadAllLines(path);
-
-            throw new FileNotFoundException();
         }
     }
 }

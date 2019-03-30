@@ -11,29 +11,30 @@ namespace DataParser
     {
         static void Main(string[] args)
         {
-            FileLoader fl = new FileLoader();
-            CSVParser csv = new CSVParser();
-            string address = "";
-            string database = "";
-            string tempFile = "tempfile.csv";
+            var fl = new FileLoader();
+            var csv = new CSVParser();
+            var address = "";
+            var database = "";
+            var tempFile = "tempfile.csv";
 
             try
             {
                 database = args[0].Split('=')[1];
                 address = args[1].Split('=')[1];
-                string season = args[2].Split('=')[1];
-                string league = args[3].Split('=')[1];
-                List<string> list = args.ToList();
-                list.RemoveRange(0, 4);
-                string[] optionalParams = list.ToArray();
+                var season = args[2].Split('=')[1];
+                var league = args[3].Split('=')[1];
+                var argumentList = args.ToList();
+                argumentList.RemoveRange(0, 4);
+                var optionalParams = argumentList.ToArray();
 
                 Console.WriteLine("Loading file from " + address);
                 fl.LoadFile(address, tempFile);
 
                 Console.WriteLine("Parsing csv data");
-                List<Match> matches = csv.Parse(tempFile, season, league, optionalParams);
-                DB db = new DB(database);
-                int addedRows = db.AddMatches(matches);
+                var matches = csv.Parse(tempFile, season, league, optionalParams);
+
+                var db = new DB(database);
+                var addedRows = db.AddMatches(matches);
 
                 Console.WriteLine(addedRows + " added to database at " + database);
                 File.Delete(tempFile);
