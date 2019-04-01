@@ -76,7 +76,7 @@ namespace BetAI.FileOperations
         }
 
         /// <summary>
-        /// Function appends lines to BetAI\Files\{savefile}\log.txt.
+        /// Appends lines to BetAI\Files\{savefile}\log.txt.
         /// </summary>
         /// <param name="savefile"></param>
         /// <param name="lines"></param>

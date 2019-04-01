@@ -96,7 +96,7 @@ namespace BetAI
                     nodes[i].EvaluateFitness(sample);
                 }
 
-                Log();
+                Logger.Log(nodes, Savefile);
                 var newGeneration = reproduce.CreateNewGeneration(nodes);
                 newGeneration = Mutation.Mutate(newGeneration, values.MutationProbability);
 
@@ -106,26 +106,6 @@ namespace BetAI
             }
             Console.WriteLine("Stopping simulation");
         } 
-
-        private void Log()
-        {
-            var worstFitness = FindMinimumFitness();
-            var bestFitness = FindMaximumFitness();
-            var avgFitness = FindAverageFitness();
-            var sum = nodes.Sum(n => n.Fitness);
-
-            var lines = new string[] {
-                $"Generation: {nodes[0].Generation}",
-                $"Minimum fitness: {worstFitness}",
-                $"Average fitness: {avgFitness}",
-                $"Maximum fitness: {bestFitness}",
-                $"Fitness sum: {sum}"
-            };
-            Array.ForEach(lines, line => Console.WriteLine(line));
-            Console.WriteLine();
-
-            Save.Log(Savefile, lines);
-        }
 
         /// <summary>
         /// Uses the random-constructor of Node to create values.NumberOfNodes-amount
@@ -142,39 +122,6 @@ namespace BetAI
             }
 
             return generation;
-        }
-
-        private double FindMinimumFitness()
-        {
-            var min = nodes[0].Fitness;
-
-            for (int i = 1; i < nodes.Count; i++)
-            {
-                if (nodes[i].Fitness < min)
-                    min = nodes[i].Fitness;
-            }
-
-            return min;
-        }
-
-        private double FindMaximumFitness()
-        {
-            var max = nodes[0].Fitness;
-
-            for (int i = 1; i < nodes.Count; i++)
-            {
-                if (nodes[i].Fitness > max)
-                    max = nodes[i].Fitness;
-            }
-
-            return max;
-        }
-
-        private double FindAverageFitness()
-        {
-            var sum = nodes.Sum(n => n.Fitness);
-
-            return sum / nodes.Count;
         }
     }
 }

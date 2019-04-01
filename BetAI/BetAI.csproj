@@ -87,6 +87,7 @@
     <Compile Include="src\Genetics\Selection\TournamentSelection.cs" />
     <Compile Include="src\Genetics\Selection\WeightedSelection.cs" />
     <Compile Include="src\Master.cs" />
+    <Compile Include="src\Utils\Logger.cs" />
     <Compile Include="src\Utils\Randomise.cs" />
     <Compile Include="src\Utils\Sample.cs" />
     <Compile Include="src\Program.cs" />
