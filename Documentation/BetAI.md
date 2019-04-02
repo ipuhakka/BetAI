@@ -6,6 +6,7 @@ Supported methods in version 0.3 are:
 - Crossover
 	- Blend crossover alpha (BLX)
 	- Uniform alpha crossover (Uni-alpha)
+	- Uniform (Uniform)
 - Parent selection
 	- Weighted selection (Weighted)
 	- Tournament selection (Tournament)
@@ -28,7 +29,15 @@ This chapter describes parent selection methods that are available in the progra
 This chapter describes crossover methods available in the program.
 1. BLX-alpha (parameter name = BLX)
 - BLX-alpha uses blend-crossover method to produce two child nodes.
-2. 
+
+2. Uniform-alpha (parameter name = Uni-alpha)
+- Uniform-alpha select a gene randomly from either parent, and
+then creates the new value from range [x - a, x + a], where a is
+the specified alpha parameter.
+
+3. Uniform (parameter name = Uniform)
+- Uniform crossover selects a value randomly from either
+parent and sets that as the value for new node.
 
 ## Mutation methods
 1. Uniform Mutation (parameter name = Mutation)
