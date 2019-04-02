@@ -128,7 +128,7 @@ namespace BetAI.Genetics
                 var betRisk = Bet.CalculateBetRisk(m, predictedResult, predictedOdd, DrawLimit, PlayLimit);
                 var stake = Bet.CalculateStake(MinimumStake, betRisk, PlayLimit);
 
-                var result = Bet.GetPredictedBetResult(predictedResult, DrawLimit);
+                var result = Bet.GetMatchResult(predictedResult, DrawLimit);
 
                 m.SimulatedResult = Bet.GetBetResultMark(result);
 
@@ -137,6 +137,7 @@ namespace BetAI.Genetics
                     wagers.Add(new Wager(new List<Match> {m}, stake));
                 }
             }
+
             return wagers;
         } 
 

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using Database;
-using BetAI.Exceptions;
 
 
 namespace BetAI.BetSim
@@ -36,7 +34,7 @@ namespace BetAI.BetSim
 
             var stake = CalculateStake(baseStake, betCoefficient, playLimit);
 
-            if (GetBetResult(m, predictedResult, drawLimit) == 1)
+            if (GetBetResult(m, predictedResult, drawLimit) == BetResult.Won)
                 return (stake * predictedResultOdd) - stake;
             else
                 return -stake;
@@ -59,20 +57,19 @@ namespace BetAI.BetSim
         }
 
         /// <summary>
-        /// Returns 1 if predicted a home win, 0 if draw, and -1
-        /// if predicted away win.
+        /// Returns MatchResult based on result and set drawLimit.
         /// </summary>
         /// <returns></returns>
-        public static int GetPredictedBetResult(double predictedResult, double drawLimit)
+        public static MatchResult GetMatchResult(double result, double drawLimit)
         {
-            if (Math.Abs(predictedResult) < drawLimit)
-                return 0;
-            else if (predictedResult > 0)
-                return 1;
-            else if (predictedResult < 0)
-                return -1;
-            else 
-                return 0;
+            if (Math.Abs(result) < drawLimit)
+                return MatchResult.Draw;
+            else if (result > 0)
+                return MatchResult.Homewin;
+            else if (result < 0)
+                return MatchResult.Awaywin;
+            else
+                return MatchResult.Draw;
         }
 
         public static double GetOddForPredictedResult(Match m, double predictedResult, double drawLimit)
@@ -92,36 +89,36 @@ namespace BetAI.BetSim
         /// </summary>
         /// <param name="result"></param>
         /// <returns></returns>
-        public static char GetBetResultMark(int result)
+        public static char GetBetResultMark(MatchResult result)
         {
             switch (result)
             {
-                case 1:
+                case MatchResult.Homewin:
                     return '1';
-                case 0:
+                case MatchResult.Draw:
                     return 'X';
-                case -1:
+                case MatchResult.Awaywin:
                     return '2';
                 default:
-                    throw new ArgumentException($"GetBetResultMark accepts integers 1 (home win)," +
-                        $"0 (draw) or -1 (away win)");
+                    throw new ArgumentException($"Invalid MatchResult: {(int)result} is not" +
+                        $" a valid MatchResult");
             }
         }
 
         /// <summary>
-        /// Returns 1 if simulated bet was correct, 0 if not.
+        /// Returns BetResult for predicted match.
         /// </summary>
-        private static int GetBetResult(Match m, double predictedResult, double drawLimit)
+        private static BetResult GetBetResult(Match m, double predictedResult, double drawLimit)
         {
-            var predictedBetResult = GetPredictedBetResult(predictedResult, drawLimit);
-            if (predictedBetResult == m.Homescore - m.Awayscore)
-                return 1;
-            if (predictedBetResult == 1 && m.Homescore > m.Awayscore)
-                return 1;
-            if (predictedBetResult == -1 && m.Homescore < m.Awayscore)
-                return 1;
+            var predictedMatchResult = GetMatchResult(predictedResult, drawLimit);
+            var actualMatchResult = GetMatchResult(m.Homescore - m.Awayscore, 0);
+
+            if (predictedMatchResult == actualMatchResult)
+            {
+                return BetResult.Won;
+            }
             else
-                return 0;
+                return BetResult.Lost;
         }
 
         /// <summary>

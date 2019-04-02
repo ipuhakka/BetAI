@@ -16,7 +16,7 @@ namespace Database
         public double DrawOdd { get; }
         public double AwayOdd { get; }
         public char SimulatedResult { get; set; }
-        public int ActualResult { get; set; } //0 = not resolved, -1 = lost, 1 = won.
+        public BetResult ActualResult { get; set; }
 
         public Match(string homeT, string awayT, string league, string season, DateTime d, int homeS, int awayS, double homeO, double drawO, double awayO)
         {
@@ -68,7 +68,7 @@ namespace Database
             Awayteam = awayT;
             Date = date;
             SimulatedResult = predictedResult;
-            ActualResult = actualResult;
+            ActualResult = (BetResult)actualResult;
             HomeOdd = hOdd;
             DrawOdd = dOdd;
             AwayOdd = aOdd;
@@ -85,7 +85,8 @@ namespace Database
             League = league;
             Date = date;
             SimulatedResult = predictedResult;
-            ActualResult = actualResult;
+
+            ActualResult = (BetResult)actualResult;
             HomeOdd = homeOdd;
             DrawOdd = drawOdd;
             AwayOdd = awayOdd;

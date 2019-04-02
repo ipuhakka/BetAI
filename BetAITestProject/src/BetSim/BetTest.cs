@@ -83,6 +83,5 @@ namespace BetSim
 
             Assert.AreEqual(-8.5, Math.Round(Bet.PlayBet(toPredict, Math.Round(result, 2), 0.5, 5, 0.53), 2));
         }
-
     }
 }

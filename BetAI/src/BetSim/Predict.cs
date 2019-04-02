@@ -20,21 +20,27 @@ namespace BetAI.BetSim
             if (Load.SaveExists(savefile, true))
             {
                 Values values = Load.LoadValues(savefile, true);
+
                 Matches.SetMatches(values.Database);
                 matches.ForEach(m =>  //Set league and season so averages can be counted.
                 {
                     m.League = Matches.GetLeagueForTeam(m.Hometeam);
                     m.Season = season;
                 });
+
                 Node maxFitness = Load.LoadSecondNewestGeneration(savefile).Aggregate((curMax, newNode) 
                     =>  curMax.Fitness < newNode.Fitness ? newNode : curMax );
+
                 var prunedMatchList = matches
                     .Where(match => Matches.TeamsExist(match.Hometeam,
                         match.Awayteam))
                     .ToList();
+
                 Matches.CreateMatchDataStructs(prunedMatchList, maxFitness.SimulationSampleSize);
+
                 return maxFitness.PlayBets(prunedMatchList);
-            } else
+            }
+            else
             {
                 throw new FileNotFoundException(savefile);
             }
