@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
-using Database;
-using BetAI.BetSim;
 using Newtonsoft.Json;
+using BetAI.BetSim;
+using Database;
 
 namespace BetAI.Genetics
 {
@@ -113,7 +114,6 @@ namespace BetAI.Genetics
 
             foreach(Match m in matches)
             {
-
                 var predictedReturnedValue = Predict.PredictResult(m, SimulationSampleSize);
 
                 if (predictedReturnedValue == null)
@@ -153,30 +153,47 @@ namespace BetAI.Genetics
         public double EvaluateFitness(List<Match> sample)
         {
             Fitness = 0;
+            object fitnessLock = new object();
 
-            foreach (Match m in sample)
-            {
-                var predictedReturnedValue = Predict.PredictResult(m, SimulationSampleSize);
-
-                if (predictedReturnedValue == null)
+            Parallel.ForEach(
+                sample,
+                () => 0.0,
+                (match, state, fitnessSubTotal) =>
                 {
-                    BetsSkipped++;
-                    continue;
-                }
+                    var predictedReturnedValue = Predict.PredictResult(match, SimulationSampleSize);
+                    var betSkipped = false;
 
-                var predictedResult = (double)predictedReturnedValue;
+                    if (predictedReturnedValue == null)
+                    {
+                        BetsSkipped++;
+                        betSkipped = true;
+                    }
 
-                var betProfit = Bet.PlayBet(m, predictedResult, PlayLimit, MinimumStake, DrawLimit);
+                    if (!betSkipped)
+                    {
+                        var predictedResult = (double)predictedReturnedValue;
 
-                if (betProfit == 0)
-                    BetsNotPlayed++;
-                else if (betProfit > 0)
-                    BetsWon++;
-                else
-                    BetsLost++;
+                        var betProfit = Bet.PlayBet(match, predictedResult, PlayLimit, MinimumStake, DrawLimit);
+                        if (betProfit == 0)
+                            BetsNotPlayed++;
+                        else if (betProfit > 0)
+                            BetsWon++;
+                        else
+                            BetsLost++;
 
-                Fitness += betProfit;
-            }
+                        return fitnessSubTotal += betProfit;
+                    }
+
+                    return fitnessSubTotal;
+                },
+                (fitnessSubTotal) =>
+                {
+                    lock (fitnessLock)
+                    {
+                        Fitness += fitnessSubTotal;
+                    }
+                });
+
             return Fitness;
         }
 

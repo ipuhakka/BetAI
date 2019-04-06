@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Database;
+using System.Threading.Tasks;
 using System.Data.SQLite;
 using BetAI.Exceptions;
+using Database;
 
 namespace BetAI.BetSim
 {
@@ -38,29 +39,38 @@ namespace BetAI.BetSim
         public static void CreateMatchDataStructs(List<Match> sample, int maxSampleSize)
         {
             MatchesData = new Dictionary<string, MatchData>();
+            object dictionaryLock = new object();
 
-            for (int i = 0; i < sample.Count; i++)
-            {
-                var homeAvg = SeasonHomeGoalAvgBeforeDate(sample[i]);
-                var awayAvg = SeasonAwayGoalAvgBeforeDate(sample[i]);
-                var hometeamPrevious = SelectNLastFromTeam(
-                    true, 
-                    maxSampleSize, 
-                    sample[i].Date, 
-                    sample[i].Hometeam)
-                    .ToArray();
-                var awayteamPrevious = SelectNLastFromTeam(
-                    false, 
-                    maxSampleSize, 
-                    sample[i].Date, 
-                    sample[i].Awayteam)
-                    .ToArray();
+            Parallel.ForEach(
+                sample, 
+                match =>
+                {
+                    var homeAvg = SeasonHomeGoalAvgBeforeDate(match);
 
-                MatchesData.Add(
-                    $"{sample[i].Hometeam}-{sample[i].Awayteam}-{sample[i].Date}", 
-                    new MatchData(homeAvg, awayAvg, hometeamPrevious, awayteamPrevious, 
-                        sample[i].Hometeam, sample[i].Awayteam));
-            }
+                    var awayAvg = SeasonAwayGoalAvgBeforeDate(match);
+
+                    var hometeamPrevious = SelectNLastFromTeam(
+                        true,
+                        maxSampleSize,
+                        match.Date,
+                        match.Hometeam)
+                        .ToArray();
+
+                    var awayteamPrevious = SelectNLastFromTeam(
+                        false,
+                        maxSampleSize,
+                        match.Date,
+                        match.Awayteam)
+                        .ToArray();
+
+                    lock (dictionaryLock)
+                    {
+                        MatchesData.Add(
+                            $"{match.Hometeam}-{match.Awayteam}-{match.Date}",
+                            new MatchData(homeAvg, awayAvg, hometeamPrevious, awayteamPrevious,
+                                match.Hometeam, match.Awayteam));
+                    }
+                });
         }
 
         /// <summary>
