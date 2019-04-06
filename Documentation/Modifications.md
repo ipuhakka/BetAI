@@ -6,7 +6,8 @@
 - Performance: 
 	- Matches uses dictionary instead of linq-queries to search correct MatchData struct.
 	- DataParser uses dictionary instead of tuple-list
-- Refactoring code
+	- Parallel Linq use in evaluating fitness and settin MatchDataStructs
+- Refactoring code, test projects under test folder
 
 # v0.3
 - Implemented
