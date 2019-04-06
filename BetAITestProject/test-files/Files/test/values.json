@@ -1,1 +1,0 @@
-{"alpha":"0.2","tournamentSize":"8","minimumStake":"1.0","numberOfNodes":4,"sampleSize":10,"database":"../../Database/db/data.sqlite3","parentSelectionMethod":"Tournament","crossoverMethod":"BLX","mutationMethod":"Uniform","mutationProbability":"0.01"}

@@ -19,7 +19,7 @@ namespace BetSim
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\..\Database\db"));
             db = new DB(path);
             db.CreateDatabase(path);
             db.ExecuteScript("db_schema_dump.sql");
@@ -90,7 +90,7 @@ namespace BetSim
             }
             Matches.CreateMatchDataStructs(sample, 18);
             Assert.IsNull(Predict.PredictResult(sample[4], 18));
-            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\..\Database\db"));
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace BetSim
             };
 
             Assert.AreEqual(2, Predict.PredictBets(matches, Path.GetFullPath(@"Files\test"), "2018-2019").Count);
-            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\..\Database\db"));
         }
     }
 }

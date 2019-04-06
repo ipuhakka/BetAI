@@ -16,13 +16,13 @@ namespace Utils
     public class SampleTest
     {
         private DB db;
-        private readonly string file = "testi.db";
-        private readonly string largeFile = @"test-files\data.sqlite3";
+        private readonly string file = @"testi.db";
+        private readonly string largeFile = @"..\test-files\data.sqlite3";
 
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\..\Database\db"));
             db = new DB(file);
             db.CreateDatabase(file);
             db.ExecuteScript("db_schema_dump.sql");
@@ -51,7 +51,7 @@ namespace Utils
         [Test]
         public void Test_NoDuplicatesInSample()
         {
-            Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\"));
             Matches.SetMatches(largeFile);
             Stopwatch sw = new Stopwatch();
             for (int i = 0; i < 100; i++)
@@ -63,7 +63,7 @@ namespace Utils
                 sw.Reset();
                 sample.Should().OnlyHaveUniqueItems();
             }
-            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\..\Database\db"));
         }
 
         /// <summary>

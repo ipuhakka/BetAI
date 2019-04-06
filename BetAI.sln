@@ -5,15 +5,17 @@ VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{C4EC7438-2A7A-41DB-A9E4-E36D853F94ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseTestProject", "DatabaseTestProject\DatabaseTestProject.csproj", "{7F8FDF17-4EDD-48E5-AE7F-E5D5C0C45F08}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseTestProject", "Test\DatabaseTestProject\DatabaseTestProject.csproj", "{7F8FDF17-4EDD-48E5-AE7F-E5D5C0C45F08}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataParser", "DataParser\DataParser.csproj", "{20E83418-2F87-4F65-968C-D97C68124B3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataParserTestProject", "DataParserTestProject\DataParserTestProject.csproj", "{B4811642-B88A-47FE-879F-F8E684057CB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataParserTestProject", "Test\DataParserTestProject\DataParserTestProject.csproj", "{B4811642-B88A-47FE-879F-F8E684057CB2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetAI", "BetAI\BetAI.csproj", "{B4B30702-37C7-4C31-90B2-C97C922E5393}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetAITestProject", "BetAITestProject\BetAITestProject.csproj", "{BD3BEC01-D729-4A68-93CD-A41E1CFAC60C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetAITestProject", "Test\BetAITestProject\BetAITestProject.csproj", "{BD3BEC01-D729-4A68-93CD-A41E1CFAC60C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{6BC4D7D7-503F-4325-AC59-F78D456EA870}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +50,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7F8FDF17-4EDD-48E5-AE7F-E5D5C0C45F08} = {6BC4D7D7-503F-4325-AC59-F78D456EA870}
+		{B4811642-B88A-47FE-879F-F8E684057CB2} = {6BC4D7D7-503F-4325-AC59-F78D456EA870}
+		{BD3BEC01-D729-4A68-93CD-A41E1CFAC60C} = {6BC4D7D7-503F-4325-AC59-F78D456EA870}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E762E0E5-0C06-47C8-9CBA-265479AC920E}

@@ -4,7 +4,7 @@
   "minimumStake": "1.0",
   "numberOfNodes": "200",
   "sampleSize": "200",
-  "database": "../../../Database/db/data.sqlite3",
+  "database": "../../Database/db/data.sqlite3",
   "parentSelectionMethod": "Tournament",
   "crossoverMethod": "BLX",
   "mutationMethod": "Uniform",

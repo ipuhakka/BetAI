@@ -30,15 +30,6 @@ namespace Genetics
         }
 
         [Test]
-        public void Test_Default_Database_Exists()
-        {
-            Save.InitializeSave(test);
-            Values values = Load.LoadValues(test);
-            FileInfo file = new FileInfo(values.Database);
-            Assert.True(File.Exists(values.Database));
-        }
-
-        [Test]
         public void Test_InitializeMutationMethod_defaults_return_UniformMutation()
         {
             Save.InitializeSave(test);

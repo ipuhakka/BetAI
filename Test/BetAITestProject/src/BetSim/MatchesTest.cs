@@ -19,7 +19,7 @@ namespace BetSim
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\..\Database\db"));
             db = new DB(database);
             db.CreateDatabase(database);
             db.ExecuteScript("db_schema_dump.sql");

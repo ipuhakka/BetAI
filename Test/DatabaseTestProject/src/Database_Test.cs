@@ -17,7 +17,7 @@ namespace DatabaseTestProject
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Database\db"));
+            Directory.SetCurrentDirectory(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\..\Database\db"));
             db = new DB(path);
             db.CreateDatabase(path);
             db.ExecuteScript("db_schema_dump.sql");
@@ -50,7 +50,7 @@ namespace DatabaseTestProject
             var database = new DB("testDB.db");
             database.CreateDatabase("testDB.db");
 
-            Assert.Throws<SQLiteException>(() => database.ExecuteScript(@"..\..\DatabaseTestProject\test-files\db_schema_throws_SQLiteE_dump.sql"));
+            Assert.Throws<SQLiteException>(() => database.ExecuteScript(@"..\..\Test\DatabaseTestProject\test-files\db_schema_throws_SQLiteE_dump.sql"));
             database.DeleteDatabase("testDB.db");
         }
 
@@ -59,7 +59,7 @@ namespace DatabaseTestProject
         {
             var database = new DB("unusedDatabase.db");
 
-            Assert.Throws<SQLiteException>(() => database.ExecuteScript(@"..\..\DatabaseTestProject\test-files\db_schema_throws_SQLiteE_dump.sql"));
+            Assert.Throws<SQLiteException>(() => database.ExecuteScript(@"..\..\Test\DatabaseTestProject\test-files\db_schema_throws_SQLiteE_dump.sql"));
         }
 
         /// <summary>
